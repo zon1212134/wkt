@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "start": "node index.js"
+  },
+  "narflinger": {
+    "basenames": [
+      "f6854wxlv8i0i88bzfn1zl8ifw8c3i0y-nodejs-20.11.1"
+    ]
+  }
+}
