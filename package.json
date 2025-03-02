@@ -3,7 +3,8 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.21.2",
+    "compression": "^1.8.0"
   },
   "narflinger": {
     "basenames": [
