@@ -4,6 +4,7 @@ const express = require("express");
 const router = express.Router();
 const path = require("path");
 const bodyParser = require("body-parser");
+const cors = require('cors');
 
 const PORT = 3000;
 const MAX_API_WAIT_TIME = 5000;
@@ -11,6 +12,7 @@ const videoId = "beFiVQcwVY8";
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.urlencoded({ extended: true }));
+router.use(cors());
 
 const limiter = rateLimit({
   windowMs: 60 * 1000,
@@ -44,9 +46,15 @@ async function fetchStreamUrls(videoId, invidiousapis) {
 }
 
 router.post("/check", limiter, async (req, res) => {
-  const invidiousapis = req.body.url.match(/https?:\/\/[^\s]+/g) || [];
-  if (invidiousapis.length === 0) {
+  console.log(req.body)
+  const urls = req.body.urls;
+  if (!urls || !Array.isArray(urls)) {
     return res.status(400).send("APIのURLを入力してください。");
+  }
+
+  const invidiousapis = urls.map(url => url.match(/https?:\/\/[^\s]+/g)).filter(Boolean).flat();
+  if (invidiousapis.length === 0) {
+    return res.status(400).send("APIのURLを入力してください");
   }
 
   try {

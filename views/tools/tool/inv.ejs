@@ -31,13 +31,16 @@
             loadingMessage.classList.remove("hidden");
             submitButton.disabled = true;
             submitButton.classList.add("opacity-50", "cursor-not-allowed");
-          
-              const formData = new FormData(this);
-    for (let [key, value] of formData.entries()) {
-        Window.alert(key, value);  // データの中身をログに出力
-    }
 
             try {
+              const formData = new FormData(this);
+
+// FormDataの内容をループして表示
+formData.forEach((value, key) => {
+    console.log(key + ": " + value); // コンソールに表示
+    alert(key + ": " + value); // アラートで表示（デバッグ用）
+});
+
                 const response = await fetch("/tools/inv/check", { method: "POST", body: new FormData(this) });
                 if (!response.ok) {
                     throw new Error(await response.text());
