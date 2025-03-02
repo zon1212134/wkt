@@ -31,4 +31,8 @@ app.get('/', (req, res) => {
   res.render("home/index");
 });
 
+app.get("/tst/:id", (req, res) => {
+  res.render(`tst/${req.params.id}`);
+});
+
 app.use("/tools", require("./routes/tools"));
