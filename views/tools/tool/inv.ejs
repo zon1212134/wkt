@@ -5,8 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>APIチェッカー</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/page.css">
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
+    <button class="back-button fixed top-5 left-5 z-50 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform transition-all duration-300 ease-in-out flex items-center space-x-2" onclick="window.location.href='/tools'">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        <span>戻る</span>
+    </button>
+  
     <div class="w-full h-screen p-6">
         <h1 class="text-3xl font-bold text-center py-4">APIチェックツール</h1>
         <p class="text-gray-900 dark:text-gray-300 mt-2 leading-relaxed">invidiousのURLを改行して入力してみてね。改行を入れたり整えたりするのにはAIを使うと楽かも。</p><br><br>

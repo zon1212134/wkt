@@ -4,3 +4,9 @@
 .back-button:hover {
    transform: scale(1.1);
 }
+.link-button {
+   transition: transform 0.3s ease-in-out;
+}
+.link-button:hover {
+   transform: scale(1.1);
+}
