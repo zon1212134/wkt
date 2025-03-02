@@ -46,36 +46,22 @@ async function fetchStreamUrls(videoId, invidiousapis) {
 }
 
 router.post("/check", limiter, async (req, res) => {
-  console.log(req.body)
   const urls = req.body.urls;
   if (!urls || !Array.isArray(urls)) {
-    return res.status(400).send("APIのURLを入力してください。");
+    return res.status(400).json({ error: "APIのURLを入力してください。" });
   }
 
   const invidiousapis = urls.map(url => url.match(/https?:\/\/[^\s]+/g)).filter(Boolean).flat();
   if (invidiousapis.length === 0) {
-    return res.status(400).send("APIのURLを入力してください");
+    return res.status(400).json({ error: "APIのURLを入力してください。" });
   }
 
   try {
     const { successUrls, errorUrls } = await fetchStreamUrls(videoId, invidiousapis);
-    let html = "<h1>APIチェック結果</h1>";
-
-    html += "<h2>正常に取得できたURL</h2><ul>";
-    successUrls.forEach(({ api, streamUrl }) => {
-      html += `<li>${api} - <a href='${streamUrl}' target='_blank'>${streamUrl}</a></li>`;
-    });
-    html += "</ul>";
-
-    html += "<h2>エラーが出たURL</h2><ul>";
-    errorUrls.forEach(api => {
-      html += `<li>${api}</li>`;
-    });
-    html += "</ul>";
-
-    res.send(html);
+    
+    res.json({ successUrls, errorUrls });
   } catch (error) {
-    res.status(500).send("エラーが発生しました: " + error.message);
+    res.status(500).json({ error: "エラーが発生しました: " + error.message });
   }
 });
 
