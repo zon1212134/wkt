@@ -3,31 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ツール一覧</title>
+    <title>ツールページ</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .back-button {
+            transition: transform 0.3s ease-in-out;
+        }
+        .back-button:hover {
+            transform: scale(1.1);
+        }
+    </style>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
-    <div class="container mx-auto mt-10">
-        <h1 class="text-4xl font-bold">🧸 ツール一覧</h1>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md text-center">
-                <h2 class="text-xl font-semibold">🔍 検索ツール</h2>
-                <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">便利な検索機能</p>
-                <a href="#" class="mt-3 inline-block bg-blue-500 text-white py-2 px-4 rounded">開く</a>
-            </div>
 
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md text-center">
-                <h2 class="text-xl font-semibold">📂 ファイル管理</h2>
-                <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">オンラインでファイルを管理</p>
-                <a href="#" class="mt-3 inline-block bg-blue-500 text-white py-2 px-4 rounded">開く</a>
+    <button class="back-button fixed top-5 left-5 z-50 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transform transition-all duration-300 ease-in-out flex items-center space-x-2" onclick="window.location.href='/'">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        <span>戻る</span>
+    </button>
+  
+    <div class="section bg-white dark:bg-gray-800 text-center py-20">
+        <h1 class="text-4xl font-semibold mb-6">🧸　ツール　🧸</h1>
+        
+        <div class="mt-6">
+            <input type="text" id="search" placeholder="ツールを検索..." class="w-full max-w-md p-2 border rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+            <div class="bg-gray-200 dark:bg-gray-700 p-6 rounded-lg shadow-lg">
+                <h3 class="text-xl font-semibold">ツール1</h3>
+                <p class="text-gray-600 dark:text-gray-400 text-sm mt-2">このツールは便利で使いやすいです。</p>
+                <a href="#" class="text-blue-500 mt-2 inline-block">ツールを使用</a>
             </div>
-
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md text-center">
-                <h2 class="text-xl font-semibold">📅 スケジュール</h2>
-                <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">予定を簡単に管理</p>
-                <a href="#" class="mt-3 inline-block bg-blue-500 text-white py-2 px-4 rounded">開く</a>
+            <div class="bg-gray-200 dark:bg-gray-700 p-6 rounded-lg shadow-lg">
+                <h3 class="text-xl font-semibold">ツール2</h3>
+                <p class="text-gray-600 dark:text-gray-400 text-sm mt-2">他のツールと比べて優れた特徴があります。</p>
+                <a href="#" class="text-blue-500 mt-2 inline-block">ツールを使用</a>
+            </div>
+            <div class="bg-gray-200 dark:bg-gray-700 p-6 rounded-lg shadow-lg">
+                <h3 class="text-xl font-semibold">ツール3</h3>
+                <p class="text-gray-600 dark:text-gray-400 text-sm mt-2">このツールも非常に便利です。</p>
+                <a href="#" class="text-blue-500 mt-2 inline-block">ツールを使用</a>
             </div>
         </div>
     </div>
+
+    <footer class="bg-gray-800 dark:bg-gray-900 text-center py-6">
+        <p class="text-white">(・∀・)</p>
+    </footer>
+  
+    <script>
+        const searchInput = document.getElementById('search');
+        const toolList = document.getElementById('tool-list');
+        const tools = document.querySelectorAll('.tool');
+
+        searchInput.addEventListener('input', function() {
+            const searchText = searchInput.value.toLowerCase();
+
+            tools.forEach(tool => {
+                const title = tool.querySelector('.tool-title').textContent.toLowerCase();
+                const description = tool.querySelector('.tool-description').textContent.toLowerCase();
+                if (title.includes(searchText) || description.includes(searchText)) {
+                    tool.style.display = '';
+                } else {
+                    tool.style.display = 'none';
+                }
+            });
+        });
+    </script>
+
+
 </body>
 </html>
