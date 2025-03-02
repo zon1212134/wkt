@@ -26,6 +26,7 @@ const bodyParser = require("body-parser");
 
 app.set("views", path.join(__dirname, "views"));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.set("trust proxy", 1);
 
 app.get('/', (req, res) => {
   res.render("home/index");

@@ -6,8 +6,9 @@ const path = require("path");
 
 const PORT = 3000;
 const MAX_API_WAIT_TIME = 5000;
-const videoId = "dQw4w9WgXcQ";
+const videoId = "beFiVQcwVY8";
 
+router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 
 const limiter = rateLimit({

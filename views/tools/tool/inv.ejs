@@ -7,15 +7,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white">
-    <div class="min-h-screen flex items-center justify-center">
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-lg">
-            <h1 class="text-2xl font-semibold text-center mb-4">APIチェックツール</h1>
+    <div class="w-full h-screen p-6">
+        <h1 class="text-3xl font-bold text-center py-4">APIチェックツール</h1>
+        <div class="w-full max-w-4xl mx-auto">
             <form id="apiForm" class="space-y-4">
-                <label for="urls" class="block text-gray-700 dark:text-gray-300">試すAPIのURL（改行区切り）:</label>
-                <textarea name="urls" id="urls" rows="5" class="w-full p-2 border rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"></textarea>
-                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition">チェック開始</button>
+                <label for="urls" class="block text-gray-700 dark:text-gray-300 text-lg">試すAPIのURL（改行区切り）:</label>
+                <textarea name="urls" id="urls" rows="10" class="w-full p-4 border rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"></textarea>
+                <button id="submitButton" type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition text-lg">チェック開始</button>
             </form>
-            <p id="errorMessage" class="text-red-500 mt-2 hidden text-center"></p>
+            <p id="loadingMessage" class="text-blue-500 mt-4 hidden text-center text-lg">APIをチェック中…</p>
+            <p id="errorMessage" class="text-red-500 mt-4 hidden text-center text-lg"></p>
         </div>
     </div>
 
@@ -23,10 +24,16 @@
         document.getElementById("apiForm").addEventListener("submit", async function(event) {
             event.preventDefault();
             const errorMessage = document.getElementById("errorMessage");
+            const loadingMessage = document.getElementById("loadingMessage");
+            const submitButton = document.getElementById("submitButton");
+            
             errorMessage.classList.add("hidden");
+            loadingMessage.classList.remove("hidden");
+            submitButton.disabled = true;
+            submitButton.classList.add("opacity-50", "cursor-not-allowed");
 
             try {
-                const response = await fetch("/check", { method: "POST", body: new FormData(this) });
+                const response = await fetch("/tools/inv/check", { method: "POST", body: new FormData(this) });
                 if (!response.ok) {
                     throw new Error(await response.text());
                 }
@@ -34,6 +41,10 @@
             } catch (error) {
                 errorMessage.textContent = error.message;
                 errorMessage.classList.remove("hidden");
+            } finally {
+                loadingMessage.classList.add("hidden");
+                submitButton.disabled = false;
+                submitButton.classList.remove("opacity-50", "cursor-not-allowed");
             }
         });
     </script>
