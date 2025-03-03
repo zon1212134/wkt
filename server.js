@@ -49,7 +49,7 @@ app.get('/watch', (req, res) => {
   if (videoId) {
     res.redirect(`/wkt/watch/${videoId}`);
   } else {
-    res.redirect(`/`);
+    res.redirect(`/wkt/trend`);
   }
 });
 app.get('/channel/:id', (req, res) => {
