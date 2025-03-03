@@ -17,47 +17,48 @@
     </header>
     
     <div class="container mx-auto p-4">
-        <h2 class="text-xl font-bold mb-4">検索結果</h2>
+        <h2 class="text-xl font-bold mb-4">検索結果: <%= res.correctedQuery %></h2>
+        <p class="text-sm text-gray-500 mb-4"><%= res.results %>件のヒット</p>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-    <% res.items.forEach(video => { %>
-      <% if (video.type === 'video') { %>
+            <% res.items.forEach(video => { %>
+              <% if (video.type === 'video') { %>
                 <div class="bg-gray-800 p-4 rounded">
                     <a href="/wkt/watch/<%= video.id %>">
                         <img loading="lazy" src="/wkt/back/vi/<%= video.id %>/mqdefault.jpg" alt="<%= video.title %>" class="w-full h-48 rounded">
                     </a>
                     <div class="mt-2 flex items-center">
                         <a href="/wkt/c/<%= video.author.channelID %>" class="flex items-center">
-                            <img src="icon1.jpg" alt="アイコン" class="w-8 h-8 rounded-full mr-2">
+                            <img src="<%= video.author.bestAvatar.url %>" alt="アイコン" class="w-8 h-8 rounded-full mr-2">
                             <p class="text-sm text-gray-400"><%= video.author.name %></p>
                         </a>
                     </div>
                     <p class="text-lg font-bold"><%= video.title %></p>
                     <p class="text-xs text-gray-500"><%= video.uploadedAt %> - <%= video.duration %> ・ <%= video.views %> 回再生</p>
                 </div>
-      <% } else if (video.type === 'playlist') { %>
-            <div class="bg-gray-600 p-4 rounded">
-              <a href="/wkt/p/<%= video.playlistID %>">
-                <img src="<%= video.firstVideo.bestThumbnail.url.slice(19) %>" alt="<%= video.title %>" class="w-full h-48 rounded">
-              </a>
-                <div class="mt-2">
-                    <p class="text-sm text-gray-400"><a href="/wkt/u/<%= video.owner.id %>"><%= video.owner.name %></a></p>
-                    <p class="text-lg font-bold">プレイリスト(<%= video.length %>本以上の動画)</p>
+              <% } else if (video.type === 'playlist') { %>
+                <div class="bg-gray-600 p-4 rounded">
+                  <a href="/wkt/p/<%= video.playlistID %>">
+                    <img src="<%= video.firstVideo.bestThumbnail.url.slice(19) %>" alt="<%= video.title %>" class="w-full h-48 rounded">
+                  </a>
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-400"><a href="/wkt/u/<%= video.owner.id %>"><%= video.owner.name %></a></p>
+                        <p class="text-lg font-bold">プレイリスト(<%= video.length %>本以上の動画)</p>
+                    </div>
                 </div>
-            </div>
-      <% } else if (video.type === 'channel') { %>
-            <div class="bg-gray-800 p-4 rounded">
-              <a href="/wkt/c/<%= video.channelID %>">
-                <img src="https://wakamecomment.glitch.me/ytc/<%= video.id %>" alt="<%= video.name %>" class="w-full h-48 rounded">
-              </a>
-                <div class="mt-2">
-                    <p class="text-sm text-gray-400"><%= video.name %></p>
-                    <p class="text-lg font-bold"><%= video.description || video.descriptionShort %></p>
-                    <p class="text-xs text-gray-500"><%= video.subscribers %> 登録</p>
+              <% } else if (video.type === 'channel') { %>
+                <div class="bg-gray-800 p-4 rounded">
+                  <a href="/wkt/c/<%= video.channelID %>">
+                    <img src="<%= video.avatars.url[0] %>" alt="<%= video.name %>" class="w-full h-48 rounded">
+                  </a>
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-400"><%= video.name %></p>
+                        <p class="text-lg font-bold"><%= video.description || video.descriptionShort %></p>
+                        <p class="text-xs text-gray-500"><%= video.subscribers %> 登録</p>
+                    </div>
                 </div>
-            </div>
-      <% } %>
-    <% }); %>
+              <% } %>
+            <% }); %>
         </div>
     </div>
 </body>
