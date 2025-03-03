@@ -22,7 +22,9 @@
 </head>
 <body class="bg-gray-900 text-white">
     <header class="bg-gray-800 p-4 flex justify-between items-center">
-        <input type="text" placeholder="検索" class="w-1/2 p-2 rounded bg-gray-700 text-white">
+            <form action="/wkt/s" method="get" class="w-1/2">
+              <input type="text" name="q" id="searchbox" placeholder="検索" class="searchbox w-full p-2 rounded bg-gray-700 text-white">
+            </form>
         <nav class="space-x-4">
             <a href="/wkt" class="text-gray-300 hover:text-white">ホーム</a>
             <a href="/wkt/trend" class="text-gray-300 hover:text-white">トレンド</a>
@@ -42,7 +44,6 @@
                 <p>再生数: <%= videoData.videoViews %></p>
                 <p>いいね: <%= videoData.likeCount %></p>
             </div>
-            <!-- 作者情報 -->
             <div class="flex items-center mt-4 p-4 bg-gray-800 rounded">
               <a href ="wkt/c/<%= videoData.channelId %>">
                 <img src="<%= videoData.channelImage %>" alt="アイコン" class="w-12 h-12 rounded-full">
@@ -52,12 +53,10 @@
                     <p class="text-sm text-gray-400">軽い自己紹介テキスト</p>
                 </div>
             </div>
-            <!-- 動画概要 -->
             <div class="mt-4 p-4 bg-gray-800 rounded">
                 <h3 class="text-lg font-bold"><%= videoData.videoTitle %></h3>
                 <p class="text-gray-400"><%- (videoData.videoDes || "").replace(/\n/g, "<br>") %></p>
             </div>
-            <!-- コメント一覧 -->
             <div class="mt-4 p-4 bg-gray-800 rounded">
                 <h3 class="text-lg font-bold">コメント</h3>
                 <div class="mt-2 space-y-2">
@@ -79,9 +78,7 @@
             </div>
         </div>
         
-        <!-- サイドエリア -->
         <div class="w-1/4 ml-4">
-            <!-- コメントボックス -->
             <div id="commentBox" class="fixed top-0 right-0 w-1/3 h-full bg-gray-800 p-4 shadow-lg comment-box">
                 <button id="closeComments" class="w-full bg-gray-700 py-2 rounded mb-2">閉じる</button>
                 <h3 class="text-lg font-bold">コメント</h3>
@@ -128,7 +125,6 @@
             </div>
             <button id="toggleComments" class="mt-4 w-full bg-gray-700 py-2 rounded">コメントを開く</button>
             <button id="toggledouga" class="mt-4 w-full bg-gray-700 py-2 rounded">関連動画を開く</button>
-            <!-- 関連動画リスト -->
             <div class="mt-4">
                 <h3 class="text-lg font-bold">関連動画</h3>
                 <div class="mt-2 space-y-2">
