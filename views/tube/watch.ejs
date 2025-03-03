@@ -41,19 +41,18 @@
                     お使いのブラウザは動画タグをサポートしていません。
                 </video>
             </div>
-            <div class="mt-2 text-gray-400">
-                <p>再生数: <%= videoData.videoViews %></p>
-                <p>いいね: <%= videoData.likeCount %></p>
-            </div>
             <div class="flex items-center mt-4 p-4 bg-gray-800 rounded">
               <a href ="wkt/c/<%= videoData.channelId %>">
                 <img src="<%= videoData.channelImage %>" alt="アイコン" class="w-12 h-12 rounded-full">
               </a>
                 <div class="ml-4">
                   <h2 class="text-lg font-bold"><a href ="wkt/c/<%= videoData.channelId %>"><%= videoData.channelName %></a></h2>
-                    <p class="text-sm text-gray-400">軽い自己紹介テキスト</p>
+                    <p class="text-sm text-gray-400">登録者数</p>
                 </div>
             </div>
+              <div class="mt-2 text-gray-400">
+                <p>再生数: <%= videoData.videoViews %> ・ いいね: <%= videoData.likeCount %></p>
+              </div>
             <div class="mt-4 p-4 bg-gray-800 rounded">
     <div class="flex items-center justify-between">
         <h3 class="text-lg font-bold"> 
