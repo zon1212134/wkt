@@ -32,6 +32,10 @@ app.get('/', (req, res) => {
   res.render("home/index");
 });
 
+app.get('/app', (req, res) => {
+  res.render("app/list");
+});
+
 app.get("/tst/:id", (req, res) => {
   res.render(`tst/${req.params.id}`);
 });
