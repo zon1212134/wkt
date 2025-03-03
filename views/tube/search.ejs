@@ -4,15 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>動画検索</title>
+    <link rel="stylesheet" href="/css/page.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="/js/tube.js"></script>
 </head>
 <body class="bg-gray-900 text-white">
     <header class="bg-gray-800 p-4 flex justify-between items-center">
-        <input type="text" placeholder="検索" class="w-1/2 p-2 rounded bg-gray-700 text-white">
+            <form action="/wkt/s" method="get">
+              <input type="text" name="q" id="searchbox" placeholder="検索" class="searchbox p-2 rounded bg-gray-700 text-white">
+            </form>
         <nav class="space-x-4">
-            <a href="#" class="text-gray-300 hover:text-white">ホーム</a>
-            <a href="#" class="text-gray-300 hover:text-white">トレンド</a>
-            <a href="#" class="text-gray-300 hover:text-white">マイページ</a>
+            <a href="/wkt" class="text-gray-300 hover:text-white">ホーム</a>
+            <a href="/wkt/trend" class="text-gray-300 hover:text-white">トレンド</a>
+            <a href="/wkt/history" class="text-gray-300 hover:text-white">再生履歴</a>
         </nav>
     </header>
     
@@ -23,7 +30,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <% res.items.forEach(video => { %>
               <% if (video.type === 'video') { %>
-                <div class="bg-gray-800 p-4 rounded">
+                <div class="result-item bg-gray-800 p-4 rounded">
                     <a href="/wkt/watch/<%= video.id %>">
                         <img loading="lazy" src="/wkt/back/vi/<%= video.id %>/mqdefault.jpg" alt="<%= video.title %>" class="w-full h-48 rounded">
                     </a>
@@ -47,9 +54,9 @@
                     </div>
                 </div>
               <% } else if (video.type === 'channel') { %>
-                <div class="bg-gray-800 p-4 rounded">
+                <div class="bg-gray-500 p-4 rounded">
                   <a href="/wkt/c/<%= video.channelID %>">
-                    <img src="<%= video.avatars.url[0] %>" alt="<%= video.name %>" class="w-full h-48 rounded">
+                    <img src="<%= video.bestAvatar.url %>" alt="<%= video.name %>" class="w-full h-30 rounded">
                   </a>
                     <div class="mt-2">
                         <p class="text-sm text-gray-400"><%= video.name %></p>

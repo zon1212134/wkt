@@ -10,3 +10,9 @@
 .link-button:hover {
    transform: scale(1.1);
 }
+.result-item {
+  transition: transform 0.2s;
+}
+.result-item:hover {
+  transform: scale(1.10);
+}
