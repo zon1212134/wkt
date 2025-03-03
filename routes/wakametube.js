@@ -31,12 +31,11 @@ router.get("/s", async (req, res) => {
 	}
 });
 
-router.get("/ss", async (req, res) => {
+router.get("/s", async (req, res) => {
 	let query = req.query.q;
 	let page = Number(req.query.p || 2);
     try {
-    const waka = await ytsr(query, { limit, pages: page });
-		res.json(waka);
+		res.json();
 	} catch (error) {
 		console.error(error);
 		try {
