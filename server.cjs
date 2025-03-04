@@ -36,10 +36,10 @@ app.get('/app', (req, res) => {
   res.render("app/list");
 });
 
-app.use("/tools", require("./routes/tools"));
-app.use("/blog", require("./routes/blog"));
-app.use("/wkt", require("./routes/wakametube"));
-app.use("/game", require("./routes/game"));
+app.use("/tools", require("./routes/tools.cjs"));
+app.use("/blog", require("./routes/blog.cjs"));
+app.use("/wkt", require("./routes/wakametube.cjs"));
+app.use("/game", require("./routes/game.cjs"));
 
 app.get('/watch', (req, res) => {
   const videoId = req.query.v;
@@ -61,4 +61,4 @@ app.get('/hashtag/:des', (req, res) => {
   const des = req.params.des;
   res.redirect(`/wkt/s?q=${des}`);
 });
-app.use("/sandbox", require("./routes/sandbox"));
+app.use("/sandbox", require("./routes/sandbox.cjs"));

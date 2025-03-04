@@ -1,6 +1,6 @@
 import { Innertube } from 'youtubei.js';
 
-const innertube = Innertube.create({
+const innertube = await Innertube.create({
         lang: "ja",
         location: "JP"
     });

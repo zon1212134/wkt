@@ -6,10 +6,6 @@ router.get("/", (req, res) => {
   res.render("tools/home");
 });
 
-router.get("/tool/:id", (req, res) => {
-  res.render(`tools/tool/${req.params.id}`);
-});
-
-router.use("/inv", require("../controllers/tool/src/inv"));
+router.use("/n", require("../controllers/blog/getblog.cjs"));
 
 module.exports = router;
