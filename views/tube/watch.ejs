@@ -11,6 +11,15 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="/js/tube.js"></script>
     <script src="/js/watch.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (localStorage.getItem("sidebarHidden") === "true") {
+                document.getElementById("sidebar").classList.add("hidden");
+                document.getElementById("videoContainer").classList.add("full");
+                document.getElementById("expandSidebar").classList.add("visible");
+            }
+        });
+    </script>
     <style>
         .comment-box, .related-box {
             transform: translateX(100%);
@@ -210,14 +219,6 @@ document.getElementById("toggleComments").addEventListener("click", function() {
             this.classList.remove("visible");
             updateSidebarState(false);
         });
-        
-        window.addEventListener("load", function() {
-            if (localStorage.getItem("sidebarHidden") === "true") {
-                document.getElementById("sidebar").classList.add("hidden");
-                document.getElementById("videoContainer").classList.add("full");
-                document.getElementById("expandSidebar").classList.add("visible");
-            }
-        });
 
 async function fetchComments() {
     const commentContainers = [document.getElementById("commentsList1"), document.getElementById("commentsList2")];
@@ -287,10 +288,6 @@ function getHistoryFromCookies() {
     }
     return [];
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    saveToHistory(videoId, channelId, channelName, videoTitle);
-});
   
 function toggleDescription(button) {
     const description = button.closest('div').nextElementSibling;
@@ -303,7 +300,10 @@ function toggleDescription(button) {
         button.textContent = '表示する';
     }
 }
-
+  
+window.addEventListener("load", function() {
+    saveToHistory(videoId, channelId, channelName, videoTitle);
+});
 </script>
 </body>
 </html>
