@@ -28,17 +28,6 @@ app.set("views", path.join(__dirname, "views"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("trust proxy", 1);
 
-const infoGet = import("./server/youtube.js");
-app.get("/info", async (req, res) => {
-  const videoId = "beFiVQcwVY8";
-  try {
-    const info = await infoGet(videoId);
-    res.json(info);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
 app.get('/', (req, res) => {
   res.render("home/index");
 });
@@ -47,10 +36,10 @@ app.get('/app', (req, res) => {
   res.render("app/list");
 });
 
-app.use("/tools", require("./routes/tools.cjs"));
-app.use("/blog", require("./routes/blog.cjs"));
-app.use("/wkt", require("./routes/wakametube.cjs"));
-app.use("/game", require("./routes/game.cjs"));
+app.use("/tools", require("./routes/tools"));
+app.use("/blog", require("./routes/blog"));
+app.use("/wkt", require("./routes/wakametube"));
+app.use("/game", require("./routes/game"));
 
 app.get('/watch', (req, res) => {
   const videoId = req.query.v;
@@ -72,4 +61,4 @@ app.get('/hashtag/:des', (req, res) => {
   const des = req.params.des;
   res.redirect(`/wkt/s?q=${des}`);
 });
-app.use("/sandbox", require("./routes/sandbox.cjs"));
+app.use("/sandbox", require("./routes/sandbox"));
