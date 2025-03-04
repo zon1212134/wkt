@@ -65,3 +65,7 @@ app.get('/hashtag/:des', (req, res) => {
   const des = req.params.des;
   res.redirect(`/wkt/s?q=${des}`);
 });
+
+app.get("/sandbox/:id", (req, res) => {
+  res.render(`tst/${req.params.id}`);
+});
