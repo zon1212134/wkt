@@ -14,4 +14,4 @@ async function infoGet(id) {
   return await yt.getInfo(id);
 }
 
-module.exports = infoGet;
+export default infoGet;
