@@ -5,6 +5,9 @@ const ytsr = require("ytsr");
 
 const limit = process.env.LIMIT || 50;
 
+router.use("/watch", require("../controllers/tube/getvideo"));
+router.use("/w", require("../controllers/tube/getvideo"));
+
 router.get("/", (req, res) => {
   res.render("tube/home");
 });
@@ -32,8 +35,6 @@ router.get("/s", async (req, res) => {
 });
 
 router.use("/back", require("../controllers/tube/back"));
-router.use("/watch", require("../controllers/tube/getvideo"));
-router.use("/w", require("../controllers/tube/getvideo"));
 router.use("/trend", require("../controllers/tube/trend"));
 
 module.exports = router;
