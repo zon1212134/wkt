@@ -1,11 +1,22 @@
-"use strict";
-const express = require("express");
-let app = express();
-const cluster = require("cluster");
-const os = require("os");
-const compression = require("compression");
+import express from "express";
+import cluster from "cluster";
+import os from "os";
+import compression from "compression";
+import path from "path";
+import { fileURLToPath } from "url";
+import bodyParser from "body-parser";
+import toolsRouter from "./routes/tools.js";
+import blogRouter from "./routes/blog.js";
+import wktRouter from "./routes/wakametube.js";
+import gameRouter from "./routes/game.js";
+import sandboxRouter from "./routes/sandbox.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const numClusters = os.cpus().length;
-if (cluster.isMaster) {
+
+if (cluster.isPrimary) {
   for (let i = 0; i < numClusters; i++) {
     cluster.fork();
   }
@@ -13,52 +24,44 @@ if (cluster.isMaster) {
     cluster.fork();
   });
 } else {
+  const app = express();
+
   app.use(compression());
-  app.use(express.static(__dirname + "/public"));
+  app.use(express.static(path.join(__dirname, "public")));
   app.set("view engine", "ejs");
+  app.set("views", path.join(__dirname, "views"));
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.set("trust proxy", 1);
+
+  app.get("/", (req, res) => {
+    res.render("home/index");
+  });
+
+  app.get("/app", (req, res) => {
+    res.render("app/list");
+  });
+
+  app.use("/tools", toolsRouter);
+  app.use("/blog", blogRouter);
+  app.use("/wkt", wktRouter);
+  app.use("/game", gameRouter);
+
+  app.get("/watch", (req, res) => {
+    const videoId = req.query.v;
+    res.redirect(videoId ? `/wkt/watch/${videoId}` : "/wkt/trend");
+  });
+  app.get("/channel/:id", (req, res) => {
+    res.redirect(`/wkt/c/${req.params.id}`);
+  });
+  app.get("/channel/:id/join", (req, res) => {
+    res.redirect(`/wkt/c/${req.params.id}`);
+  });
+  app.get("/hashtag/:des", (req, res) => {
+    res.redirect(`/wkt/s?q=${req.params.des}`);
+  });
+  app.use("/sandbox", sandboxRouter);
+
   app.listen(3000, () => {
     console.log(`Worker ${process.pid} started`);
   });
 }
-
-const path = require("path");
-const bodyParser = require("body-parser");
-
-app.set("views", path.join(__dirname, "views"));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.set("trust proxy", 1);
-
-app.get('/', (req, res) => {
-  res.render("home/index");
-});
-
-app.get('/app', (req, res) => {
-  res.render("app/list");
-});
-
-app.use("/tools", require("./routes/tools"));
-app.use("/blog", require("./routes/blog"));
-app.use("/wkt", require("./routes/wakametube"));
-app.use("/game", require("./routes/game"));
-
-app.get('/watch', (req, res) => {
-  const videoId = req.query.v;
-  if (videoId) {
-    res.redirect(`/wkt/watch/${videoId}`);
-  } else {
-    res.redirect(`/wkt/trend`);
-  }
-});
-app.get('/channel/:id', (req, res) => {
-  const id = req.params.id;
-    res.redirect(`/wkt/c/${id}`);
-});
-app.get('/channel/:id/join', (req, res) => {
-  const id = req.params.id;
-  res.redirect(`/wkt/c/${id}`);
-});
-app.get('/hashtag/:des', (req, res) => {
-  const des = req.params.des;
-  res.redirect(`/wkt/s?q=${des}`);
-});
-app.use("/sandbox", require("./routes/sandbox"));

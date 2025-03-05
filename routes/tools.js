@@ -1,6 +1,7 @@
-const express = require("express");
+import express from "express";
+import invController from "../controllers/tool/src/inv.js";
+
 const router = express.Router();
-const path = require("path");
 
 router.get("/", (req, res) => {
   res.render("tools/home");
@@ -10,6 +11,6 @@ router.get("/tool/:id", (req, res) => {
   res.render(`tools/tool/${req.params.id}`);
 });
 
-router.use("/inv", require("../controllers/tool/src/inv"));
+router.use("/inv", invController);
 
-module.exports = router;
+export default router;
