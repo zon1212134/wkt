@@ -19,3 +19,7 @@
 .hidden {
     display: none;
 }
+.description a {
+    color: #4a77a8;
+    text-decoration: none;
+}

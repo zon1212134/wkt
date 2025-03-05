@@ -1,7 +1,6 @@
 "use strict";
 const cluster = require("cluster");
 const os = require("os");
-
 if (!process.env.NO_CLUSTERS && cluster.isPrimary) {
   const numClusters = process.env.CLUSTERS || (os.availableParallelism ? os.availableParallelism() : (os.cpus().length || 2))
   console.log(`Primary ${process.pid} is running.${numClusters} clusters.`);
