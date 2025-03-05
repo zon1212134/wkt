@@ -8,23 +8,11 @@ const serverYt = require("/app/server/youtube.js");
 router.get('/edu/:id', async (req, res) => {
   const videoId = req.params.id;
   try {
-    const videoInfo = "";
+    const videoData = await serverYt.infoGet(videoId);
     const ytinfo = await axios.get("https://wktedutube.glitch.me");
-    const src = `https://www.youtubeeducation.com/embed/${videoId}${ytinfo.data}`;
-    
-    const templateData = {
-      videoId: videoId,
-      channelId: videoInfo.channelId,
-      channelName: videoInfo.channelName,
-      channelImage: videoInfo.channelImage,
-      videoTitle: videoInfo.videoTitle,
-      videoDes: videoInfo.videoDes,
-      videoViews: videoInfo.videoViews,
-      likeCount: videoInfo.likeCount,
-      Videosrc: src
-    };
+    const videosrc = `https://www.youtubeeducation.com/embed/${videoId}${ytinfo.data}`;
           
-    res.render('tube/umekomi.ejs', templateData);
+    res.render('tube/umekomi.ejs', {videosrc, videoData});
   } catch (error) {
      res.status(500).render('matte', { 
       videoId, 
