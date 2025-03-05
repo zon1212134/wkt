@@ -3,7 +3,7 @@
 <body class="bg-gray-900 text-white">
   <div class="mt-4 p-4 bg-gray-800 rounded-lg shadow-lg">
     <div class="mt-2 space-y-4">
-      <% cm.comments.contents.filter(c => c.comment).forEach(CommentThread => { %>   
+      <% cm.contents.filter(c => c.comment).forEach(CommentThread => { %>   
         <div class="flex items-start bg-gray-700 p-4 rounded-lg transition-transform transform hover:scale-105">
           <img loading="lazy" src="<%= CommentThread.comment?.author.thumbnails[0].url %>" class="w-10 h-10 rounded-full">
           <div class="ml-3">

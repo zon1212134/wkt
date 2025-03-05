@@ -34,22 +34,17 @@ router.get('/:id', async (req, res) => {
     } else {
         baseUrl = serverUrls[server] || 'https://wtserver1.glitch.me';
     }
-  
     if (!/^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
         return res.status(400).send('videoIDが正しくありません');
     }
-
     const cookies = parseCookies(req);
     const wakames = cookies.wakametubeumekomi === 'true';
     if (wakames) {
         return res.redirect(`/wkt/umekomi/${videoId}`);
     }
     try {
-        console.log(baseUrl);
         const response = await axios.get(`${baseUrl}/api/${videoId}`);
         const videoData = response.data;
-        console.log(videoData);
-
         res.render('tube/watch', { videoData, videoId, baseUrl });
   } catch (error) {
         res.status(500).render('mattev', { 
