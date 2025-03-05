@@ -73,9 +73,7 @@ app.use((req, res) => {
     content: "そのページは存在しません。",
   });
 });
-
 app.on("error", console.error);
-
 async function initInnerTube() {
   try {
     client = await YouTubeJS.Innertube.create({ lang: "ja", location: "JP"});
