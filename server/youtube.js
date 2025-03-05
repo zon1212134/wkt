@@ -1,30 +1,27 @@
 import { Innertube, UniversalCache } from "youtubei.js";
 
-let yt;
+// YouTubeクライアントの初期化
+let yt = null;
 
+// Innertubeを初期化する関数
 async function initInnerTube() {
   try {
     console.log("Initializing Innertube...");
-    yt = await Innertube.create({ 
-      location: process.env.GEOLOCATION || "JP"
+    yt = await Innertube.create({
+      location: "JP"
     });
     console.log("Innertube initialized successfully.");
   } catch (e) {
     yt = null;
-    console.error(process.pid, "--- Failed to initialize InnerTube. Trying again in 10 seconds....");
-    console.error(e);
-    setTimeout(initInnerTube, 10000);
+    console.error("Error during Innertube initialization:", e);
+    throw new Error("Failed to initialize Innertube.");
   }
 }
 
+// 動画情報を取得する関数
 async function getVideoInfo(videoId) {
-  console.log(videoId);
-  
   if (!yt) {
-    await initInnerTube();
-    if (!yt) {
-      throw new Error("InnerTube failed to initialize.");
-    }
+    await initInnerTube();  // クライアントが初期化されていない場合は初期化を試みる
   }
 
   try {
@@ -44,7 +41,5 @@ async function getVideoInfo(videoId) {
     throw new Error("Failed to fetch video information.");
   }
 }
-
-process.on("unhandledRejection", console.error);
 
 export { getVideoInfo };
