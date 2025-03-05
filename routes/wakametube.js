@@ -18,7 +18,7 @@ router.get("/s", async (req, res) => {
 	let page = Number(req.query.p || 1);
     try {
 		res.render("tube/search.ejs", {
-			res: await serverYt.search(query, limit, page ),
+			res: await serverYt.search(query, limit, page),
 			query: query,
 			page
 		});
@@ -40,7 +40,7 @@ router.get("/ss", async (req, res) => {
 	let page = Number(req.query.p || 2);
     try {
 		res.render("tube/opu/search.ejs", {
-			res: await serverYt.search(query, limit, page ),
+			res: await ytsr(query, {limit, pages: page}),
 			query: query,
 			page
 		});

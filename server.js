@@ -100,7 +100,7 @@ async function initInnerTube() {
     client = await YouTubeJS.Innertube.create({ lang: "ja", location: "JP"});
     serverYt.setClient(client);
     const listener = app.listen(process.env.PORT || 3000, () => {
-      console.log(process.pid, "-- Ready.", listener.address().port);
+      console.log(process.pid, "Ready.", listener.address().port);
     });
   } catch (e) {
     console.error(e);
