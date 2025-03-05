@@ -5,7 +5,7 @@ const path = require("path");
 const http = require('http');
 const undici = require("undici");
 const bodyParser = require("body-parser");
-const serverYt = require("../server/youtube.js");
+const serverYt = require("/app/server/youtube.js");
 
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
@@ -109,8 +109,7 @@ router.get(["/yt3/*", "/ytc/*"], async (req, res) => {
 router.get('/comment/:id', async (req, res) => {
   const videoId = req.params.id;
     try {
-        const response = await axios.get(`https://wakamecomment.glitch.me/api/wakame/${videoId}`);
-        const cm = response.data;
+        const cm = await serverYt.getComments(req.params.id);
 
         res.render('tube/back/comment', { cm });
    } catch (error) {

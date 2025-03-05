@@ -23,8 +23,18 @@ async function search(q, page, limit) {
   }
 }
 
+async function getComments(id) {
+  if (!id) return;
+  try {
+    return(await client.getComments(id));
+  } catch (error) {
+    return null;
+  }
+}
+
 module.exports = { 
   infoGet, 
   setClient,
-  search
+  search,
+  getComments
 };
