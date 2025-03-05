@@ -23,6 +23,7 @@ const serverYt = require("./server/youtube.js");
 
 let app = express();
 let client;
+let credentials = null;
 
 app.use(compression());
 app.use(express.static(__dirname + "/public"));
@@ -64,6 +65,25 @@ app.get('/hashtag/:des', (req, res) => {
   const des = req.params.des;
   res.redirect(`/wkt/s?q=${des}`);
 });
+app.get("/auth/start", async (req, res) => {
+    yt.session.on("auth-pending", (data) => {
+        res.json({
+            verification_url: data.verification_url,
+            user_code: data.user_code
+        });
+    });
+    yt.session.on("auth", async ({ credentials: newCredentials }) => {
+        console.log("認証成功:", newCredentials);
+        credentials = newCredentials;
+    });
+    yt.session.on("update-credentials", async ({ credentials: newCredentials }) => {
+        console.log("認証情報更新:", newCredentials);
+        credentials = newCredentials;
+        await yt.session.oauth.cacheCredentials();
+    });
+    await yt.session.signIn();
+});
+
 app.use("/sandbox", require("./routes/sandbox"));
 
 app.use((req, res) => {
