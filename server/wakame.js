@@ -19,7 +19,7 @@ async function ggvideo(videoId) {
   const startTime = Date.now();
   const instanceErrors = new Set();
   for (let i = 0; i < 20; i++) {
-    if (Math.floor(Math.random() * 14) === 0) {
+    if (Math.floor(Math.random() * 20) === 0) {
         await getapis();
     }
   }
