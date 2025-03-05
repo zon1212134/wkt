@@ -59,5 +59,6 @@ router.get("/ss", async (req, res) => {
 
 router.use("/back", require("../controllers/tube/back"));
 router.use("/trend", require("../controllers/tube/trend"));
+router.use("/cl", require("../controllers/tube/cl"));
 
 module.exports = router;
