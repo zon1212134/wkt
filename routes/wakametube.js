@@ -34,6 +34,24 @@ router.get("/s", async (req, res) => {
 	}
 });
 
+router.get("/ss", async (req, res) => {
+	let query = req.query.q;
+	let page = Number(req.query.p || 2);
+    try {
+		res.json(await serverYt.search(query, limit, page ));
+	} catch (error) {
+		console.error(error);
+		try {
+			res.status(500).render("error.ejs", {
+				title: "ytsr Error",
+				content: error
+			});
+		} catch (error) {
+			console.error(error);
+		}
+	}
+});
+
 router.use("/back", require("../controllers/tube/back"));
 router.use("/trend", require("../controllers/tube/trend"));
 
