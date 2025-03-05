@@ -8,6 +8,7 @@ const limit = process.env.LIMIT || 50;
 
 router.use("/watch", require("../controllers/tube/getvideo"));
 router.use("/w", require("../controllers/tube/getvideo"));
+router.use("/yt", require("../controllers/tube/youtube"));
 
 router.get("/", (req, res) => {
   res.render("tube/home");
