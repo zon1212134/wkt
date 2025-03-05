@@ -67,29 +67,10 @@ app.get('/hashtag/:des', (req, res) => {
 });
 app.use("/sandbox", require("./routes/sandbox"));
 
-app.get("/umekomiapi/:id", async (req, res) => {
-  try {
-    let id = req.params.id || req.query.v;
-    let info = await client.getInfo(id);
-    res.json({
-      videoId: id,
-      channelId: info.secondary_info.owner.author.id,
-      channelName: info.secondary_info.owner.author.name,
-      channelImage: info.secondary_info.owner.author.thumbnails[0].url || '',
-      videoTitle: info.primary_info.title.text,
-      videoDes: info.secondary_info.description.text,
-      videoViews: info.primary_info.view_count.text,
-      likeCount: info.basic_info.like_count || 0
-    });
-  } catch (error) {
-    res.json(error);
-  }
-});
-
 app.use((req, res) => {
   res.status(404).render("error.ejs", {
     title: "404 Not found",
-    content: "A resource that you tried to get is not available.",
+    content: "そのページは存在しません。",
   });
 });
 
