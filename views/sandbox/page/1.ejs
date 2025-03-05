@@ -3,71 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>再生履歴 - わかめtube</title>
+    <title>YouTube OAuth 認証</title>
     <link rel="stylesheet" href="/css/page.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="/js/tube.js"></script>
+    <script src="/js/tailwindcss.js"></script>
 </head>
 <body class="bg-gray-900 text-white">
-    <header class="bg-gray-800 p-4 flex justify-between items-center fixed top-0 left-0 w-full z-10">
-        <form action="/wkt/s" method="get" class="w-1/2">
-            <input type="text" name="q" id="searchbox" placeholder="検索" class="searchbox w-full p-2 rounded bg-gray-700 text-white">
-        </form>
-        <nav class="space-x-4">
-            <a href="/wkt" class="text-gray-300 hover:text-white">ホーム</a>
-            <a href="/wkt/trend" class="text-gray-300 hover:text-white">トレンド</a>
-            <a href="/wkt/history" class="text-gray-300 hover:text-white font-bold">履歴</a>
-        </nav>
+    <header class="bg-gray-800 p-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold">認証</h1>
     </header>
+    
+    <main class="container mx-auto p-6 text-center">
+        <p class="text-lg mb-4">YouTubeにログインして、サービスを利用するための認証を行ってください。</p>
+        <button id="auth-button" class="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-full shadow-md hover:bg-blue-700 transition">YouTubeにログイン</button>
+        <button id="check-auth" class="ml-4 px-6 py-3 bg-gray-600 text-white text-lg font-semibold rounded-full shadow-md hover:bg-gray-700 transition">認証情報を確認</button>
+    </main>
+    
+    <script>
+    document.getElementById("auth-button").addEventListener("click", async () => {
+        const res = await fetch("/auth/start");
+        const data = await res.json();
+        alert(`認証ページにアクセスしてコードを入力してください: ${data.verification_url}`);
+    });
+    
+    document.getElementById("check-auth").addEventListener("click", async () => {
+        const res = await fetch("/auth/info");
+        const data = await res.json();
+        console.log("認証情報:", data);
+        alert(JSON.stringify(data, null, 2));
+    });
+    </script>
+</body>
+</html>
 
-    <div class="container mx-auto p-4 pt-24">
-        <h1 class="text-3xl font-bold mb-4">再生履歴</h1>
-        
-        <div class="flex justify-end">
-            <button id="clear-history" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
-                履歴を削除
-            </button>
-        </div>
 
-        <div id="history-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
-            <div class="result-item w-auto bg-gray-800 p-4 rounded">
-                <a href="/wkt/watch/abc123" class="thumbnail">
-                    <img loading="lazy" src="https://via.placeholder.com/320x180" alt="適当な動画1" class="w-auto h-48 rounded">
-                    <span class="video-duration">12:34</span>
-                </a>
-                <p class="text-lg font-bold mt-2">適当な動画タイトル1</p>
-                <p class="text-xs text-gray-500">3月1日 14:23</p>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>認証 - わかめtube</title>
+    <link rel="stylesheet" href="/css/page.css">
+    <script src="/js/tailwindcss.js"></script>
+</head>
+<body class="bg-gray-900 text-white">
+    <header class="bg-gray-800 flex p-4 justify-between items-center">
+        <h1 class="text-lg font-bold">わかめtube 認証</h1>
+    </header>
+    
+    <div class="container mx-auto p-6 flex flex-col items-center">
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h2 class="text-xl font-bold mb-4">アカウントに接続</h2>
+            <p class="text-gray-400 mb-4">このアプリにアカウントへのアクセスを許可しますか？</p>
+            
+            <div class="flex items-center space-x-4 mb-6">
+                <img src="/img/default-avatar.png" alt="ユーザーアイコン" class="w-12 h-12 rounded-full">
+                <p class="text-lg">あなたのアカウント</p>
             </div>
-
-            <div class="result-item w-auto bg-gray-800 p-4 rounded">
-                <a href="/wkt/watch/xyz789" class="thumbnail">
-                    <img loading="lazy" src="https://via.placeholder.com/320x180" alt="適当な動画2" class="w-auto h-48 rounded">
-                    <span class="video-duration">8:45</span>
-                </a>
-                <p class="text-lg font-bold mt-2">適当な動画タイトル2</p>
-                <p class="text-xs text-gray-500">3月1日 12:10</p>
-            </div>
-
-            <div class="result-item w-auto bg-gray-800 p-4 rounded">
-                <a href="/wkt/watch/def456" class="thumbnail">
-                    <img loading="lazy" src="https://via.placeholder.com/320x180" alt="適当な動画3" class="w-auto h-48 rounded">
-                    <span class="video-duration">5:20</span>
-                </a>
-                <p class="text-lg font-bold mt-2">適当な動画タイトル3</p>
-                <p class="text-xs text-gray-500">2月28日 22:05</p>
-            </div>
+            
+            <form action="/oauth/authorize" method="POST">
+                <input type="hidden" name="client_id" value="<%= client_id %>">
+                <input type="hidden" name="redirect_uri" value="<%= redirect_uri %>">
+                <input type="hidden" name="response_type" value="code">
+                
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold">許可する</button>
+            </form>
+            
+            <a href="/" class="block text-center text-gray-400 mt-4 hover:text-gray-300">キャンセル</a>
         </div>
     </div>
-
-    <script>
-        document.getElementById('clear-history').addEventListener('click', function() {
-            if (confirm('本当に履歴を削除しますか？')) {
-                document.getElementById('history-list').innerHTML = '<p class="text-center text-gray-400">履歴はありません。</p>';
-            }
-        });
-    </script>
 </body>
 </html>
