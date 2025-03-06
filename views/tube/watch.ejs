@@ -291,7 +291,7 @@ fetchComments();
                 if (this.checked) {
                     videoSrc.type = "video/webm";
                     videoSrc.src = "<%- videoData.highstreamUrl %>";
-                    audio.src = "<%- videoData.audioUrl %>";
+                    audio.src = "<%- videoData.stream_url %>";
                     video.load();
                     audio.load();
                     
