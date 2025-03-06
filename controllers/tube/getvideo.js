@@ -44,6 +44,7 @@ router.get('/:id', async (req, res) => {
         return res.redirect(`/wkt/umekomi/${videoId}`);
     }
     try {
+      
         const response = await axios.get(`${baseUrl}/api/${videoId}`);
         const videoData = response.data;
         res.render('tube/watch', { videoData, videoId, baseUrl });
