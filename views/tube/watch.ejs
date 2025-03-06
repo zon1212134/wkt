@@ -288,10 +288,12 @@ fetchComments();
             $('#hdToggle').change(function() {
                 const video = document.getElementById('video');
                 const audio = document.getElementById('audio');
+                const videoSrc = document.getElementById('videoSrc');
                 
                 if (this.checked) {
-                    $('#videoSrc').attr('src', '<%= videoData.highstreamUrl %>').attr('type', 'video/webm');
-                    audio.src = '<%= videoData.stream_url %>';
+                    videoSrc.src = '<%= videoData.stream_url %>.webm';
+                    videoSrc.type = 'video/webm';
+                    audio.src = '<%= videoData.audio_url %>';
                     video.load();
                     
                     video.addEventListener('loadedmetadata', () => {
@@ -326,9 +328,12 @@ fetchComments();
                         }
                     });
                 } else {
-                    $('#videoSrc').attr('src', '<%= videoData.stream_url %>').attr('type', 'video/mp4');
+                    videoSrc.src = '<%= videoData.stream_url %>';
+                    videoSrc.type = 'video/mp4';
+                    audio.pause();
                     audio.src = '';
                     video.load();
+                    video.play().catch(error => console.error("動画の再生エラー:", error));
                 }
             });
         });
