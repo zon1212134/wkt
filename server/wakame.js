@@ -48,7 +48,41 @@ async function ggvideo(videoId) {
   throw new Error("動画を取得する方法が見つかりません");
 }
 
+async function getYouTube (videoId) {
+  try {
+    const videoInfo = await ggvideo(videoId);
+    const formatStreams = videoInfo.formatStreams || [];
+    const streamUrl = formatStreams.reverse().map(stream => stream.url)[0];
+    const audioStreams = videoInfo.adaptiveFormats || [];
+    let highstreamUrl = audioStreams
+      .filter(stream => stream.container === 'webm' && stream.resolution === '1080p')
+      .map(stream => stream.url)[0];
+    const audioUrl = audioStreams
+      .filter(stream => stream.container === 'm4a' && stream.audioQuality === 'AUDIO_QUALITY_MEDIUM')
+      .map(stream => stream.url)[0];
+    
+    const templateData = {
+      stream_url: streamUrl,
+      highstreamUrl: highstreamUrl,
+      audioUrl: audioUrl,
+      videoId: videoId,
+      channelId: videoInfo.authorId,
+      channelName: videoInfo.author,
+      channelImage: videoInfo.authorThumbnails?.[videoInfo.authorThumbnails.length - 1]?.url || '',
+      videoTitle: videoInfo.title,
+      videoDes: videoInfo.descriptionHtml,
+      videoViews: videoInfo.viewCount,
+      likeCount: videoInfo.likeCount
+    };
+          
+    return(templateData);
+  } catch (error) {
+    return null;
+}
+}
+
 module.exports = { 
   ggvideo, 
   getapis,
+  getYouTube
 };

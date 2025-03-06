@@ -4,6 +4,7 @@ const router = express.Router();
 const path = require("path");
 const http = require('http');
 const serverYt = require("/app/server/youtube.js");
+const wakamess = require("/app/server/wakame.js");
 
 router.get('/:id', async (req, res) => {
     const videoId = req.params.id;
@@ -46,7 +47,7 @@ router.get('/:id', async (req, res) => {
     try {
       let videoData;
       if(server == "direct"){
-        
+        videoData = await wakamess.getYouTube(videoId);
       }else{
         const response = await axios.get(`${baseUrl}/api/${videoId}`);
         videoData = response.data;
