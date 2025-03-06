@@ -51,7 +51,7 @@ router.get('/:id', async (req, res) => {
         const response = await axios.get(`${baseUrl}/api/${videoId}`);
         videoData = response.data;
       }
-        res.render('tube/watch', { videoData, videoId, baseUrl });
+      res.render('tube/watch', { videoData, videoId, baseUrl });
   } catch (error) {
         res.status(500).render('mattev', { 
       videoId, baseUrl,
