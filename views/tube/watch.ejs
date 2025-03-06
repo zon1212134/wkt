@@ -106,7 +106,7 @@
         <div class="video-container" id="videoContainer">
             <div class="relative">
     <div class="max-w-6xl mx-auto p-4">
-        <video id="video" class="w-full h-auto" controls autoplay poster="/wkt/back/vi/<%= videoData.videoId %>/maxresdefault.jpg">
+        <video id="video" class="w-full h-auto" controls autoplay preload="auto" poster="/wkt/back/vi/<%= videoData.videoId %>/maxresdefault.jpg">
             <source id="videoSrc" src="<%= videoData.stream_url %>" type="video/mp4">
         </video>
         <audio id="audio" style="display: none;"></audio>
@@ -281,10 +281,6 @@ document.getElementById("retryButton").addEventListener("click", fetchComments);
 
 fetchComments();
   
-const videosrcok = "<%= videoData.stream_url %>";
-const highvideook = "<%= videoData.highstreamUrl %>";
-const audiosrcok = "<%= videoData.audioUrl %>";
-  
         $(document).ready(function() {
             $('#toggleToolbar').click(() => $('#toolbar').addClass('open'));
             $('#closeToolbar').click(() => $('#toolbar').removeClass('open'));
@@ -296,9 +292,9 @@ const audiosrcok = "<%= videoData.audioUrl %>";
                 
                 if (this.checked) {
                     video.load();
-                    videoSrc.src = highvideook;
-                    videoSrc.type = 'video/webm';
-                    audio.src = audiosrcok;
+                    videoSrc.src = "<%- videoData.highstreamUrl %>";
+                    videoSrc.type = "video/webm";
+                    audio.src = "<%- videoData.audioUrl %>";
                     video.load();
                     audio.load();
                     
@@ -334,8 +330,8 @@ const audiosrcok = "<%= videoData.audioUrl %>";
                         }
                     });
                 } else {
-                    videoSrc.src = videosrcok;
-                    videoSrc.type = 'video/mp4';
+                    videoSrc.src = "<%- videoData.stream_url %>";
+                    videoSrc.type = "video/mp4";
                     audio.pause();
                     audio.src = '';
                     video.load();
