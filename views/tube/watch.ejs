@@ -281,6 +281,10 @@ document.getElementById("retryButton").addEventListener("click", fetchComments);
 
 fetchComments();
   
+const videosrcok = "<%= videoData.stream_url %>";
+const highvideook = "<%= videoData.highstreamUrl %>";
+const audiosrcok = "<%= videoData.audioUrl %>";
+  
         $(document).ready(function() {
             $('#toggleToolbar').click(() => $('#toolbar').addClass('open'));
             $('#closeToolbar').click(() => $('#toolbar').removeClass('open'));
@@ -291,9 +295,10 @@ fetchComments();
                 const videoSrc = document.getElementById('videoSrc');
                 
                 if (this.checked) {
-                    videoSrc.src = '<%= videoData.highstreamUrl %>';
+                    video.load();
+                    videoSrc.src = highvideook;
                     videoSrc.type = 'video/webm';
-                    audio.src = '<%= videoData.audio_url %>';
+                    audio.src = audiosrcok;
                     video.load();
                     audio.load();
                     
@@ -329,7 +334,7 @@ fetchComments();
                         }
                     });
                 } else {
-                    videoSrc.src = '<%= videoData.stream_url %>';
+                    videoSrc.src = videosrcok;
                     videoSrc.type = 'video/mp4';
                     audio.pause();
                     audio.src = '';
