@@ -23,7 +23,6 @@ const serverYt = require("./server/youtube.js");
 
 let app = express();
 let client;
-let credentials = null;
 
 app.use(compression());
 app.use(express.static(__dirname + "/public"));

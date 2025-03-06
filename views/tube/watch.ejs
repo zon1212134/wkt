@@ -60,6 +60,19 @@
         .expand-sidebar-btn.visible {
             display: block;
         }
+        .toolbar {
+            position: fixed;
+            top: 0;
+            right: -250px;
+            width: 250px;
+            height: 100%;
+            background: #333;
+            transition: right 0.3s;
+            padding: 10px;
+        }
+        .toolbar.open { right: 0; }
+        .toggle-btn { cursor: pointer; padding: 10px; background: #444; color: white; }
+        .checkbox-container { display: flex; align-items: center; }
     </style>
 </head>
 <body class="bg-gray-900 text-white">
@@ -67,20 +80,37 @@
             <form action="/wkt/s" method="get" class="w-1/2">
               <input type="text" name="q" id="searchbox" placeholder="検索" class="searchbox w-full p-2 rounded bg-gray-700 text-white">
             </form>
-        <nav class="space-x-4">
-            <a href="/wkt" class="text-gray-300 hover:text-white">ホーム</a>
-            <a href="/wkt/trend" class="text-gray-300 hover:text-white">トレンド</a>
-            <a href="/wkt/cl/history" class="text-gray-300 hover:text-white">履歴</a>
-        </nav>
+        <button id="toggleToolbar" class="toggle-btn">ツール</button>
     </header>
+  
+    <div class="toolbar" id="toolbar">
+        <button id="closeToolbar" class="toggle-btn">閉じる</button>
+        <nav>
+            <a href="/wkt" class="block text-gray-300">ホーム</a>
+            <a href="/wkt/trend" class="block text-gray-300">トレンド</a>
+            <a href="/wkt/cl/history" class="block text-gray-300">履歴</a>
+        </nav>
+        <div class="mt-4">
+            <div class="checkbox-container">
+                <input type="checkbox" id="loopToggle">
+                <label for="loopToggle" class="ml-2">ループ再生</label>
+            </div>
+            <div class="checkbox-container mt-2">
+                <input type="checkbox" id="hdToggle">
+                <label for="hdToggle" class="ml-2">高画質化</label>
+            </div>
+        </div>
+    </div>
     
     <div class="max-w-6xl mx-auto p-4 main-container" id="mainContainer">
         <div class="video-container" id="videoContainer">
             <div class="relative">
-                <video class="w-full h-auto" controls autoplay poster="/wkt/back/vi/<%= videoData.videoId %>/maxresdefault.jpg">
-                    <source src="<%= videoData.stream_url %>" type="video/mp4">
-                    お使いのブラウザは動画タグをサポートしていません。
-                </video>
+    <div class="max-w-6xl mx-auto p-4">
+        <video id="video" class="w-full" controls autoplay>
+            <source id="videoSrc" src="<%= videoData.stream_url %>" type="video/mp4">
+        </video>
+        <audio id="audio" style="display: none;"></audio>
+    </div>
             </div>
             <div class="flex items-center mt-4 p-4 bg-gray-800 rounded">
               <a href ="wkt/c/<%= videoData.channelId %>">
@@ -250,6 +280,58 @@ async function fetchComments() {
 document.getElementById("retryButton").addEventListener("click", fetchComments);
 
 fetchComments();
+  
+        $(document).ready(function() {
+            $('#toggleToolbar').click(() => $('#toolbar').addClass('open'));
+            $('#closeToolbar').click(() => $('#toolbar').removeClass('open'));
+            
+            $('#hdToggle').change(function() {
+                const video = document.getElementById('video');
+                const audio = document.getElementById('audio');
+                
+                if (this.checked) {
+                    $('#videoSrc').attr('src', '<%= videoData.stream_url %>.webm').attr('type', 'video/webm');
+                    audio.src = '<%= videoData.audio_url %>';
+                    video.load();
+                    
+                    video.addEventListener('loadedmetadata', () => {
+                        video.play().catch(error => console.error("動画の再生エラー:", error));
+                    });
+                    
+                    video.addEventListener('play', () => {
+                        audio.play().catch(error => console.error("オーディオの再生エラー:", error));
+                    });
+                    
+                    video.addEventListener('pause', () => {
+                        audio.pause();
+                        audio.currentTime = video.currentTime;
+                    });
+                    
+                    video.addEventListener('ended', () => {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    });
+                    
+                    video.addEventListener('seeked', () => {
+                        video.pause();
+                        audio.pause();
+                        audio.currentTime = video.currentTime;
+                        video.play();
+                        audio.play();
+                    });
+                    
+                    video.addEventListener('timeupdate', () => {
+                        if (Math.abs(video.currentTime - audio.currentTime) > 0.5) {
+                            audio.currentTime = video.currentTime;
+                        }
+                    });
+                } else {
+                    $('#videoSrc').attr('src', '<%= videoData.stream_url %>').attr('type', 'video/mp4');
+                    audio.src = '';
+                    video.load();
+                }
+            });
+        });
 
 const videoId = "<%= videoData.videoId %>";
 const channelId = "<%= videoData.channelId %>";
