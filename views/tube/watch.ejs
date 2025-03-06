@@ -106,7 +106,7 @@
         <div class="video-container" id="videoContainer">
             <div class="relative">
         <video id="video" class="w-full h-auto" controls autoplay preload="auto" poster="/wkt/back/vi/<%= videoData.videoId %>/maxresdefault.jpg">
-            <source id="videoSrc" src="<%- videoData.highstreamUrl %>" type="video/webm">
+            <source id="videoSrc" src="<%- videoData.stream_url %>" type="video/mp4">
         </video>
         <audio id="audio" style="display: none;"></audio>
             </div>
@@ -289,9 +289,8 @@ fetchComments();
                 const videoSrc = document.getElementById('videoSrc');
                 
                 if (this.checked) {
-                    video.load();
+                    videoSrc.type = "video/webm";
                     videoSrc.src = "<%- videoData.highstreamUrl %>";
-                  
                     audio.src = "<%- videoData.audioUrl %>";
                     video.load();
                     audio.load();
@@ -328,8 +327,8 @@ fetchComments();
                         }
                     });
                 } else {
-                    videoSrc.src = "<%- videoData.stream_url %>";
                     videoSrc.type = "video/mp4";
+                    videoSrc.src = "<%- videoData.stream_url %>";
                     audio.pause();
                     audio.src = '';
                     video.load();
