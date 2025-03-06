@@ -29,7 +29,7 @@ router.get('/:id', async (req, res) => {
     };
 
     let baseUrl;
-    if (server == 0) {
+    if (server == "0") {
         const randomIndex = Math.floor(Math.random() * serverUrls['0'].length);
         baseUrl = serverUrls['0'][randomIndex];
     } else {
