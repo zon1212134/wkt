@@ -6,6 +6,7 @@ const http = require('http');
 const undici = require("undici");
 const bodyParser = require("body-parser");
 const serverYt = require("/app/server/youtube.js");
+const wakamess = require("/app/server/wakame.js");
 
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
@@ -107,17 +108,41 @@ router.get(["/yt3/*", "/ytc/*"], async (req, res) => {
 });
 
 router.get('/comment/:id', async (req, res) => {
-  const videoId = req.params.id;
+    const id = req.params.id;
     try {
-        const cm = await serverYt.getComments(req.params.id);
-
+        const cm = await serverYt.getComments(id);
         res.render('tube/back/comment', { cm });
    } catch (error) {
         res.status(500).render('error', { 
-      videoId, 
+      id, 
       error: 'コメントを取得できません', 
       details: error.message 
     });
+  }
+});
+
+router.get("/videoinfo/:id", async (req, res) => {
+    try {
+		res.json(await serverYt.infoGet(req.params.id));
+	} catch (error) {
+		console.error(error);
+		try {
+			res.status(500).render("error.ejs", {
+				title: "youtube.js Error",
+				content: error
+			});
+		} catch (error) {
+			console.error(error);
+		}
+	}
+});
+
+router.get('/stream/api/:id', async (req, res) => {
+  try {
+    const videoData = await wakamess.getYouTube(req.params.id);
+    res.json(videoData);
+  } catch (error) {
+    res.json(error);
   }
 });
 

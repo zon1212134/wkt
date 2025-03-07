@@ -60,6 +60,12 @@ async function getYouTube (videoId) {
     const audioUrl = audioStreams
       .filter(stream => stream.container === 'm4a' && stream.audioQuality === 'AUDIO_QUALITY_MEDIUM')
       .map(stream => stream.url)[0];
+    const streamUrls = audioStreams
+      .filter(stream => stream.container === 'webm' && stream.resolution)
+      .map(stream => ({
+        url: stream.url,
+        resolution: stream.resolution,
+      }));
     
     const templateData = {
       stream_url: streamUrl,
@@ -72,7 +78,8 @@ async function getYouTube (videoId) {
       videoTitle: videoInfo.title,
       videoDes: videoInfo.descriptionHtml,
       videoViews: videoInfo.viewCount,
-      likeCount: videoInfo.likeCount
+      likeCount: videoInfo.likeCount,
+      streamUrls: streamUrls
     };
           
     return(templateData);

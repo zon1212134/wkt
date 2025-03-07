@@ -57,22 +57,6 @@ router.get("/ss", async (req, res) => {
 	}
 });
 
-router.get("/sss", async (req, res) => {
-    try {
-		res.json(await serverYt.infoGet("beFiVQcwVY8"));
-	} catch (error) {
-		console.error(error);
-		try {
-			res.status(500).render("error.ejs", {
-				title: "ytsr Error",
-				content: error
-			});
-		} catch (error) {
-			console.error(error);
-		}
-	}
-});
-
 router.use("/back", require("../controllers/tube/back"));
 router.use("/trend", require("../controllers/tube/trend"));
 router.use("/cl", require("../controllers/tube/cl"));
