@@ -81,24 +81,24 @@
         <form action="/wkt/s" method="get" class="w-1/2">
             <input type="text" name="q" id="searchbox" placeholder="検索" class="searchbox w-full p-2 rounded bg-gray-700 text-white">
         </form>
-        <button id="toggleToolbar" class="toggle-btn">ツール</button>
+        <button id="toggleToolbar" class="toggle-btn w-1/5">ツール</button>
     </header>
   
     <div class="toolbar" id="toolbar">
-        <button id="closeToolbar" class="toggle-btn absolute top-4 right-4">×</button> <!-- 閉じるボタン -->
+        <button id="closeToolbar" class="toggle-btn absolute top-4 right-4">×</button>
         <nav class="mt-12">
-            <button onclick="window.location.href='/wkt'" class="block text-gray-300 hover:text-white p-2 rounded">ホーム</button>
-            <button onclick="window.location.href='/wkt/trend'" class="block text-gray-300 hover:text-white p-2 rounded">トレンド</button>
-            <button onclick="window.location.href='/wkt/cl/history'" class="block text-gray-300 hover:text-white p-2 rounded">履歴</button>
+            <button onclick="window.location.href='/wkt'" class="w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">ホーム</button>
+            <button onclick="window.location.href='/wkt/trend'" class="w-full bg-gray-700 py-2 hover:text-white rounded mb-2">トレンド</button>
+            <button onclick="window.location.href='/wkt/cl/history'" class="w-full bg-gray-700 py-2 hover:text-white rounded mb-2">履歴</button>
         </nav>
         <div class="mt-4">
-            <div class="checkbox-container">
-                <input type="checkbox" id="loopToggle" class="form-checkbox text-green-500">
+            <div class="checkbox-container w-full bg-gray-700 py-2 hover:text-white rounded mb-2">
                 <label for="loopToggle" class="ml-2">ループ再生</label>
+                <input type="checkbox" id="loopToggle" class="form-checkbox text-green-500">
             </div>
-            <div class="checkbox-container mt-2">
-                <input type="checkbox" id="hdToggle" class="form-checkbox text-green-500">
+            <div class="checkbox-container mt-2 w-full bg-gray-700 py-2 hover:text-white rounded mb-2">
                 <label for="hdToggle" class="ml-2">高画質化</label>
+                <input type="checkbox" id="hdToggle" class="form-checkbox text-green-500">
             </div>
         </div>
     </div>
