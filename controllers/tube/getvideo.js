@@ -9,32 +9,17 @@ const wakamess = require("/app/server/wakame.js");
 router.get('/:id', async (req, res) => {
     const videoId = req.params.id;
     const server = req.query.server || '0';
-    const serverUrls = {
-        '0': [
-        'https://natural-voltaic-titanium.glitch.me',
-        'https://wtserver3.glitch.me',
-        'https://wtserver1.glitch.me',
-        'https://wtserver2.glitch.me',
+    const serverUrls = [
 	      'https://watawata8.glitch.me',
-	      'https://watawata7.glitch.me',
 	      'https://watawata37.glitch.me'
-        ],
-        '1': 'https://wataamee.glitch.me',
-        '2': 'https://watawatawata.glitch.me',
-        '3': 'https://amenable-charm-lute.glitch.me',
-        '4': 'https://watawata37.glitch.me',
-        '5': 'https://wtserver1.glitch.me',
-        "6": "https://battle-deciduous-bear.glitch.me",
-        "7": 'https://productive-noon-van.glitch.me',
-	      "8": 'https://balsam-secret-fine.glitch.me',
-    };
+        ];
 
     let baseUrl;
     if (server == "0") {
-        const randomIndex = Math.floor(Math.random() * serverUrls['0'].length);
-        baseUrl = serverUrls['0'][randomIndex];
+        const randomIndex = Math.floor(Math.random() * serverUrls.length);
+        baseUrl = serverUrls[randomIndex];
     } else {
-        baseUrl = serverUrls[server] || 'https://wtserver1.glitch.me';
+        baseUrl = `https://${server}.glitch.me`;
     }
     if (!/^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
         return res.status(400).send('videoIDが正しくありません');
