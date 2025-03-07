@@ -66,37 +66,38 @@
             right: -250px;
             width: 250px;
             height: 100%;
-            background: #333;
+            background: rgba(51, 51, 51, 0.95);
             transition: right 0.3s;
-            padding: 10px;
+            padding: 20px;
+            z-index: 10;
         }
         .toolbar.open { right: 0; }
-        .toggle-btn { cursor: pointer; padding: 10px; background: #444; color: white; }
+        .toggle-btn { cursor: pointer; padding: 10px; background: #444; color: white; border: none; border-radius: 5px; }
         .checkbox-container { display: flex; align-items: center; }
     </style>
 </head>
 <body class="bg-gray-900 text-white">
     <header class="bg-gray-800 p-4 flex justify-between items-center">
-            <form action="/wkt/s" method="get" class="w-1/2">
-              <input type="text" name="q" id="searchbox" placeholder="検索" class="searchbox w-full p-2 rounded bg-gray-700 text-white">
-            </form>
+        <form action="/wkt/s" method="get" class="w-1/2">
+            <input type="text" name="q" id="searchbox" placeholder="検索" class="searchbox w-full p-2 rounded bg-gray-700 text-white">
+        </form>
         <button id="toggleToolbar" class="toggle-btn">ツール</button>
     </header>
   
     <div class="toolbar" id="toolbar">
-        <button id="closeToolbar" class="toggle-btn">閉じる</button>
-        <nav>
-            <a href="/wkt" class="block text-gray-300">ホーム</a>
-            <a href="/wkt/trend" class="block text-gray-300">トレンド</a>
-            <a href="/wkt/cl/history" class="block text-gray-300">履歴</a>
+        <button id="closeToolbar" class="toggle-btn absolute top-4 right-4">×</button> <!-- 閉じるボタン -->
+        <nav class="mt-12">
+            <button onclick="window.location.href='/wkt'" class="block text-gray-300 hover:text-white p-2 rounded">ホーム</button>
+            <button onclick="window.location.href='/wkt/trend'" class="block text-gray-300 hover:text-white p-2 rounded">トレンド</button>
+            <button onclick="window.location.href='/wkt/cl/history'" class="block text-gray-300 hover:text-white p-2 rounded">履歴</button>
         </nav>
         <div class="mt-4">
             <div class="checkbox-container">
-                <input type="checkbox" id="loopToggle">
+                <input type="checkbox" id="loopToggle" class="form-checkbox text-green-500">
                 <label for="loopToggle" class="ml-2">ループ再生</label>
             </div>
             <div class="checkbox-container mt-2">
-                <input type="checkbox" id="hdToggle">
+                <input type="checkbox" id="hdToggle" class="form-checkbox text-green-500">
                 <label for="hdToggle" class="ml-2">高画質化</label>
             </div>
         </div>
