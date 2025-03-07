@@ -74,6 +74,28 @@
         .toolbar.open { right: 0; }
         .toggle-btn { cursor: pointer; padding: 10px; background: #444; color: white; border: none; border-radius: 5px; }
         .checkbox-container { display: flex; align-items: center; }
+        .control-panel {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(51, 51, 51, 0.95);
+            padding: 10px;
+            border-radius: 10px;
+            display: none;
+        }
+        .control-panel.open { display: block; }
+        .tab-header { display: flex; }
+        .tab-button {
+            flex: 1;
+            padding: 10px;
+            cursor: pointer;
+            text-align: center;
+            background: #444;
+            color: white;
+        }
+        .tab-button.active { background: #666; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
 </head>
 <body class="bg-gray-900 text-white">
@@ -148,6 +170,46 @@
                 </div>
 
                <button id="retryButton" class="w-full bg-gray-700 py-2 rounded mt-2 hidden">再取得</button>
+            </div>
+        </div>
+            
+        <div id="controlPanel" class="control-panel">
+            <div class="tab-header">
+                <div id="tabControl" class="tab-button active">コントロール</div>
+                <div id="tabSettings" class="tab-button">設定</div>
+            </div>
+            <div id="controlTab" class="tab-content active">
+                <div class="control-section">
+                    <button id="reloadVideo" class="control-button">🔄 再読み込み</button>
+                    <button id="toggleLoop" class="control-button">🔁 ループ再生: OFF</button>
+                </div>
+                <div class="control-section">
+                    <label>画質選択:
+                        <select id="qualitySelect">
+                            <% videoData.streamUrls.forEach(stream => { %>
+                                <option value="<%= stream.url %>"><%= stream.resolution %></option>
+                            <% }); %>
+                        </select>
+                    </label>
+                </div>
+                <div class="control-section">
+                    <label>サーバー選択:
+                        <select id="serverSelect">
+                            <option value="wtserver1">wtserver1</option>
+                            <option value="wtserver2">wtserver2</option>
+                            <option value="wtserver3">wtserver3</option>
+                        </select>
+                    </label>
+                    <button id="changeServer" class="control-button">🔃 サーバーを変更</button>
+                </div>
+            </div>
+            <div id="settingsTab" class="tab-content">
+                <div class="control-section">
+                    <label><input type="radio" name="playbackMode" value="mode1"> モード1</label>
+                    <label><input type="radio" name="playbackMode" value="mode2"> モード2</label>
+                    <label><input type="radio" name="playbackMode" value="mode3"> モード3</label>
+                </div>
+                <button id="saveSettings" class="control-button">💾 設定を保存</button>
             </div>
         </div>
         
@@ -226,7 +288,7 @@
             <button id="hideSidebar" class="w-full bg-gray-700 py-2 rounded">▶ サイドバーを隠す</button>
             <button id="toggleComments" class="mt-4 w-full bg-gray-700 py-2 rounded">コメントを開く</button>
             <button id="toggledouga" class="mt-4 w-full bg-gray-700 py-2 rounded">関連動画を開く</button>
-            <button id="togglecontrol" class="mt-4 w-full bg-gray-700 py-2 rounded"><%= baseUrl.replace('https://', '').replace('.glitch.me', '') %></button>
+            <button id="toggleControlPanel" class="mt-4 w-full bg-gray-700 py-2 rounded"><%= baseUrl.replace('https://', '').replace('.glitch.me', '') %></button>
             <div class="mt-4">
 <% if (videoInfo.watch_next_feed?.length) { %>
 <div class="mt-2 space-y-2">
@@ -322,6 +384,45 @@ document.getElementById("closedouga2").addEventListener("click", function() {
             document.getElementById("videoContainer").classList.remove("full");
             this.classList.remove("visible");
             updateSidebarState(false);
+        });
+        $(document).ready(function() {
+            $('#toggleControlPanel').click(() => $('#controlPanel').toggleClass('open'));
+            $('.tab-button').click(function() {
+                $('.tab-button').removeClass('active');
+                $(this).addClass('active');
+                $('.tab-content').removeClass('active');
+                $('#' + this.id.replace('tab', '') + 'Tab').addClass('active');
+            });
+            $('#qualitySelect').change(function() {
+                const selectedOption = $(this).find(':selected');
+                const resolution = selectedOption.data('resolution');
+                const videoSrc = $('#videoSrc');
+                const video = $('#video')[0];
+                const audio = document.getElementById('audio');
+                
+                if (resolution === '360p') {
+                    videoSrc.type = "video/mp4";
+                    videoSrc.src = "<%- videoData.stream_url %>";
+                    audio.pause();
+                    audio.src = '';
+                } else {
+                    videoSrc.src('type', 'video/webm');
+                    videoSrc.src('src', selectedOption.val());
+                    audio.src = "<%- videoData.stream_url %>";
+                }
+                
+                video.load();
+                audio.load();
+            });
+            $('#changeServer').click(function() {
+                const server = $('#serverSelect').val();
+                window.location.href = `/wkt/watch/<%= videoData.videoId %>?server=${server}`;
+            });
+            $('#saveSettings').click(function() {
+                const mode = $('input[name="playbackMode"]:checked').val();
+                document.cookie = `playbackMode=${mode}; path=/; max-age=31536000`;
+                window.location.href = `/wkt/watch/<%= videoData.videoId %>?mode=${mode}`;
+            });
         });
 
 async function fetchComments() {
