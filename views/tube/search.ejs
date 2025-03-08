@@ -83,7 +83,7 @@
               <% } else if (video.type.endsWith("Channel")) { %>
                 <div class="bg-gray-600 p-4 rounded">
                   <a href="/wkt/c/<%= video.author.id %>">
-                    <img src="<%= video.author.thumbnails[0].url %>" alt="<%= video.author.name %>" class="w-full h-30 rounded">
+                    <img src="<%= video.author.thumbnails[0].url %>" alt="<%= video.author.name %>" class="w-full h-auto rounded">
                   </a>
                     <div class="mt-2">
                         <p class="text-lg font-bold"><%= video.author.name %></p>

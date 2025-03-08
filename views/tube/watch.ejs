@@ -130,7 +130,7 @@
     <div class="max-w-6xl mx-auto p-4 main-container" id="mainContainer">
         <div class="video-container" id="videoContainer">
             <div class="relative">
-        <video id="video" class="w-full h-auto" controls autoplay preload="auto" poster="/wkt/back/vi/<%= videoData.videoId %>/maxresdefault.jpg">
+        <video id="video" class="w-full h-auto max-h-screen" controls autoplay preload="auto" poster="/wkt/back/vi/<%= videoData.videoId %>/maxresdefault.jpg">
             <source id="videoSrc" src="<%- videoData.stream_url %>" type="video/mp4">
         </video>
         <audio id="audio" style="display: none;"></audio>
