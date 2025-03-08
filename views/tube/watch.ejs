@@ -106,7 +106,7 @@
         <button id="toggleToolbar" class="toggle-btn w-1/5">ツール</button>
     </header>
   
-    <div class="toolbar" id="toolbar">
+    <div class="toolbar w-1/2" id="toolbar">
         <button id="closeToolbar" class="toggle-btn w-2/3 bg-gray-700 py-2 hover:text-white p-2 rounded mb-2 absolute top-4 right-4">閉じる</button>
         <nav class="mt-12">
             <button onclick="window.location.href='/wkt'" class="w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">ホーム</button>
@@ -356,7 +356,7 @@
     <button id="expandSidebar" class="expand-sidebar-btn">◀ サイドバーを開く</button>
           
 <script>
-// コメント関連の処理
+// コメント
 const commentContainers = [document.getElementById("commentsList1"), document.getElementById("commentsList2")];
 const errorContainers = [document.getElementById("commentError1"), document.getElementById("commentError2")];
 const retryButton = document.getElementById("retryButton");
@@ -396,8 +396,16 @@ async function fetchComments() {
 
 document.getElementById("retryButton").addEventListener("click", fetchComments);
 fetchComments();
+  
+//関連動画
+document.getElementById("toggledouga").addEventListener("click", function() {
+    document.getElementById("dougaBox").classList.toggle("open");
+});
+document.getElementById("closedouga").addEventListener("click", function() {
+    document.getElementById("dougaBox").classList.remove("open");
+});
 
-// サイドバーの表示・非表示
+// サイドバー
 function updateSidebarState(hidden) {
     localStorage.setItem("sidebarHidden", hidden);
 }
@@ -416,7 +424,7 @@ document.getElementById("expandSidebar").addEventListener("click", function() {
     updateSidebarState(false);
 });
 
-// 動画のコントロールパネル
+// コントロール
 $(document).ready(function() {
     $('#toggleControlPanel').click(() => $('#controlPanel').toggleClass('open'));
 
@@ -496,11 +504,11 @@ $(document).ready(function() {
     });
 });
 
-// ツールバーの表示・非表示
+// ツールバー
 $('#toggleToolbar').click(() => $('#toolbar').addClass('open'));
 $('#closeToolbar').click(() => $('#toolbar').removeClass('open'));
 
-// 高画質の切り替え
+// 高画質
 $('#hdToggle').change(function() {
     const video = document.getElementById('video');
     const audio = document.getElementById('audio');
@@ -554,7 +562,7 @@ $('#hdToggle').change(function() {
     }
 });
 
-// 履歴管理
+// 履歴
 const videoId = "<%= videoData.videoId %>";
 const channelId = "<%= videoData.channelId %>";
 const channelName = "<%= videoData.channelName %>";
@@ -592,7 +600,7 @@ function getHistoryFromCookies() {
     return [];
 }
 
-// 説明文の表示・非表示
+// 概要
 function toggleDescription(button) {
     const description = button.closest('div').nextElementSibling;
 
@@ -605,7 +613,7 @@ function toggleDescription(button) {
     }
 }
 
-// ページ読み込み時に履歴を保存
+// ページ読み込み
 window.addEventListener("load", function() {
     saveToHistory(videoId, channelId, channelName, videoTitle);
 });
