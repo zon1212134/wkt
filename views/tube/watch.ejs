@@ -111,6 +111,7 @@
             <button onclick="window.location.href='/wkt'" class="w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">ホーム</button>
             <button onclick="window.location.href='/wkt/trend'" class="w-full bg-gray-700 py-2 hover:text-white rounded mb-2">トレンド</button>
             <button onclick="window.location.href='/wkt/cl/history'" class="w-full bg-gray-700 py-2 hover:text-white rounded mb-2">履歴</button>
+            <button id="reloadButton" class="w-full bg-gray-700 py-2 hover:text-white rounded mb-2">動画を再読み込み</button>
             <button onclick="window.open('<%- videoData.stream_url %>', '_blank');" class="w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">ストリームURLに移動</button>
         </nav>
         <div class="mt-4">
@@ -402,6 +403,11 @@ const loopToggle = document.getElementById('loopToggle');
 const video = document.getElementById('video');
 loopToggle.addEventListener('change', function() {
     video.loop = this.checked;
+});
+  
+//動画再読み込み
+document.getElementById('reloadButton').addEventListener('click', function() {
+  video.load();
 });
 
 //関連動画
