@@ -411,6 +411,16 @@ loopToggle.addEventListener('change', function() {
 document.getElementById('reloadButton').addEventListener('click', function() {
   video.load();
 });
+  
+//エラー処理
+video.addEventListener('error', function() {
+    let lastCurrentTime = video.currentTime;
+    video.load();
+    video.addEventListener('loadedmetadata', function() {
+        video.currentTime = lastCurrentTime;
+        video.play();
+    }, { once: true });
+});
 
 //関連動画
 document.getElementById("toggledouga").addEventListener("click", function() {
