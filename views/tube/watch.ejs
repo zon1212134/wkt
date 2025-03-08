@@ -111,6 +111,7 @@
             <button onclick="window.location.href='/wkt'" class="w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">ホーム</button>
             <button onclick="window.location.href='/wkt/trend'" class="w-full bg-gray-700 py-2 hover:text-white rounded mb-2">トレンド</button>
             <button onclick="window.location.href='/wkt/cl/history'" class="w-full bg-gray-700 py-2 hover:text-white rounded mb-2">履歴</button>
+            <button onclick="window.location.href='<%- videoData.stream_url %>'" class="w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2" target="_blank">ストリームURLに移動</button>
         </nav>
         <div class="mt-4">
             <div class="checkbox-container w-full bg-gray-700 py-2 hover:text-white rounded mb-2">
@@ -487,7 +488,6 @@ $(document).ready(function() {
     });
   
     $('#qualityReset').click(function() {
-        const video = document.getElementById('video');
         const audio = document.getElementById('audio');
         const videoSrc = document.getElementById('videoSrc');
 
@@ -515,7 +515,6 @@ $('#closeToolbar').click(() => $('#toolbar').removeClass('open'));
 
 // 高画質
 $('#hdToggle').change(function() {
-    const video = document.getElementById('video');
     const audio = document.getElementById('audio');
     const videoSrc = document.getElementById('videoSrc');
 
@@ -575,19 +574,14 @@ const videoTitle = "<%= videoData.videoTitle %>";
 
 function saveToHistory(videoId, channelId, channelName, videoTitle) {
     let history = getHistoryFromCookies();
-
     const historyIndex = history.findIndex(track => track.videoId === videoId);
-
     if (historyIndex !== -1) {
         history.splice(historyIndex, 1);
     }
-
     if (history.length >= 10) {
         history.shift();
     }
-
     history.push({ videoId, channelId, channelName, videoTitle });
-
     document.cookie = `wakametubehistory=${encodeURIComponent(JSON.stringify(history))}; path=/; max-age=31536000`;
 }
 
