@@ -121,7 +121,7 @@ router.get('/comment/:id', async (req, res) => {
   }
 });
 
-router.get("/videoinfo/:id", async (req, res) => {
+router.get("/info/:id", async (req, res) => {
     try {
 		res.json(await serverYt.infoGet(req.params.id));
 	} catch (error) {
