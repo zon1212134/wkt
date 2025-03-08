@@ -111,10 +111,11 @@
             <button onclick="window.location.href='/wkt'" class="w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">ホーム</button>
             <button onclick="window.location.href='/wkt/trend'" class="w-full bg-gray-700 py-2 hover:text-white rounded mb-2">トレンド</button>
             <button onclick="window.location.href='/wkt/cl/history'" class="w-full bg-gray-700 py-2 hover:text-white rounded mb-2">履歴</button>
-            <button id="reloadButton" class="w-full bg-gray-700 py-2 hover:text-white rounded mb-2">動画を再読み込み</button>
+            <button onclick="window.open('/wkt/back/vi/<%= videoId %>/maxresdefault.jpg', '_blank');" class="w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">サムネをダウンロード</button>
             <button onclick="window.open('<%- videoData.stream_url %>', '_blank');" class="w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">ストリームURLに移動</button>
         </nav>
         <div class="mt-4">
+            <button id="reloadButton" class="w-full bg-gray-700 py-2 hover:text-white rounded mb-2">動画を再読み込み</button>
             <div class="checkbox-container w-full bg-gray-700 py-2 hover:text-white rounded mb-2">
                 <label for="loopToggle" class="ml-2">ループ再生</label>
                 <input type="checkbox" id="loopToggle" class="form-checkbox text-green-500">
@@ -131,7 +132,7 @@
     <div class="max-w-6xl mx-auto p-4 main-container" id="mainContainer">
         <div class="video-container" id="videoContainer">
             <div class="relative">
-        <video id="video" class="w-full h-auto max-h-screen" controls autoplay preload="auto" poster="/wkt/back/vi/<%= videoData.videoId %>/maxresdefault.jpg">
+        <video id="video" class="w-full h-auto max-h-screen" controls autoplay preload="auto" poster="/wkt/back/vi/<%= videoId %>/maxresdefault.jpg">
             <source id="videoSrc" src="<%- videoData.stream_url %>" type="video/mp4">
         </video>
         <audio id="audio" style="display: none;"></audio>
@@ -637,6 +638,12 @@ document.addEventListener('keydown', function(event) {
     if (event.key === 'f' || event.key === 'F') {
         event.preventDefault();
         toggleFullScreen();
+    }
+  
+    if (event.key === 'ArrowRight') {
+        video.currentTime += 10;
+    } else if (event.key === 'ArrowLeft') {
+        video.currentTime -= 10;
     }
 });
   
