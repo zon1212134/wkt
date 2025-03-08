@@ -436,7 +436,7 @@ video.addEventListener('error', function() {
         video.play();
     }, { once: true });
 });
-  
+
 document.addEventListener('DOMContentLoaded', function () {
     const loadingIndicator = document.querySelector('.loading-indicator');
     const showLoadingIndicator = () => {
@@ -448,7 +448,6 @@ document.addEventListener('DOMContentLoaded', function () {
     video.addEventListener('waiting', showLoadingIndicator);
     video.addEventListener('playing', hideLoadingIndicator);
     video.addEventListener('canplay', hideLoadingIndicator);
-    video.addEventListener('seeking', showLoadingIndicator);
     video.addEventListener('seeked', () => {
         if (video.readyState < 3) {
             showLoadingIndicator();
