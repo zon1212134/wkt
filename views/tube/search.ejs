@@ -58,7 +58,7 @@
               <% if (video.type.endsWith("Video")) { %>
                 <div class="result-item w-auto bg-gray-800 p-4 rounded">
                     <a href="/wkt/watch/<%= video.id %>#mainContainer" class="thumbnail">
-                        <img loading="lazy" src="/wkt/back/vi/<%= video.id %>/mqdefault.jpg" alt="<%= video.title.text %>" class="w-auto h-48 rounded">
+                        <img loading="lazy" src="/wkt/back/vi/<%= video.id %>/mqdefault.jpg" alt="<%= video.title.text %>" class="w-full h-auto rounded">
                         <span class="video-duration"><%= video.duration.text %></span>
                     </a>
                     <div class="mt-2 flex items-center">
@@ -73,7 +73,7 @@
               <% } else if (video.type.endsWith("Playlist")) { %>
                 <div class="bg-gray-600 p-4 rounded">
                   <a href="/wkt/p/<%= video.id %>">
-                    <img src="/vi/<%= video?.endpoint?.payload?.videoId || video.first_videos[0]?.id %>/mqdefault.jpg" alt="<%= video.title.text %>" class="w-full h-48 rounded">
+                    <img src="/vi/<%= video?.endpoint?.payload?.videoId || video.first_videos[0]?.id %>/mqdefault.jpg" alt="<%= video.title.text %>" class="w-full h-auto rounded">
                   </a>
                     <div class="mt-2">
                         <p class="text-sm text-gray-400"><a href="/wkt/u/<%= video.author.id %>"><%= video.author.name %></a></p>
