@@ -254,9 +254,12 @@
 
   <div id="dougaBox" class="fixed top-0 right-0 w-1/2 h-full bg-gray-800 p-4 shadow-lg overflow-y-auto related-box">
     <div class="sticky top-0 flex justify-end">
-    <button id="closedouga" class="w-1/2 bg-gray-700 py-2 rounded mb-2 ml-auto text-center">閉じる</button>
+    <form id="umekomisearchForm" class="w-1/2 ml-auto mb-2">
+      <input type="text" name="q" id="searchInput" placeholder="検索" class="searchInput w-full p-2 rounded bg-gray-700 text-white">
+    </form>
+    <button id="closedouga" class="w-1/5 bg-gray-700 py-2 rounded mb-2 ml-auto text-center">閉じる</button>
     </div>
-    <div class="flex-1 overflow-y-auto">
+    <div class="flex-1 overflow-y-auto" id="dougaBoxcon">
                 <h3 class="text-lg font-bold">関連動画</h3>
 <% if (videoInfo.watch_next_feed?.length) { %>
 <% videoInfo.watch_next_feed.forEach(video => { %>
@@ -469,6 +472,19 @@ document.getElementById("closedouga").addEventListener("click", function() {
 });
 document.getElementById("closedouga2").addEventListener("click", function() {
     document.getElementById("dougaBox").classList.remove("open");
+});
+  
+//けんさく
+document.getElementById('umekomisearchForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  const searchValue = document.getElementById('searchInput').value;
+  const videoContainer = document.getElementById('dougaBoxcon');
+  videoContainer.innerHTML = '';
+  const embedDiv = document.createElement('div');
+  embedDiv.innerHTML = `
+    <iframe src="/wkt/back/search?q=${encodeURIComponent(searchValue)}" width="100%" height=auto frameborder="0" allowfullscreen></iframe>
+  `;
+  videoContainer.appendChild(embedDiv);
 });
 
 // サイドバー
