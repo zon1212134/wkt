@@ -84,18 +84,25 @@
             display: none;
         }
         .control-panel.open { display: block; }
-        .tab-header { display: flex; }
-        .tab-button {
-            flex: 1;
-            padding: 10px;
-            cursor: pointer;
-            text-align: center;
-            background: #444;
-            color: white;
-        }
-        .tab-button.active { background: #666; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+.tab-button {
+    @apply flex-1 text-center py-3 text-lg font-semibold cursor-pointer transition duration-200;
+}
+
+.tab-button.active {
+    @apply bg-blue-600 text-white rounded-t-lg;
+}
+
+.tab-content {
+    @apply hidden;
+}
+
+.tab-content.active {
+    @apply block;
+}
+
+.control-button {
+    @apply w-full py-3 px-4 text-lg font-semibold bg-blue-500 rounded-lg hover:bg-blue-600 transition duration-200;
+}
         .loading-indicator {
             position: absolute;
             top: 50%;
@@ -193,50 +200,65 @@
             </div>
         </div>
             
-        <div id="controlPanel" class="control-panel">
-            <div class="tab-header">
-                <div id="tabControl" class="tab-button active" data-target="controlTab">コントロール</div>
-                <div id="tabSettings" class="tab-button" data-target="settingsTab">設定</div>
+<div id="controlPanel" class="bg-gray-800 text-white p-4 rounded-lg shadow-lg max-w-lg mx-auto">
+    <!-- タブヘッダー -->
+    <div class="flex mb-4 border-b border-gray-600">
+        <div id="tabControl" class="tab-button active">コントロール</div>
+        <div id="tabSettings" class="tab-button">設定</div>
+    </div>
+
+    <!-- コントロールタブ -->
+    <div id="controlTab" class="tab-content active">
+        <div class="space-y-4">
+            <div class="flex space-x-2">
+                <button id="reloadVideo" class="control-button">🔄 再読み込み</button>
+                <button id="toggleLoop" class="control-button">🔁 ループ再生: OFF</button>
             </div>
-            <div id="controlTab" class="tab-content active">
-                <div class="control-section">
-                    <button id="reloadVideo" class="control-button">🔄 再読み込み</button>
-                    <button id="toggleLoop" class="control-button">🔁 ループ再生: OFF</button>
-              </div>
-              <% if (videoData.streamUrls && videoData.streamUrls.length > 0) { %>
-                <div class="control-section">
-                    <label>画質選択:
-                        <select id="qualitySelect">
-                            <% videoData.streamUrls.forEach(stream => { %>
-                                <option value="<%= stream.url %>" data-resolution="<%= stream.resolution %>"><%= stream.resolution %></option>
-                            <% }); %>
-                        </select>
-                    </label>
-                  <button id="qualityReset" class="control-button">画質をリセット</button>
-                </div>
-              <% } else { %>
-                 <p>他の画質が見つかりません</p>
-               <% } %>
-                <div class="control-section">
-                    <label>サーバー選択:
-                        <select id="serverSelect">
-                            <option value="watawata8">watawata8</option>
-                            <option value="watawata37">watawata37</option>
-                            <option value="direct">direct</option>
-                        </select>
-                    </label>
-                    <button id="changeServer" class="control-button">🔃 サーバーを変更</button>
-                </div>
+
+            <% if (videoData.streamUrls && videoData.streamUrls.length > 0) { %>
+            <div class="space-y-2">
+                <label class="block text-lg">画質選択:</label>
+                <select id="qualitySelect" class="w-full p-2 rounded bg-gray-700 border border-gray-600">
+                    <% videoData.streamUrls.forEach(stream => { %>
+                        <option value="<%= stream.url %>"><%= stream.resolution %></option>
+                    <% }); %>
+                </select>
+                <button id="qualityReset" class="control-button">画質をリセット</button>
             </div>
-            <div id="settingsTab" class="tab-content">
-                <div class="control-section">
-                    <label><input type="radio" name="playbackMode" value="normal"> 通常</label>
-                    <label><input type="radio" name="playbackMode" value="edu"> education</label>
-                    <label><input type="radio" name="playbackMode" value="nocookie"> nocookie</label>
-                </div>
-                <button id="saveSettings" class="control-button">💾 設定を保存</button>
+            <% } else { %>
+                <p class="text-red-400">他の画質が見つかりません</p>
+            <% } %>
+
+            <div class="space-y-2">
+                <label class="block text-lg">サーバー選択:</label>
+                <select id="serverSelect" class="w-full p-2 rounded bg-gray-700 border border-gray-600">
+                    <option value="watawata8">watawata8</option>
+                    <option value="watawata37">watawata37</option>
+                    <option value="direct">direct</option>
+                </select>
+                <button id="changeServer" class="control-button">🔃 サーバーを変更</button>
             </div>
         </div>
+    </div>
+
+    <!-- 設定タブ -->
+    <div id="settingsTab" class="tab-content hidden">
+        <div class="space-y-4">
+            <div class="flex flex-col space-y-2">
+                <label class="inline-flex items-center">
+                    <input type="radio" name="playbackMode" value="normal" class="mr-2"> 通常
+                </label>
+                <label class="inline-flex items-center">
+                    <input type="radio" name="playbackMode" value="edu" class="mr-2"> education
+                </label>
+                <label class="inline-flex items-center">
+                    <input type="radio" name="playbackMode" value="nocookie" class="mr-2"> nocookie
+                </label>
+            </div>
+            <button id="saveSettings" class="control-button">💾 設定を保存</button>
+        </div>
+    </div>
+</div>
         
         <div class="sidebar w-1/4 ml-4" id="sidebar">
 <div id="commentBox" class="fixed top-0 right-0 w-1/2 h-full bg-gray-800 p-4 shadow-lg flex flex-col hidden">
