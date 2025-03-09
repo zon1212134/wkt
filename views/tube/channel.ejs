@@ -26,18 +26,20 @@
         </div>
         
         <!-- タブナビゲーション -->
-<div class="tabs-container">
-    <div class="tabs">
+<div class="mt-6">
+    <label for="shelfSelector" class="block text-white text-lg font-bold mb-2">カテゴリを選択:</label>
+    <select id="shelfSelector" class="bg-gray-800 text-white p-2 rounded w-full">
         <% channel.shelves?.forEach((shelf, index) => { %>
-            <button class="tab-btn" data-tab="tab-<%= index %>"><%= shelf.title.text %></button>
+            <option value="shelf-<%= index %>"><%= shelf.title.text %></option>
         <% }); %>
-    </div>
+    </select>
 
     <% channel.shelves?.forEach((shelf, index) => { %>
-        <div class="tab-content" id="tab-<%= index %>" style="display: none;">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-4">
+        <div id="shelf-<%= index %>" class="shelf-content mt-4 bg-gray-800 p-4 rounded-lg" style="display: none;">
+            <h2 class="text-xl font-bold text-white mb-2"><%= shelf.title.text %></h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <% shelf.content?.items?.forEach(video => { %>
-                    <div class="result-item w-auto bg-gray-700 p-4 rounded">
+                    <div class="result-item bg-gray-700 p-4 rounded">
                         <a href="/wkt/watch/<%= video.videoId %>" class="thumbnail">
                             <img loading="lazy" src="<%= video.thumbnail %>" alt="<%= video.title %>" class="w-auto h-48 rounded">
                             <span class="video-duration"><%= video.duration %></span>
@@ -54,50 +56,22 @@
     </div>
     
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const tabs = document.querySelectorAll(".tab-btn");
-        const contents = document.querySelectorAll(".tab-content");
-
-        if (tabs.length > 0) {
-            tabs[0].classList.add("active");
-            contents[0].style.display = "block";
+    document.addEventListener("DOMContentLoaded", function() {
+        const selector = document.getElementById("shelfSelector");
+        const contents = document.querySelectorAll(".shelf-content");
+        
+        function showSelectedShelf() {
+            contents.forEach(el => el.style.display = "none");
+            const selectedShelf = document.getElementById(selector.value);
+            if (selectedShelf) {
+                selectedShelf.style.display = "block";
+            }
         }
-
-        tabs.forEach((tab, index) => {
-            tab.addEventListener("click", () => {
-                tabs.forEach(t => t.classList.remove("active"));
-                contents.forEach(c => c.style.display = "none");
-                
-                tab.classList.add("active");
-                document.getElementById("tab-" + index).style.display = "block";
-            });
-        });
+        
+        selector.addEventListener("change", showSelectedShelf);
+        showSelectedShelf();
     });
 </script>
-
-<style>
-    .tabs {
-        display: flex;
-        gap: 10px;
-        overflow-x: auto;
-        padding: 10px 0;
-        border-bottom: 2px solid #444;
-    }
-    .tab-btn {
-        background: #333;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        cursor: pointer;
-        transition: background 0.3s;
-    }
-    .tab-btn.active {
-        background: red;
-    }
-    .tab-btn:hover {
-        background: #555;
-    }
-</style>
 
 </body>
 </html>
