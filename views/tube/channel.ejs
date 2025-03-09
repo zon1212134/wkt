@@ -26,23 +26,34 @@
         </div>
         
         <!-- タブナビゲーション -->
-        <div class="flex space-x-4 mt-6 border-b border-gray-600">
-            <button class="tab-button px-4 py-2 text-white border-b-2 border-transparent" data-tab="latest">最新</button>
-            <button class="tab-button px-4 py-2 text-gray-400 border-b-2 border-transparent" data-tab="popular">人気</button>
-            <button class="tab-button px-4 py-2 text-gray-400 border-b-2 border-transparent" data-tab="shorts">ショート</button>
-        </div>
+<div class="tabber">
+  <div class="tab-buttons flex space-x-4 border-b">
+    <% shelves.forEach((shelf, index) => { %>
+      <button class="tab-button px-4 py-2 text-white bg-gray-700 hover:bg-gray-600" data-tab="tab-<%= index %>">
+        <%= shelf.title.text %>
+      </button>
+    <% }); %>
+  </div>
 
-        <!-- 動画リスト -->
-        <div id="video-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
-            <% channel.current_tab?.content?.contents?.forEach(video => { %>
-                <% video.contents.forEach(video => { %>
-                    <%- include("back/videolist.ejs", { video }); %>
-                <% }); %>
-            <% }); %>
-            <% videos.current_tab?.content?.contents?.forEach(video => { %>
-                <%- include("back/videolist.ejs", { video: video.content }); %>
-            <% }); %>
+  <div class="tab-contents">
+    <% shelves.forEach((shelf, index) => { %>
+      <div class="tab-content p-4 <%= index === 0 ? '' : 'hidden' %>" id="tab-<%= index %>">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <% shelf.content?.items?.forEach(video => { %>
+            <div class="video-item bg-gray-800 p-4 rounded">
+              <a href="/wkt/watch/<%= video.id %>">
+                <img loading="lazy" src="<%= video.thumbnail %>" alt="<%= video.title %>" class="w-full h-48 rounded">
+                <span class="video-duration"><%= video.duration %></span>
+              </a>
+              <p class="text-lg font-bold mt-2"><%= video.title %></p>
+              <p class="text-xs text-gray-500"><%= video.views %>回視聴 - <%= video.published %></p>
+            </div>
+          <% }); %>
         </div>
+      </div>
+    <% }); %>
+  </div>
+</div>
     </div>
     
     <script>
