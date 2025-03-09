@@ -39,6 +39,9 @@
                     <%- include("back/videolist.ejs", { video }); %>
                 <% }); %>
             <% }); %>
+            <% videos.current_tab?.content?.contents?.forEach(video => { %>
+                <%- include("back/videolist.ejs", { video: video.content }); %>
+            <% }); %>
         </div>
     </div>
     
