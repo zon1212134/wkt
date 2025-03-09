@@ -61,9 +61,8 @@ router.get("/ss", async (req, res) => {
 router.get("/c/:id", async (req, res) => {
   try {
     const channel = await serverYt.getChannel(req.params.id);
-    const videos = await channel.getVideos();
-
-    res.render("tube/channel.ejs", { channel, videos });
+    
+    res.render("tube/channel.ejs", { channel });
   } catch (err) {
     console.error("Failed to fetch channel", req.params.id, err);
     res.status(500).render("error.ejs", {
