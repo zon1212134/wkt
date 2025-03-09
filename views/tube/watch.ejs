@@ -188,12 +188,12 @@
     <button id="closeControlPanel" class="absolute top-2 right-2 text-gray-400 hover:text-white text-2xl">×</button>
     <div class="tab-header flex border-b border-gray-700 mb-4">
         <div id="tabControl" class="tab-button active px-4 py-2 cursor-pointer text-white bg-gray-800 rounded-t-lg" data-target="controlTab">コントロール</div>
-        <div id="tabSettings" class="tab-button px-4 py-2 cursor-pointer text-gray-400 hover:text-white" data-target="settingsTab">設定</div>
+        <div id="tabSettings" class="tab-button px-4 py-2 cursor-pointer text-gray-400 hover:text-white rounded-t-lg" data-target="settingsTab">設定</div>
     </div>
     <div id="controlTab" class="tab-content active">
         <div class="control-section mb-4">
-            <button id="reloadVideo" class="control-button w-full py-3 text-lg rounded-xl bg-gray-700 hover:bg-gray-600 shadow-md">🔄 再読み込み</button>
-            <button id="toggleLoop" class="control-button w-full py-3 text-lg rounded-xl bg-gray-700 hover:bg-gray-600 shadow-md mt-2">🔁 ループ再生: OFF</button>
+            <button id="reloadVideo" class="control-button w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">🔄 再読み込み</button>
+            <button id="toggleLoop" class="control-button w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">🔁 ループ再生: OFF</button>
         </div>
         <% if (videoData.streamUrls && videoData.streamUrls.length > 0) { %>
         <div class="control-section mb-4">
@@ -204,7 +204,7 @@
                     <% }); %>
                 </select>
             </label>
-            <button id="qualityReset" class="control-button w-full py-3 text-lg rounded-xl bg-gray-700 hover:bg-gray-600 shadow-md">画質をリセット</button>
+            <button id="qualityReset" class="control-button w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">画質をリセット</button>
         </div>
         <% } else { %>
         <p class="text-gray-400">他の画質が見つかりません</p>
@@ -217,7 +217,7 @@
                     <option value="direct">direct</option>
                 </select>
             </label>
-            <button id="changeServer" class="control-button w-full py-3 text-lg rounded-xl bg-gray-700 hover:bg-gray-600 shadow-md">🔃 サーバーを変更</button>
+            <button id="changeServer" class="control-button w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">🔃 サーバーを変更</button>
         </div>
     </div>
     <div id="settingsTab" class="tab-content hidden">
@@ -226,7 +226,7 @@
             <label class="block py-1"><input type="radio" name="playbackMode" value="edu" class="mr-2"> education</label>
             <label class="block py-1"><input type="radio" name="playbackMode" value="nocookie" class="mr-2"> nocookie</label>
         </div>
-        <button id="saveSettings" class="control-button w-full py-3 text-lg rounded-xl bg-gray-700 hover:bg-gray-600 shadow-md">💾 設定を保存</button>
+        <button id="saveSettings" class="control-button w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">💾 設定を保存</button>
     </div>
 </div>
 
@@ -523,7 +523,7 @@ $(document).ready(function() {
         videoSrc.type = "video/webm";
         videoSrc.src = selectedOption.val();
         audio.src = "<%- videoData.stream_url %>";
-        $('#controlPanel').toggleClass('open'));
+        $('#controlPanel').toggleClass('open');
         video.load();
         audio.load();
 
@@ -567,18 +567,18 @@ $(document).ready(function() {
         videoSrc.type = "video/mp4";
         videoSrc.src = "<%- videoData.stream_url %>";
         audio.src = "";
-        $('#controlPanel').toggleClass('open'));
+        $('#controlPanel').toggleClass('open');
         video.load();
     });
 
     $('#changeServer').click(function() {
         const server = $('#serverSelect').val();
-        $('#controlPanel').toggleClass('open'));
+        $('#controlPanel').toggleClass('open');
         window.location.href = `/wkt/watch/<%= videoData.videoId %>?server=${server}`;
     });
 
     $('#saveSettings').click(function() {
-        $('#controlPanel').toggleClass('open'));
+        $('#controlPanel').toggleClass('open');
         const mode = $('input[name="playbackMode"]:checked').val();
         document.cookie = `playbackMode=${mode}; path=/; max-age=31536000`;
         window.location.href = `/wkt/redirect/mode/<%= videoData.videoId %>?mode=${mode}`;
