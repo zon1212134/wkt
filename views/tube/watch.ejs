@@ -193,7 +193,6 @@
     <div id="controlTab" class="tab-content active">
         <div class="control-section mb-4">
             <button id="reloadVideo" class="control-button w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">🔄 再読み込み</button>
-            <button id="toggleLoop" class="control-button w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">🔁 ループ再生: OFF</button>
         </div>
         <% if (videoData.streamUrls && videoData.streamUrls.length > 0) { %>
         <div class="control-section mb-4">
@@ -220,14 +219,27 @@
             <button id="changeServer" class="control-button w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">🔃 サーバーを変更</button>
         </div>
     </div>
-    <div id="settingsTab" class="tab-content hidden">
-        <div class="control-section mb-4">
-            <label class="block py-1"><input type="radio" name="playbackMode" value="normal" class="mr-2"> 通常</label>
-            <label class="block py-1"><input type="radio" name="playbackMode" value="edu" class="mr-2"> education</label>
-            <label class="block py-1"><input type="radio" name="playbackMode" value="nocookie" class="mr-2"> nocookie</label>
-        </div>
-        <button id="saveSettings" class="control-button w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">💾 設定を保存</button>
+<div id="settingsTab" class="tab-content hidden">
+    <h2 class="text-lg font-semibold mb-3">再生方法の設定</h2>
+    <p class="mb-4 text-gray-600">動画のデフォルトの再生方法を設定できます。埋め込みで見れるなら埋め込みで見た方が良いですよ。</p>
+    
+    <div class="control-section mb-4">
+        <label class="block py-1">
+            <input type="radio" name="playbackMode" value="normal" class="mr-2">
+            通常 - ストリームURLを用いて再生します。最初のデフォルト設定で、ほとんどの人が使用できます。
+        </label>
+        <label class="block py-1">
+            <input type="radio" name="playbackMode" value="edu" class="mr-2">
+            education - youtubeeducationを埋め込んで再生を行います。一部の人が利用できます。<a href="/yt/edu/" class="text-blue-500 underline">利用できるか確かめる</a>。
+        </label>
+        <label class="block py-1">
+            <input type="radio" name="playbackMode" value="nocookie" class="mr-2">
+            nocookie - Cookieを使用しない再生方法です。プライバシー重視の方におすすめです。詳細については<a href="/wkt/yt/nocookie" class="text-blue-500 underline">こちら</a>をご覧ください。
+        </label>
     </div>
+    
+    <button id="saveSettings" class="control-button w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">💾 設定を保存</button>
+</div>
 </div>
 
         <div class="sidebar w-1/4 ml-4" id="sidebar">
@@ -423,6 +435,9 @@ loopToggle.addEventListener('change', function() {
   
 //動画再読み込み
 document.getElementById('reloadButton').addEventListener('click', function() {
+  video.load();
+});
+document.getElementById('reloadVideo').addEventListener('click', function() {
   video.load();
 });
   
