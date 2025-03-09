@@ -24,8 +24,8 @@
     </header>
 
     <div class="container mx-auto p-4 pt-24">
-        <!-- チャンネル情報 -->
-        <div class="bg-gray-800 p-8 rounded-lg shadow-lg">
+        <div class="w-full h-60 bg-gray-700 rounded-lg"></div>
+        <div class="bg-gray-800 p-8 rounded-lg shadow-lg mt-4">
             <div class="flex items-center mb-6">
                 <img src="https://via.placeholder.com/80" alt="適当なチャンネル" class="w-20 h-20 rounded-full mr-4">
                 <div>
@@ -36,44 +36,50 @@
             </div>
         </div>
 
-        <!-- チャンネル動画リスト -->
-        <h2 class="text-2xl font-bold text-white mt-8 mb-4">最近の動画</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <div class="result-item w-auto bg-gray-800 p-4 rounded">
-                <a href="/wkt/watch/abc123" class="thumbnail">
-                    <img loading="lazy" src="https://via.placeholder.com/320x180" alt="適当な動画1" class="w-auto h-48 rounded">
-                    <span class="video-duration">12:34</span>
-                </a>
-                <p class="text-lg font-bold mt-2">適当な動画タイトル1</p>
-                <p class="text-xs text-gray-500">100万回視聴 - 3日前</p>
+        <div class="mt-8">
+            <div class="flex space-x-4 border-b border-gray-600 pb-2">
+                <button class="tab-btn px-4 py-2 bg-gray-700 text-white rounded" data-tab="recent">最近の動画</button>
+                <button class="tab-btn px-4 py-2 text-gray-300 hover:bg-gray-700 rounded" data-tab="popular">人気の動画</button>
+                <button class="tab-btn px-4 py-2 text-gray-300 hover:bg-gray-700 rounded" data-tab="shorts">ショート動画</button>
             </div>
 
-            <div class="result-item w-auto bg-gray-800 p-4 rounded">
-                <a href="/wkt/watch/xyz789" class="thumbnail">
-                    <img loading="lazy" src="https://via.placeholder.com/320x180" alt="適当な動画2" class="w-auto h-48 rounded">
-                    <span class="video-duration">8:45</span>
-                </a>
-                <p class="text-lg font-bold mt-2">適当な動画タイトル2</p>
-                <p class="text-xs text-gray-500">50万回視聴 - 1週間前</p>
+            <div id="video-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-4">
+                <div class="video-item w-auto bg-gray-800 p-4 rounded" data-category="recent">
+                    <a href="/wkt/watch/abc123">
+                        <img loading="lazy" src="https://via.placeholder.com/320x180" alt="最近の動画1" class="w-auto h-48 rounded">
+                    </a>
+                    <p class="text-lg font-bold mt-2">最近の動画タイトル1</p>
+                    <p class="text-xs text-gray-500">100万回視聴 - 3日前</p>
+                </div>
+                <div class="video-item w-auto bg-gray-800 p-4 rounded" data-category="popular" style="display: none;">
+                    <a href="/wkt/watch/xyz789">
+                        <img loading="lazy" src="https://via.placeholder.com/320x180" alt="人気の動画1" class="w-auto h-48 rounded">
+                    </a>
+                    <p class="text-lg font-bold mt-2">人気の動画タイトル1</p>
+                    <p class="text-xs text-gray-500">200万回視聴 - 1週間前</p>
+                </div>
+                <div class="video-item w-auto bg-gray-800 p-4 rounded" data-category="shorts" style="display: none;">
+                    <a href="/wkt/watch/def456">
+                        <img loading="lazy" src="https://via.placeholder.com/320x180" alt="ショート動画1" class="w-auto h-48 rounded">
+                    </a>
+                    <p class="text-lg font-bold mt-2">ショート動画タイトル1</p>
+                    <p class="text-xs text-gray-500">30万回視聴 - 2日前</p>
+                </div>
             </div>
-
-            <div class="result-item w-auto bg-gray-800 p-4 rounded">
-                <a href="/wkt/watch/def456" class="thumbnail">
-                    <img loading="lazy" src="https://via.placeholder.com/320x180" alt="適当な動画3" class="w-auto h-48 rounded">
-                    <span class="video-duration">5:20</span>
-                </a>
-                <p class="text-lg font-bold mt-2">適当な動画タイトル3</p>
-                <p class="text-xs text-gray-500">30万回視聴 - 2週間前</p>
-            </div>
-        </div>
-        
-        <!-- もっと見る ボタン -->
-        <div class="flex justify-center mt-10 mb-6">
-            <a class="px-6 py-3 bg-blue-600 text-white text-lg font-semibold rounded-full shadow-md hover:bg-blue-700 transition"
-               href="/wkt/c/dummy_channel/more">
-                もっと見る
-            </a>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $('.tab-btn').on('click', function() {
+                let tab = $(this).data('tab');
+                $('.tab-btn').removeClass('bg-gray-700 text-white').addClass('text-gray-300');
+                $(this).addClass('bg-gray-700 text-white').removeClass('text-gray-300');
+                
+                $('.video-item').hide();
+                $(`.video-item[data-category="${tab}"]`).show();
+            });
+        });
+    </script>
 </body>
 </html>
