@@ -74,35 +74,19 @@
         .toolbar.open { right: 0; }
         .toggle-btn { cursor: pointer; padding: 10px; background: #444; color: white; border: none; border-radius: 5px; }
         .checkbox-container { display: flex; align-items: center; }
-        .control-panel {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(51, 51, 51, 0.95);
-            padding: 10px;
-            border-radius: 10px;
+        .controlPanel {
             display: none;
         }
-        .control-panel.open { display: block; }
-.tab-button {
-    @apply flex-1 text-center py-3 text-lg font-semibold cursor-pointer transition duration-200;
-}
-
-.tab-button.active {
-    @apply bg-blue-600 text-white rounded-t-lg;
-}
-
-.tab-content {
-    @apply hidden;
-}
-
-.tab-content.active {
-    @apply block;
-}
-
-.control-button {
-    @apply w-full py-3 px-4 text-lg font-semibold bg-blue-500 rounded-lg hover:bg-blue-600 transition duration-200;
-}
+        .controlPanel.open { display: block; }
+        .tab-button.active {
+            background-color: #4a5568;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+　　     }
         .loading-indicator {
             position: absolute;
             top: 50%;
@@ -200,65 +184,51 @@
             </div>
         </div>
             
-<div id="controlPanel" class="bg-gray-800 text-white p-4 rounded-lg shadow-lg max-w-lg mx-auto">
-    <!-- タブヘッダー -->
-    <div class="flex mb-4 border-b border-gray-600">
-        <div id="tabControl" class="tab-button active">コントロール</div>
-        <div id="tabSettings" class="tab-button">設定</div>
+<div id="controlPanel" class="controlPanel fixed top-0 right-0 w-96 h-screen bg-gray-900 text-white shadow-lg transform transition-transform duration-300 ease-in-out p-5 rounded-l-xl">
+    <button id="closeControlPanel" class="absolute top-2 right-2 text-xl p-2 text-gray-300 hover:text-white">&times;</button>
+    <div class="tab-header flex border-b border-gray-700 mb-4">
+        <div id="tabControl" class="tab-button active flex-1 text-center py-3 cursor-pointer bg-gray-800 hover:bg-gray-700 rounded-t-lg" data-target="controlTab">コントロール</div>
+        <div id="tabSettings" class="tab-button flex-1 text-center py-3 cursor-pointer bg-gray-800 hover:bg-gray-700 rounded-t-lg" data-target="settingsTab">設定</div>
     </div>
-
-    <!-- コントロールタブ -->
-    <div id="controlTab" class="tab-content active">
-        <div class="space-y-4">
-            <div class="flex space-x-2">
-                <button id="reloadVideo" class="control-button">🔄 再読み込み</button>
-                <button id="toggleLoop" class="control-button">🔁 ループ再生: OFF</button>
-            </div>
-
-            <% if (videoData.streamUrls && videoData.streamUrls.length > 0) { %>
-            <div class="space-y-2">
-                <label class="block text-lg">画質選択:</label>
-                <select id="qualitySelect" class="w-full p-2 rounded bg-gray-700 border border-gray-600">
-                    <% videoData.streamUrls.forEach(stream => { %>
-                        <option value="<%= stream.url %>"><%= stream.resolution %></option>
-                    <% }); %>
-                </select>
-                <button id="qualityReset" class="control-button">画質をリセット</button>
-            </div>
-            <% } else { %>
-                <p class="text-red-400">他の画質が見つかりません</p>
-            <% } %>
-
-            <div class="space-y-2">
-                <label class="block text-lg">サーバー選択:</label>
-                <select id="serverSelect" class="w-full p-2 rounded bg-gray-700 border border-gray-600">
-                    <option value="watawata8">watawata8</option>
-                    <option value="watawata37">watawata37</option>
-                    <option value="direct">direct</option>
-                </select>
-                <button id="changeServer" class="control-button">🔃 サーバーを変更</button>
-            </div>
+    <div id="controlTab" class="tab-content active space-y-4">
+        <div class="control-section">
+            <button id="reloadVideo" class="w-full py-3 px-5 bg-blue-600 hover:bg-blue-500 text-white text-lg rounded-lg">🔄 再読み込み</button>
+            <button id="toggleLoop" class="w-full py-3 px-5 bg-green-600 hover:bg-green-500 text-white text-lg rounded-lg mt-2">🔁 ループ再生: OFF</button>
+        </div>
+        <% if (videoData.streamUrls && videoData.streamUrls.length > 0) { %>
+        <div class="control-section">
+            <label class="block mb-2 text-lg">画質選択:</label>
+            <select id="qualitySelect" class="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg text-white">
+                <% videoData.streamUrls.forEach(stream => { %>
+                    <option value="<%= stream.url %>" data-resolution="<%= stream.resolution %>"><%= stream.resolution %></option>
+                <% }); %>
+            </select>
+            <button id="qualityReset" class="w-full py-3 px-5 bg-yellow-600 hover:bg-yellow-500 text-white text-lg rounded-lg mt-2">画質をリセット</button>
+        </div>
+        <% } else { %>
+        <p class="text-red-500">他の画質が見つかりません</p>
+        <% } %>
+        <div class="control-section">
+            <label class="block mb-2 text-lg">サーバー選択:</label>
+            <select id="serverSelect" class="w-full p-2 bg-gray-800 border border-gray-700 rounded-lg text-white">
+                <option value="watawata8">watawata8</option>
+                <option value="watawata37">watawata37</option>
+                <option value="direct">direct</option>
+            </select>
+            <button id="changeServer" class="w-full py-3 px-5 bg-purple-600 hover:bg-purple-500 text-white text-lg rounded-lg mt-2">🔃 サーバーを変更</button>
         </div>
     </div>
-
-    <!-- 設定タブ -->
-    <div id="settingsTab" class="tab-content hidden">
-        <div class="space-y-4">
-            <div class="flex flex-col space-y-2">
-                <label class="inline-flex items-center">
-                    <input type="radio" name="playbackMode" value="normal" class="mr-2"> 通常
-                </label>
-                <label class="inline-flex items-center">
-                    <input type="radio" name="playbackMode" value="edu" class="mr-2"> education
-                </label>
-                <label class="inline-flex items-center">
-                    <input type="radio" name="playbackMode" value="nocookie" class="mr-2"> nocookie
-                </label>
-            </div>
-            <button id="saveSettings" class="control-button">💾 設定を保存</button>
+    <div id="settingsTab" class="tab-content hidden space-y-4">
+        <div class="control-section">
+            <label class="block text-lg">再生モード:</label>
+            <label class="block"><input type="radio" name="playbackMode" value="normal" class="mr-2">通常</label>
+            <label class="block"><input type="radio" name="playbackMode" value="edu" class="mr-2">education</label>
+            <label class="block"><input type="radio" name="playbackMode" value="nocookie" class="mr-2">nocookie</label>
         </div>
+        <button id="saveSettings" class="w-full py-3 px-5 bg-indigo-600 hover:bg-indigo-500 text-white text-lg rounded-lg">💾 設定を保存</button>
     </div>
 </div>
+
         
         <div class="sidebar w-1/4 ml-4" id="sidebar">
 <div id="commentBox" class="fixed top-0 right-0 w-1/2 h-full bg-gray-800 p-4 shadow-lg flex flex-col hidden">
