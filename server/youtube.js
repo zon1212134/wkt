@@ -38,7 +38,7 @@ async function getChannel(id) {
     const about = await channel.getAbout();
     const videos = await channel.getVideos();
 
-    return({channel, about, videos});
+    return({channel});
   } catch (error) {
     return null;
   }
