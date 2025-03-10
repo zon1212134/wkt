@@ -59,14 +59,13 @@
     <div class="recent-videos mt-4" id="recentVideos">
         <h2 class="text-xl font-bold text-white mb-2">最近の動画</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <% recentVideos.forEach(video => { %>
+            <% recentVideos.items.forEach(video => { %>
                 <div class="result-item bg-gray-700 p-4 rounded">
-                    <a href="/wkt/watch/<%= video.videoId %>" class="thumbnail">
-                        <img loading="lazy" src="<%= video.thumbnail %>" alt="<%= video.title %>" class="w-auto h-48 rounded">
+                    <a href="/wkt/watch/<%= video.id %>" class="thumbnail">
+                        <img loading="lazy" src="/wkt/back/vi/<%= video.id %>/mqdefault.jpg" alt="<%= video.title %>" class="w-auto h-48 rounded">
                         <span class="video-duration"><%= video.duration %></span>
                     </a>
                     <p class="text-lg font-bold mt-2 text-white"><%= video.title %></p>
-                    <p class="text-xs text-gray-400"><%= video.views %>回視聴 - <%= video.uploaded %></p>
                 </div>
             <% }); %>
         </div>
