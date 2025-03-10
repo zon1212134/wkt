@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>チャンネル</title>
+    <title><%- channel.metadata.title %></title>
     <link rel="stylesheet" href="/css/page.css">
     <script src="/js/tailwindcss.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -26,19 +26,19 @@
     <div class="container mx-auto p-3 pt-2">
         <!-- カバー画像 -->
         
-      　<img src="<%- channel.header.content.banner.image[0].url %>" class="w-full h-auto mr-4">
+      　<img src="<%- channel.header.content.banner.image[0].url || ""  %>" class="w-full h-auto mr-4">
         
         <!-- チャンネル情報 -->
         <div class="bg-gray-800 p-8 rounded-lg shadow-lg mt-4">
             <div class="flex items-center mb-6">
-                <img src="<%- channel.metadata.avatar[0].url %>" class="w-20 h-20 rounded-full mr-4">
+                <img src="<%- channel.metadata.avatar[0].url || ""  %>" class="w-20 h-20 rounded-full mr-4">
                 <div>
                     <h1 class="text-3xl font-bold"><%- channel.metadata.title %></h1>
-                    <p class="text-gray-400 text-sm">@MIMI</p>
-                    <p class="text-gray-500 text-sm mt-2"><%- channel.header.content.metadata.metadata_rows[0].metadata_parts[0].text.runs.text %></p>
+                    <p class="text-gray-400 text-sm"><%- channel.header.content.metadata.metadata_rows[0].metadata_parts[0].text || ""  %>  -  <%- channel.header.content.metadata.metadata_rows[1].metadata_parts[1].text || ""  %></p>
+                    <p class="text-gray-500 text-sm mt-2"><%- channel.header.content.metadata.metadata_rows[1].metadata_parts[0].text || ""  %></p>
                 </div>
             </div>
-          <p class="text-gray-400 mt-4"><%- channel.metadata.description %></p>
+          <p class="text-gray-400 mt-4"><%- channel.metadata.description || ""  %></p>
         </div>
 
 <div class="mt-6">
@@ -63,6 +63,7 @@
             <h2 class="text-xl font-bold text-white mb-2"><%= shelf.title.text %></h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 <% shelf.content?.items?.forEach(video => { %>
+                  <% if (video.type.endsWith("Video")) { %>
                     <div class="result-item bg-gray-700 p-4 rounded">
                         <a href="/wkt/watch/<%= video.id %>" class="thumbnail">
                             <img loading="lazy" src="/wkt/back/vi/<%= video.id %>/mqdefault.jpg" alt="<%= video.title %>" class="w-auto h-48 rounded">
@@ -71,6 +72,29 @@
                         <p class="text-lg font-bold mt-2 text-white"><%= video.title %></p>
                         <p class="text-xs text-gray-400"><%= video.short_view_count || video.views %> - <%= video.published %></p>
                     </div>
+        <% } else if (video.type.endsWith("Playlist")) { %>
+      <div class="bg-gray-800 p-2 rounded">
+        <a href="/wkt/p/<%= video.id %>">
+          <img src="/wkt/back/vi/<%= video?.endpoint?.payload?.videoId || video.first_videos?.[0]?.id || video.id %>/mqdefault.jpg" alt="<%= video.title %>" class="w-full h-auto rounded">
+        </a>
+        <p class="text-sm font-bold mt-1">
+          <a href="/wkt/p/<%= video.id %>"><%= video.title.text %></a>
+        </p>
+        <p class="text-xs text-gray-400">動画数: <%= video.video_count?.text || '不明' %></p>
+      </div>
+    <% } else if (video.type.endsWith("Channel")) { %>
+      <div class="bg-gray-800 p-2 rounded">
+        <a href="/wkt/c/<%= video.author.id %>">
+          <img src="/wkt/back/yt3 %>" alt="<%= video.author.name %> のチャンネルアイコン" class="w-16 h-16 rounded-full mx-auto">
+        </a>
+        <p class="text-sm font-bold mt-1 text-center">
+          <a href="/wkt/c/<%= video.author.id %>"><%= video.author.name %></a>
+        </p>
+        <p class="text-xs text-gray-400 text-center">
+          登録者数: <%= video.subscriber_count?.text || '非公開' %>
+        </p>
+      </div>
+    <% } %>
                 <% }); %>
             </div>
         </div>
