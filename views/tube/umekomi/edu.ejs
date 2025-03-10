@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= videoData.videoTitle %></title>
+    <link rel="stylesheet" href="/css/page.css">
+    <script src="/js/tailwindcss.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="/js/tube.js"></script>
+    <script src="/js/watch.js"></script>
+    <link rel="apple-touch-icon" href="/wkt/back/vi/<%= videoId %>/maxresdefault.jpg">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (localStorage.getItem("sidebarHidden") === "true") {
+                document.getElementById("sidebar").classList.add("hidden");
+                document.getElementById("videoContainer").classList.add("full");
+                document.getElementById("expandSidebar").classList.add("visible");
+            }
+        });
+    </script>
+    <style>
+        .comment-box, .related-box {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        .comment-box.open, .related-box.open {
+            transform: translateX(0);
+        }
+        .main-container {
+            display: flex;
+            transition: width 0.3s ease-in-out;
+        }
+        .video-container {
+            width: 75%;
+            transition: width 0.3s ease-in-out;
+        }
+        .video-container.full {
+            width: 100%;
+        }
+        .sidebar {
+            width: 25%;
+            transition: transform 0.3s ease-in-out;
+        }
+        .sidebar.hidden {
+            transform: translateX(100%);
+        }
+        .expand-sidebar-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 10px;
+            background: #444;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+        }
+        .expand-sidebar-btn.visible {
+            display: block;
+        }
+        .toolbar {
+            position: fixed;
+            top: 0;
+            right: -50%;
+            width: 50%;
+            background: rgba(51, 51, 51, 0.95);
+            transition: right 0.3s;
+            padding: 20px;
+            z-index: 10;
+        }
+        .toolbar.open { right: 0; }
+        .toggle-btn { cursor: pointer; padding: 10px; background: #444; color: white; border: none; border-radius: 5px; }
+        .checkbox-container { display: flex; align-items: center; }
+        .controlPanel {
+            display: none;
+        }
+        .controlPanel.open { display: block; }
+        .tab-button.active {
+            background-color: #4a5568;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+　　     }
+        .loading-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            z-index: 10;
+        }
+        .loading-indicator img {
+            width: 75px;
+            height: 75px;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <header class="bg-gray-800 p-4 flex justify-between items-center">
+        <form action="/wkt/s" method="get" class="w-1/2" id="searchForm">
+            <input type="text" name="q" id="searchbox" placeholder="検索" class="searchbox w-full p-2 rounded bg-gray-700 text-white">
+        </form>
+        <button id="toggleToolbar" class="toggle-btn w-1/5">ツール</button>
+    </header>
+  
+    <div class="toolbar w-1/2 ml-4" id="toolbar">
+        <button id="closeToolbar" class="toggle-btn w-2/3 bg-gray-700 py-2 hover:text-white p-2 rounded mb-2 absolute top-4 right-4">閉じる</button>
+        <nav class="mt-12">
+            <button onclick="window.location.href='/wkt'" class="w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">ホーム</button>
+            <button onclick="window.location.href='/wkt/trend'" class="w-full bg-gray-700 py-2 hover:text-white rounded mb-2">トレンド</button>
+            <button onclick="window.location.href='/wkt/cl/history'" class="w-full bg-gray-700 py-2 hover:text-white rounded mb-2">履歴</button>
+            <button onclick="window.open('/wkt/back/vi/<%= videoId %>/maxresdefault.jpg', '_blank');" class="w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">サムネをダウンロード</button>
+        </nav>
+    </div>
+    
+    <div class="max-w-6xl mx-auto p-4 main-container" id="mainContainer">
+        <div class="video-container" id="videoContainer">
+        <div class="relative">
+        <div class="loading-indicator">
+          <img src="https://cdn.glitch.global/3128bf45-3a23-4695-81ba-3aba21b8585b/IMG_1966.gif?v=1729824394361" alt="Loading...">
+        </div>
+          <video id="video" class="w-full h-auto max-h-screen" controls autoplay preload="auto" playsinline poster="/wkt/back/vi/<%= videoId %>/maxresdefault.jpg">
+              <source id="videoSrc" src="<%- videoData.stream_url %>" type="video/mp4">
+          </video>
+        <audio id="audio" style="display: none;"></audio>
+        </div>
+            <div class="flex items-center mt-4 p-4 bg-gray-800 rounded">
+              <a href ="/wkt/c/<%= videoData.channelId %>">
+                <img src="<%= videoData.channelImage %>" alt="アイコン" class="w-12 h-12 rounded-full">
+              </a>
+                <div class="ml-4">
+                  <h2 class="text-lg font-bold"><a href ="/wkt/c/<%= videoData.channelId %>"><%= videoData.channelName %></a></h2>
+                    <p class="text-sm text-gray-400"><%= videoInfo.secondary_info.owner.subscriber_count.text || "" %></p>
+                </div>
+            </div>
+
+    <div class="mt-4 p-4 bg-gray-800 rounded">
+      <div class="mt-2 text-gray-400 text-sm">
+          <p><%= videoInfo.primary_info.view_count.short_view_count?.text || videoInfo.primary_info.view_count.view_count?.text %>  ・  <%= videoInfo.primary_info.menu.top_level_buttons.short_like_count || videoInfo.primary_info.menu.top_level_buttons.like_count || videoData.likeCount %>いいね  ・  <%= videoInfo.primary_info.published %></p>
+      </div>
+    <div class="flex items-center justify-between">
+        <h3 class="text-2xl font-bold"> 
+            <%= videoData.videoTitle %> 
+        </h3>
+        <button class="ml-2 text-blue-500 hover:text-blue-300 text-sm" onclick="toggleDescription(this)">
+            折りたたむ
+        </button>
+    </div>
+    <div class="description mt-2">
+        <p class="text-base text-gray-300 mt-1"><%- (videoData.videoDes || "").replace(/\n/g, "<br>") %></p>
+    </div>
+   </div>
+              
+            <div class="mt-4 p-4 bg-gray-800 rounded">
+                <h3 class="text-lg font-bold">コメント</h3>
+                <div class="mt-2 space-y-2">
+                <div id="commentError2" class="text-red-500 hidden"></div>
+                <div id="commentsList2" class="mt-2 space-y-2">
+                   <p>コメントを取得中...</p>
+                </div>
+                </div>
+
+               <button id="retryButton" class="w-full bg-gray-700 py-2 rounded mt-2 hidden">再取得</button>
+            </div>
+        </div>
+            
+<div id="controlPanel" class="controlPanel bg-gray-900 text-white p-6 rounded-lg shadow-lg w-96 fixed bottom-10 right-10 border border-gray-700">
+    <button id="closeControlPanel" class="absolute top-2 right-2 text-gray-400 hover:text-white text-2xl">×</button>
+    <div class="tab-header flex border-b border-gray-700 mb-4">
+        <div id="tabSettings" class="tab-button active px-4 py-2 cursor-pointer text-white bg-gray-800 rounded-t-lg" data-target="settingsTab">設定</div>
+    </div>
+    <div id="controlTab" class="tab-content active">
+<div id="settingsTab" class="tab-content">
+    <h2 class="text-lg font-semibold mb-3">再生方法の設定</h2>
+    <p class="mb-4 text-gray-600">動画のデフォルトの再生方法を設定できます。埋め込みで見れるなら埋め込みで見た方が良いですよ。</p>
+    
+    <div class="control-section mb-4">
+        <div class="flex flex-col">
+            <label class="flex items-start mb-2">
+                <input type="radio" name="playbackMode" value="normal" class="mr-2 mt-1">
+                <div>
+                    <strong>通常</strong> - ストリームURLを用いて再生します。最初のデフォルト設定で、ほとんどの人が使用できます。
+                </div>
+            </label>
+            <label class="flex items-start mb-2">
+                <input type="radio" name="playbackMode" value="edu" class="mr-2 mt-1">
+                <div>
+                    <strong>education</strong> - youtubeeducationを埋め込んで再生を行います。一部の人が使用できます。
+                    <a href="/wkt/yt/edu/<%= videoId %>" class="text-blue-500 underline" target="_blank">再生できるか確かめる</a>。
+                </div>
+            </label>
+            <label class="flex items-start mb-2">
+                <input type="radio" name="playbackMode" value="nocookie" class="mr-2 mt-1">
+                <div>
+                    <strong>nocookie</strong> - youtubenocookieを埋め込んで再生を行います。こちらも一部の人が使用できます。
+                    <a href="/wkt/yt/nocookie/<%= videoId %>" class="text-blue-500 underline" target="_blank">再生できるか確かめる</a>。
+                </div>
+            </label>
+        </div>
+    </div>
+    
+    <button id="saveSettings" class="control-button w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">💾 設定を保存</button>
+</div>
+</div>
+
+        <div class="sidebar w-1/4 ml-4" id="sidebar">
+<div id="commentBox" class="fixed top-0 right-0 w-1/2 h-full bg-gray-800 p-4 shadow-lg flex flex-col hidden">
+    <div class="sticky top-0 bg-gray-800 p-0 z-10">
+        <button id="closeComments" class="w-full bg-gray-700 py-2 rounded mb-2">閉じる</button>
+    </div>
+    <div class="flex-1 overflow-y-auto">
+        <div id="commentError1" class="text-red-500 hidden"></div>
+        <div id="commentsList1" class="mt-2 space-y-2">
+            <p>コメントを取得中...</p>
+        </div>
+        <button id="closeComments2" class="w-full bg-gray-700 py-2 rounded mt-2">閉じる</button>
+    </div>
+</div>
+
+  <div id="dougaBox" class="fixed top-0 right-0 w-1/2 h-full bg-gray-800 p-4 shadow-lg overflow-y-auto related-box">
+    <div class="sticky top-0 flex justify-end">
+    <form id="umekomisearchForm" class="w-1/2 mr-2 mb-2">
+      <input type="text" name="q" id="searchInput" placeholder="検索" class="searchInput w-full p-2 rounded bg-gray-700 text-white">
+    </form>
+    <button id="closedouga" class="w-1/2 bg-gray-700 py-2 rounded mb-2 ml-auto text-center">閉じる</button>
+    </div>
+    <div class="flex-1 overflow-y-auto" id="dougaBoxcon">
+                <h3 class="text-lg font-bold">関連動画</h3>
+<% if (videoInfo.watch_next_feed?.length) { %>
+<% videoInfo.watch_next_feed.forEach(video => { %>
+<div class="mt-2 space-y-4">
+  <% if (!video) return; %>
+  <% if (video.type.endsWith("Video")) { %>
+    <div class="bg-gray-800 p-2 rounded result-item">
+      <a href="/wkt/watch/<%= video.id %>">
+        <img src="/wkt/back/vi/<%= video.id %>/maxresdefault.jpg" alt="サムネ" class="w-full h-auto rounded">
+      </a>
+      <div class="flex items-center mt-2">
+        <% if (video.author?.thumbnails.length) { %>
+          <a href="/wkt/c/<%= video.author.id %>"><img src="/wkt/back/yt3<%- (new URL(video.author.thumbnails[0].url)).pathname %>" alt="アイコン" class="w-6 h-6 rounded-full"></a>
+        <% } %>
+        <p class="text-sm text-gray-400 ml-2">
+          <a href="/wkt/c/<%= video.author.id %>"><%= video.author.name %></a>
+        </p>
+      </div>
+      <p class="text-sm font-bold mt-1">
+        <a href="/wkt/watch/<%= video.id %>"><%= video.title.text %></a>
+      </p>
+      <p class="text-xs text-gray-400">
+        <%= video.short_view_count?.text || video.view_count?.text %>
+      </p>
+    </div>
+  <% } else if (video.type.endsWith("Playlist")) { %>
+    <div class="bg-gray-800 p-2 rounded">
+      <a href="/wkt/p/<%= video.id %>">
+        <img src="/wkt/back/vi/<%= video?.endpoint?.payload?.videoId || video.first_videos[0]?.id %>/mqdefault.jpg" alt="サムネ" class="w-full h-auto rounded">
+      </a>
+      <p class="text-sm font-bold mt-1">
+        <a href="/wkt/p/<%= video.id %>"><%= video.title.text %></a>
+      </p>
+      <p class="text-xs text-gray-400">動画数: <%= video.video_count?.text %></p>
+    </div>
+  <% } else if (video.type.endsWith("Channel")) { %>
+    <div class="bg-gray-800 p-2 rounded">
+      <a href="/wkt/c/<%= video.author.id %>">
+        <img src="/wkt/back/yt3<%- (new URL(video.author.thumbnails[0].url)).pathname %>" alt="チャンネルアイコン" class="w-16 h-16 rounded-full mx-auto">
+      </a>
+      <p class="text-sm font-bold mt-1 text-center">
+        <a href="/wkt/c/<%= video.author.id %>" target="_top"><%= video.author.name %></a>
+      </p>
+      <p class="text-xs text-gray-400 text-center">
+        登録者数: <%= video.subscriber_count?.text %>
+      </p>
+    </div>
+  <% } %>
+</div>
+<% }); %><% } %>
+</div>
+<button id="closedouga2" class="w-full bg-gray-700 py-2 rounded mb-2">閉じる</button>
+            </div>
+            <button id="hideSidebar" class="w-full bg-gray-700 py-2 rounded">▶ サイドバーを隠す</button>
+            <button id="toggleComments" class="mt-4 w-full bg-gray-700 py-2 rounded">コメントを開く</button>
+            <button id="toggledouga" class="mt-4 w-full bg-gray-700 py-2 rounded">関連動画を開く</button>
+            <button id="toggleControlPanel" class="mt-4 w-full bg-gray-700 py-2 rounded"><%= baseUrl.replace('https://', '').replace('.glitch.me', '') %></button>
+            <div class="mt-4">
+<% if (videoInfo.watch_next_feed?.length) { %>
+<div class="mt-2 space-y-2">
+  <% videoInfo.watch_next_feed.forEach(video => { %>
+    <% if (!video) return; %>
+    <% if (video.type.endsWith("Video")) { %>
+      <div class="bg-gray-800 p-2 rounded result-item">
+        <a href="/wkt/watch/<%= video.id %>">
+          <img src="/wkt/back/vi/<%= video.id %>/mqdefault.jpg" alt="<%= video.title.text %> のサムネイル" class="w-full h-auto rounded">
+        </a>
+        <div class="flex items-center mt-2">
+          <% if (video.author?.thumbnails.length) { %>
+            <a href="/wkt/c/<%= video.author.id %>">
+              <img src="/wkt/back/yt3<%- (new URL(video.author.thumbnails[0].url)).pathname %>" alt="<%= video.author.name %> のアイコン" class="w-6 h-6 rounded-full">
+            </a>
+          <% } %>
+          <p class="text-sm text-gray-400 ml-2">
+            <a href="/wkt/c/<%= video.author.id %>"><%= video.author.name %></a>
+          </p>
+        </div>
+        <p class="text-sm font-bold mt-1">
+          <a href="/wkt/watch/<%= video.id %>"><%= video.title.text %></a>
+        </p>
+        <p class="text-xs text-gray-400">
+          <%= video.short_view_count?.text || video.view_count?.text || '不明' %>
+        </p>
+      </div>
+    <% } else if (video.type.endsWith("Playlist")) { %>
+      <div class="bg-gray-800 p-2 rounded">
+        <a href="/wkt/p/<%= video.id %>">
+          <img src="/wkt/back/vi/<%= video?.endpoint?.payload?.videoId || video.first_videos?.[0]?.id || 'default' %>/mqdefault.jpg" alt="<%= video.title.text %> のサムネイル" class="w-full h-24 rounded">
+        </a>
+        <p class="text-sm font-bold mt-1">
+          <a href="/wkt/p/<%= video.id %>"><%= video.title.text %></a>
+        </p>
+        <p class="text-xs text-gray-400">動画数: <%= video.video_count?.text || '不明' %></p>
+      </div>
+    <% } else if (video.type.endsWith("Channel")) { %>
+      <div class="bg-gray-800 p-2 rounded">
+        <a href="/wkt/c/<%= video.author.id %>">
+          <img src="/wkt/back/yt3<%- (new URL(video.author.thumbnails[0].url)).pathname %>" alt="<%= video.author.name %> のチャンネルアイコン" class="w-16 h-16 rounded-full mx-auto">
+        </a>
+        <p class="text-sm font-bold mt-1 text-center">
+          <a href="/wkt/c/<%= video.author.id %>"><%= video.author.name %></a>
+        </p>
+        <p class="text-xs text-gray-400 text-center">
+          登録者数: <%= video.subscriber_count?.text || '非公開' %>
+        </p>
+      </div>
+    <% } %>
+  <% }); %>
+</div>
+<% } %>
+            </div>
+        </div>
+    </div>
+              
+    <button id="expandSidebar" class="expand-sidebar-btn">◀ サイドバーを開く</button>
+          
+<script>
+// コメント
+const commentContainers = [document.getElementById("commentsList1"), document.getElementById("commentsList2")];
+const errorContainers = [document.getElementById("commentError1"), document.getElementById("commentError2")];
+const retryButton = document.getElementById("retryButton");
+
+document.getElementById("closeComments").addEventListener("click", closeComments);
+document.getElementById("closeComments2").addEventListener("click", closeComments);
+document.getElementById("toggleComments").addEventListener("click", toggleComments);
+
+function closeComments() {
+    document.getElementById("commentBox").classList.add("hidden");
+}
+
+function toggleComments() {
+    document.getElementById("commentBox").classList.remove("hidden");
+}
+
+async function fetchComments() {
+    commentContainers.forEach(container => container.innerHTML = "<p>コメントを取得中...</p>");
+    errorContainers.forEach(error => error.style.display = "none");
+    retryButton.style.display = "none";
+
+    try {
+        const response = await fetch("/wkt/back/comment/<%= videoData.videoId %>");
+        if (!response.ok) throw new Error("サーバーエラー");
+
+        const responseText = await response.text();
+        commentContainers.forEach(container => container.innerHTML = responseText);
+    } catch (error) {
+        console.error("エラー:", error);
+        errorContainers.forEach(errorContainer => {
+            errorContainer.textContent = "コメントの取得に失敗しました: " + error.message;
+            errorContainer.style.display = "block";
+        });
+        retryButton.style.display = "block";
+    }
+}
+
+document.getElementById("retryButton").addEventListener("click", fetchComments);
+fetchComments();
+
+//関連動画
+document.getElementById("toggledouga").addEventListener("click", function() {
+    document.getElementById("dougaBox").classList.toggle("open");
+});
+document.getElementById("closedouga").addEventListener("click", function() {
+    document.getElementById("dougaBox").classList.remove("open");
+});
+document.getElementById("closedouga2").addEventListener("click", function() {
+    document.getElementById("dougaBox").classList.remove("open");
+});
+  
+//けんさく
+document.getElementById('umekomisearchForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  const searchValue = document.getElementById('searchInput').value;
+  const videoContainer = document.getElementById('dougaBoxcon');
+  videoContainer.innerHTML = '';
+  const embedDiv = document.createElement('div');
+  embedDiv.innerHTML = `
+    <div style="height: 100vh; width: 100%;"><iframe src="/wkt/back/search?q=${encodeURIComponent(searchValue)}" width=100% height=100% frameborder="0" allowfullscreen></iframe></div>
+  `;
+  videoContainer.appendChild(embedDiv);
+});
+
+// サイドバー
+function updateSidebarState(hidden) {
+    localStorage.setItem("sidebarHidden", hidden);
+}
+
+document.getElementById("hideSidebar").addEventListener("click", function() {
+    document.getElementById("sidebar").classList.add("hidden");
+    document.getElementById("videoContainer").classList.add("full");
+    document.getElementById("expandSidebar").classList.add("visible");
+    updateSidebarState(true);
+});
+
+document.getElementById("expandSidebar").addEventListener("click", function() {
+    document.getElementById("sidebar").classList.remove("hidden");
+    document.getElementById("videoContainer").classList.remove("full");
+    this.classList.remove("visible");
+    updateSidebarState(false);
+});
+
+// コントロール
+$(document).ready(function() {
+    $('#toggleControlPanel').click(() => $('#controlPanel').toggleClass('open'));
+    $('#closeControlPanel').click(() => $('#controlPanel').toggleClass('open'));
+
+    $('.tab-button').click(function() {
+        $('.tab-button').removeClass('active');
+        $(this).addClass('active');
+        $('.tab-content').removeClass('active');
+        $('#' + $(this).data('target')).addClass('active');
+    });
+
+    $('#saveSettings').click(function() {
+        $('#controlPanel').toggleClass('open');
+        const mode = $('input[name="playbackMode"]:checked').val();
+        document.cookie = `playbackMode=${mode}; path=/; max-age=31536000`;
+        window.location.href = `/wkt/redirect/mode/<%= videoData.videoId %>?mode=${mode}`;
+    });
+});
+
+// ツールバー
+$('#toggleToolbar').click(() => $('#toolbar').addClass('open'));
+$('#closeToolbar').click(() => $('#toolbar').removeClass('open'));
+
+// 履歴
+const videoId = "<%= videoData.videoId %>";
+const channelId = "<%= videoInfo.secondary_info.owner.author.id %>";
+const channelName = "<%= videoInfo.secondary_info.owner.author.name %>";
+const videoTitle = "<%= videoInfo.primary_info.title.text %>";
+
+function saveToHistory(videoId, channelId, channelName, videoTitle) {
+    let history = getHistoryFromCookies();
+    const historyIndex = history.findIndex(track => track.videoId === videoId);
+    if (historyIndex !== -1) {
+        history.splice(historyIndex, 1);
+    }
+    if (history.length >= 10) {
+        history.shift();
+    }
+    history.push({ videoId, channelId, channelName, videoTitle });
+    document.cookie = `wakametubehistory=${encodeURIComponent(JSON.stringify(history))}; path=/; max-age=31536000`;
+}
+
+function getHistoryFromCookies() {
+    const historyCookie = document.cookie.split('; ').find(row => row.startsWith('wakametubehistory='));
+    if (historyCookie) {
+        const cookieValue = historyCookie.split('=')[1];
+        try {
+            return JSON.parse(decodeURIComponent(cookieValue));
+        } catch (error) {
+            console.error('Error parsing history cookie:', error);
+            return [];
+        }
+    }
+    return [];
+}
+  
+// 概要
+function toggleDescription(button) {
+    const description = button.closest('div').nextElementSibling;
+
+    if (description.classList.contains('hidden')) {
+        description.classList.remove('hidden');
+        button.textContent = '折りたたむ';
+    } else {
+        description.classList.add('hidden');
+        button.textContent = '表示する';
+    }
+}
+
+// ページ読み込み
+window.addEventListener("load", function() {
+    saveToHistory(videoId, channelId, channelName, videoTitle);
+});
+
+</script>
+</body>
+</html>

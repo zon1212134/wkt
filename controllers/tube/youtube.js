@@ -8,11 +8,11 @@ const serverYt = require("/app/server/youtube.js");
 router.get('/edu/:id', async (req, res) => {
   const videoId = req.params.id;
   try {
-    const videoData = await serverYt.infoGet(videoId);
+    const videoInfo = await serverYt.infoGet(videoId);
     const ytinfo = await axios.get("https://wktedutube.glitch.me");
     const videosrc = `https://www.youtubeeducation.com/embed/${videoId}${ytinfo.data}`;
           
-    res.render('tube/umekomi.ejs', {videosrc, videoData});
+    res.render('tube/umekomi/edu.ejs', {videosrc, videoInfo});
   } catch (error) {
      res.status(500).render('matte', { 
       videoId, 
@@ -25,10 +25,10 @@ router.get('/edu/:id', async (req, res) => {
 router.get('/nocookie/:id', async (req, res) => {
   const videoId = req.params.id;
   try {
-    const videoData = await serverYt.infoGet(videoId);
+    const videoInfo = await serverYt.infoGet(videoId);
     const videosrc = `https://www.youtube-nocookie.com/embed/${videoId}`;
           
-    res.render('tube/umekomi.ejs', {videosrc, videoData});
+    res.render('tube/umekomi/nocookie.ejs', {videosrc, videoInfo});
   } catch (error) {
      res.status(500).render('matte', { 
       videoId, 

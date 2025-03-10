@@ -25,9 +25,12 @@ router.get('/:id', async (req, res) => {
         return res.status(400).send('videoIDが正しくありません');
     }
     const cookies = parseCookies(req);
-    const wakames = cookies.wakametubeumekomi === 'true';
-    if (wakames) {
-        return res.redirect(`/wkt/umekomi/${videoId}`);
+    const wakames = cookies.playbackMode;
+    if (wakames == "edu") {
+        return res.redirect(`/wkt/yt/edu/${videoId}`);
+    }
+    if (wakames == "nocookie") {
+        return res.redirect(`/wkt/yt/nocookie/${videoId}`);
     }
     try {
       let videoData;
