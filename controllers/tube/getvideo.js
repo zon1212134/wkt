@@ -11,7 +11,8 @@ router.get('/:id', async (req, res) => {
     const server = req.query.server || '0';
     const serverUrls = [
 	      'https://watawata8.glitch.me',
-	      'https://watawata37.glitch.me'
+	      'https://watawata37.glitch.me',
+        'https://watawatawata.glitch.me'
         ];
 
     let baseUrl;
