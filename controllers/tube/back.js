@@ -138,7 +138,8 @@ router.get('/comment/:id', async (req, res) => {
 
 router.get("/info/:id", async (req, res) => {
     try {
-		res.json(await serverYt.infoGet(req.params.id));
+      const t = await serverYt.infoGet(req.params.id)
+		res.json(t.basic_info);
 	} catch (error) {
 		console.error(error);
 		try {
