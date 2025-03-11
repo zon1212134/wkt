@@ -753,7 +753,6 @@ document.addEventListener('keydown', function(event) {
     if (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA') {
         return;
     }
-
     if (event.code === 'Space') {
         event.preventDefault();
         if (video.paused) {
@@ -762,19 +761,17 @@ document.addEventListener('keydown', function(event) {
             video.pause();
         }
     }
-
     if (event.key === 'f' || event.key === 'F') {
         event.preventDefault();
         toggleFullScreen();
     }
-  
     if (event.key === 'ArrowRight') {
         video.currentTime += 10;
-    } else if (event.key === 'ArrowLeft') {
+    } 
+    if (event.key === 'ArrowLeft') {
         video.currentTime -= 10;
     }
 });
-  
 function toggleFullScreen() {
     if (!document.fullscreenElement) {
         if (video.requestFullscreen) {
@@ -803,7 +800,6 @@ function toggleFullScreen() {
 window.addEventListener("load", function() {
     saveToHistory(videoId, channelId, channelName, videoTitle);
 });
-
 </script>
 </body>
 </html>
