@@ -60,7 +60,7 @@
                 <div class="result-item w-auto bg-gray-800 p-4 rounded">
                     <a href="/wkt/watch/<%= video.id %>#mainContainer" class="thumbnail">
                         <img loading="lazy" src="/wkt/back/vi/<%= video.id %>/mqdefault.jpg" alt="<%= video.title %>" class="w-auto h-48 rounded">
-                        <span class="video-duration"><%= video.duration.text %></span>
+                        <span class="video-duration"><%= video.duration %></span>
                     </a>
                     <div class="mt-2 flex items-center">
                         <a href="/wkt/c/<%= video.author.id %>" class="flex items-center">
@@ -72,7 +72,7 @@
                     <p class="text-xs text-gray-500"><%= video.uploadedAt %> - <%= video.views %> 回再生</p>
                 </div>
               <% } else if (video.type === 'playlist') { %>
-                <div class="bg-gray-600 p-4 rounded">
+                <div class="result-item bg-gray-600 p-4 rounded">
                   <a href="/wkt/p/<%= video.playlistID %>">
                     <img src="<%= video.firstVideo.bestThumbnail.url.slice(19) %>" alt="<%= video.title %>" class="w-full h-48 rounded">
                   </a>
@@ -82,7 +82,7 @@
                     </div>
                 </div>
               <% } else if (video.type === 'channel') { %>
-                <div class="bg-gray-500 p-4 rounded">
+                <div class="result-item bg-gray-500 p-4 rounded">
                   <a href="/wkt/c/<%= video.channelID %>">
                     <img src="<%= video.bestAvatar.url %>" alt="<%= video.name %>" class="w-full h-30 rounded">
                   </a>

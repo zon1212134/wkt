@@ -55,7 +55,7 @@
                     <p class="text-xs text-gray-500"><%= video.view_count?.text || video.short_view_count?.text %> - <%= video.published.text %></p>
                 </div>
               <% } else if (video.type.endsWith("Playlist")) { %>
-                <div class="bg-gray-600 p-4 rounded">
+                <div class="result-item bg-gray-600 p-4 rounded">
                   <a href="/wkt/p/<%= video.id %>">
                     <img src="/vi/<%= video?.endpoint?.payload?.videoId || video.first_videos[0]?.id %>/mqdefault.jpg" alt="<%= video.title.text %>" class="w-full h-auto rounded">
                   </a>
@@ -65,7 +65,7 @@
                     </div>
                 </div>
               <% } else if (video.type.endsWith("Channel")) { %>
-                <div class="bg-gray-600 p-4 rounded">
+                <div class="result-item bg-gray-600 p-4 rounded">
                   <a href="/wkt/c/<%= video.author.id %>">
                     <img src="<%= video.author.thumbnails[0].url %>" alt="<%= video.author.name %>" class="w-full h-auto rounded">
                   </a>
