@@ -37,25 +37,25 @@
 }
         .comment-box, .related-box {
             transform: translateX(100%);
-            transition: transform 0.3s ease-in-out;
+            transition: transform 0.2s ease-in-out;
         }
         .comment-box.open, .related-box.open {
             transform: translateX(0);
         }
         .main-container {
             display: flex;
-            transition: width 0.3s ease-in-out;
+            transition: width 0.2s ease-in-out;
         }
         .video-container {
             width: 75%;
-            transition: width 0.3s ease-in-out;
+            transition: width 0.2s ease-in-out;
         }
         .video-container.full {
             width: 100%;
         }
         .sidebar {
             width: 25%;
-            transition: transform 0.3s ease-in-out;
+            transition: transform 0.2s ease-in-out;
         }
         .sidebar.hidden {
             transform: translateX(100%);
@@ -80,7 +80,7 @@
             right: -50%;
             width: 50%;
             background: rgba(51, 51, 51, 0.95);
-            transition: right 0.3s;
+            transition: right 0.2s;
             padding: 20px;
             z-index: 10;
         }
@@ -213,7 +213,7 @@
 </div>
 
         <div class="sidebar w-1/4 ml-4" id="sidebar">
-<div id="commentBox" class="fixed top-0 right-0 w-1/2 h-full bg-gray-800 p-4 shadow-lg flex flex-col hidden">
+<div id="commentBox" class="fixed top-0 right-0 w-1/2 h-full bg-gray-800 p-4 shadow-lg flex flex-col comment-box">
     <div class="sticky top-0 bg-gray-800 p-0 z-10">
         <button id="closeComments" class="w-full bg-gray-700 py-2 rounded mb-2">閉じる</button>
     </div>
@@ -361,11 +361,10 @@ document.getElementById("closeComments2").addEventListener("click", closeComment
 document.getElementById("toggleComments").addEventListener("click", toggleComments);
 
 function closeComments() {
-    document.getElementById("commentBox").classList.add("hidden");
+    document.getElementById("commentBox").classList.remove("open");
 }
-
 function toggleComments() {
-    document.getElementById("commentBox").classList.remove("hidden");
+    document.getElementById("commentBox").classList.toggle("open");
 }
 
 async function fetchComments() {
