@@ -181,5 +181,21 @@ router.get("/search", async (req, res) => {
 	}
 });
 
+router.get("/wakame/refresh", async (req, res) => {
+  try {
+    await serverYt.getapis();
+		res.json("ok");
+	} catch (error) {
+		console.error(error);
+		try {
+			res.status(500).render("error.ejs", {
+				title: "Error",
+				content: error
+			});
+		} catch (error) {
+			console.error(error);
+		}
+	}
+});
 
 module.exports = router;
