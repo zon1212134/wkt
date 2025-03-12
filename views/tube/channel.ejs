@@ -24,7 +24,7 @@
     </header>
   
     <div class="container mx-auto p-3 pt-2">
-      　<img src="<%- channel.header.content.banner.image[0].url || ""  %>" class="w-full h-auto mr-4">
+      　<img src="<%- channel.header?.content?.banner?.image?.[0]?.url || ""  %>" class="w-full h-auto mr-4">
         <div class="bg-gray-800 p-8 rounded-lg shadow-lg mt-4">
             <div class="flex items-center mb-6">
                 <img src="<%- channel.metadata.avatar[0].url || ""  %>" class="w-20 h-20 rounded-full mr-4">

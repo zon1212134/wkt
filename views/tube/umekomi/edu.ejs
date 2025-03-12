@@ -308,11 +308,11 @@
             </a>
           <% } %>
           <p class="text-sm text-gray-400 ml-2">
-            <%= video.author.name %>
+            <a href="/wkt/c/<%= video.author.id %>"><%= video.author.name %></a>
           </p>
         </div>
         <p class="text-sm font-bold mt-1">
-          <%= video.title.text %></a>
+          <%= video.title.text %>
         </p>
         <p class="text-xs text-gray-400">
           <%= video.short_view_count?.text || video.view_count?.text || '不明' %>
