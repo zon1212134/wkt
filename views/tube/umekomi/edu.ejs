@@ -452,11 +452,6 @@ $('#toggleToolbar').click(() => $('#toolbar').addClass('open'));
 $('#closeToolbar').click(() => $('#toolbar').removeClass('open'));
 
 // 履歴
-const videoId = "<%= videoId %>";
-const channelId = "<%= videoInfo.secondary_info.owner.author.id %>";
-const channelName = "<%= videoInfo.secondary_info.owner.author.name %>";
-const videoTitle = "<%= videoInfo.primary_info.title.text %>";
-
 function saveToHistory(videoId, channelId, channelName, videoTitle) {
     let history = getHistoryFromCookies();
     const historyIndex = history.findIndex(track => track.videoId === videoId);
@@ -499,7 +494,11 @@ function toggleDescription(button) {
 
 // ページ読み込み
 window.addEventListener("load", function() {
-    saveToHistory(videoId, channelId, channelName, videoTitle);
+  const videoId = "<%= videoId %>";
+  const channelId = "<%= videoInfo.secondary_info.owner.author.id %>";
+  const channelName = "<%= videoInfo.secondary_info.owner.author.name %>";
+  const videoTitle = "<%= videoInfo.primary_info.title.text %>";
+  saveToHistory(videoId, channelId, channelName, videoTitle);
 });
 </script>
 </body>
