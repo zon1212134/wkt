@@ -41,10 +41,13 @@
             <a href="/wkt/cl/history" class="text-gray-300 hover:text-white">履歴</a>
         </nav>
     </header>
-    <div class="container mx-auto p-4 mt-16">
+    <div class="container mx-auto p-4 mt-4 relative">
         <h2 class="text-xl font-bold mb-4">再生履歴</h2>
+        <button id="clear-history" class="absolute top-0 right-0 m-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+            履歴を削除
+        </button>
         <div id="history-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            <p id="no-history" class="text-gray-400 hidden">最近再生した動画はありません(´・ω・｀)</p>
+            <p id="no-history" class="hidden">最近再生した動画はありません(´・ω・｀)</p>
         </div>
     </div>
 <script>
@@ -63,7 +66,7 @@ function displayHistory() {
     const historyList = document.getElementById("history-list");
     const noHistoryMsg = document.getElementById("no-history");
     historyList.innerHTML = "";
-    if (history.length === 0) {
+    if (!history || history.length === 0) {
         noHistoryMsg.classList.remove("hidden");
         return;
     } else {
@@ -74,7 +77,7 @@ function displayHistory() {
         item.className = "result-item w-auto bg-gray-800 p-4 rounded";
         item.innerHTML = `
             <a href="/wkt/watch/${video.videoId}" class="thumbnail">
-                <img loading="lazy" src="/wkt/back/vi/${video.videoId}/mqdefault.jpg" alt="${video.videoTitle}" class="w-auto h-48 rounded">
+                <img loading="lazy" src="/wkt/back/vi/${video.videoId}/mqdefault.jpg" alt="${video.videoTitle}" class="w-full h-auto rounded">
             </a>
             <div class="mt-2 flex items-center">
                 <a href="/wkt/c/${video.channelId}" class="flex items-center">
@@ -87,7 +90,18 @@ function displayHistory() {
     });
 }
 
-document.addEventListener("DOMContentLoaded", displayHistory);
+function clearHistory() {
+  if (confirm("本当に履歴を削除しますか？")) {
+    localStorage.removeItem("wakametubehistory");
+    alert("履歴を削除しました");
+    displayHistory();
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    displayHistory();
+    document.getElementById("clear-history").addEventListener("click", clearHistory);
+});
 </script>
 </body>
 </html>
