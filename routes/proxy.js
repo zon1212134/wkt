@@ -3,8 +3,8 @@ const express = require("express");
 const router = express.Router();
 const path = require("path");
 
-router.get("/", (req, res) => {
-  const proxylist = await Getproxylist(part);
+router.get("/", async (req, res) => {
+  const proxylist = await GetproxyList();
   if (proxylist) {
     res.send(proxylist);
   } else {
@@ -12,18 +12,18 @@ router.get("/", (req, res) => {
   }
 });
 
-async function Getproxy(blogId, part) {
+async function Getproxy(id, ff) {
   try {
-    const response = await axios.get(`https://wakameblog.glitch.me/${part}/${blogId}.html`);
+    const response = await axios.get(`https://wakamepp.glitch.me/${ff}/${id}.html`);
     return response.data;
   } catch (error) {
     return null;
   }
 }
 
-async function GetproxyList(part) {
+async function GetproxyList() {
   try {
-    const response = await axios.get(`https://wakameblog.glitch.me/${part}.html`);
+    const response = await axios.get(`https://wakamepp.glitch.me/list.html`);
     return response.data;
   } catch (error) {
     return null;
@@ -32,9 +32,10 @@ async function GetproxyList(part) {
 
 router.get('/:ff/:id', async (req, res) => {
   const id = req.params.id;
-  const blogData = await Getproxy(id, "blog");
-  if (blogData) {
-    res.send(blogData);
+  const ff = req.params.ff;
+  const proxyHtml = await Getproxy(id, ff);
+  if (proxyHtml) {
+    res.send(proxyHtml);
   } else {
     res.status(500).send('Proxyが見つかりません。');
   }
