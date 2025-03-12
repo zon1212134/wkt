@@ -452,8 +452,13 @@ $('#toggleToolbar').click(() => $('#toolbar').addClass('open'));
 $('#closeToolbar').click(() => $('#toolbar').removeClass('open'));
 
 // 履歴
+const videoId = "<%= videoId %>";
+const channelId = "<%= videoInfo.secondary_info.owner.author.id %>";
+const channelName = "<%= videoInfo.secondary_info.owner.author.name %>";
+const videoTitle = "<%= videoInfo.primary_info.title.text %>";
+
 function saveToHistory(videoId, channelId, channelName, videoTitle) {
-    let history = getHistoryFromCookies();
+    let history = getHistoryFromLocalStorage();
     const historyIndex = history.findIndex(track => track.videoId === videoId);
     if (historyIndex !== -1) {
         history.splice(historyIndex, 1);
@@ -462,23 +467,19 @@ function saveToHistory(videoId, channelId, channelName, videoTitle) {
         history.shift();
     }
     history.push({ videoId, channelId, channelName, videoTitle });
-    document.cookie = `wakametubehistory=${encodeURIComponent(JSON.stringify(history))}; path=/; max-age=31536000`;
+    localStorage.setItem("wakametubehistory", JSON.stringify(history));
 }
 
-function getHistoryFromCookies() {
-    const historyCookie = document.cookie.split('; ').find(row => row.startsWith('wakametubehistory='));
-    if (historyCookie) {
-        const cookieValue = historyCookie.split('=')[1];
-        try {
-            return JSON.parse(decodeURIComponent(cookieValue));
-        } catch (error) {
-            console.error('Error parsing history cookie:', error);
-            return [];
-        }
+function getHistoryFromLocalStorage() {
+    const historyData = localStorage.getItem("wakametubehistory");
+    try {
+        return historyData ? JSON.parse(historyData) : [];
+    } catch (error) {
+        console.error('Error parsing history from localStorage:', error);
+        return [];
     }
-    return [];
 }
-  
+
 // 概要
 function toggleDescription(button) {
     const description = button.closest('div').nextElementSibling;
@@ -494,10 +495,6 @@ function toggleDescription(button) {
 
 // ページ読み込み
 window.addEventListener("load", function() {
-  const videoId = "<%= videoId %>";
-  const channelId = "<%= videoInfo.secondary_info.owner.author.id %>";
-  const channelName = "<%= videoInfo.secondary_info.owner.author.name %>";
-  const videoTitle = "<%= videoInfo.primary_info.title.text %>";
   saveToHistory(videoId, channelId, channelName, videoTitle);
 });
 </script>

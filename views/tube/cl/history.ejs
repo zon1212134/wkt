@@ -47,42 +47,47 @@
             <p id="no-history" class="text-gray-400 hidden">最近再生した動画はありません(´・ω・｀)</p>
         </div>
     </div>
-    <script>
-        function getHistoryFromCookies() {
-            const cookies = document.cookie.split('; ');
-            const historyCookie = cookies.find(row => row.startsWith('wakametubehistory='));
-            return historyCookie ? JSON.parse(decodeURIComponent(historyCookie.split('=')[1])) : [];
-        }
-        
-        function displayHistory() {
-            const history = getHistoryFromCookies().reverse();
-            const historyList = document.getElementById("history-list");
-            const noHistoryMsg = document.getElementById("no-history");
-            
-            if (history.length === 0) {
-                noHistoryMsg.classList.remove("hidden");
-                return;
-            }
-            
-            history.forEach(video => {
-                const item = document.createElement("div");
-                item.className = "result-item w-auto bg-gray-800 p-4 rounded";
-                item.innerHTML = `
-                    <a href="/wkt/watch/${video.videoId}" class="thumbnail">
-                        <img loading="lazy" src="/wkt/back/vi/${video.videoId}/mqdefault.jpg" alt="${video.videoTitle}" class="w-auto h-48 rounded">
-                    </a>
-                    <div class="mt-2 flex items-center">
-                        <a href="/wkt/c/${video.channelId}" class="flex items-center">
-                            <p class="text-sm text-gray-400">${video.channelName}</p>
-                        </a>
-                    </div>
-                    <p class="text-lg font-bold">${video.videoTitle}</p>
-                `;
-                historyList.appendChild(item);
-            });
-        }
-        
-        document.addEventListener("DOMContentLoaded", displayHistory);
-    </script>
+<script>
+function getHistoryFromLocalStorage() {
+    const historyData = localStorage.getItem("wakametubehistory");
+    try {
+        return historyData ? JSON.parse(historyData) : [];
+    } catch (error) {
+        console.error('Error parsing history from localStorage:', error);
+        return [];
+    }
+}
+
+function displayHistory() {
+    const history = getHistoryFromLocalStorage().reverse();
+    const historyList = document.getElementById("history-list");
+    const noHistoryMsg = document.getElementById("no-history");
+    historyList.innerHTML = "";
+    if (history.length === 0) {
+        noHistoryMsg.classList.remove("hidden");
+        return;
+    } else {
+        noHistoryMsg.classList.add("hidden");
+    }
+    history.forEach(video => {
+        const item = document.createElement("div");
+        item.className = "result-item w-auto bg-gray-800 p-4 rounded";
+        item.innerHTML = `
+            <a href="/wkt/watch/${video.videoId}" class="thumbnail">
+                <img loading="lazy" src="/wkt/back/vi/${video.videoId}/mqdefault.jpg" alt="${video.videoTitle}" class="w-auto h-48 rounded">
+            </a>
+            <div class="mt-2 flex items-center">
+                <a href="/wkt/c/${video.channelId}" class="flex items-center">
+                    <p class="text-sm text-gray-400">${video.channelName}</p>
+                </a>
+            </div>
+            <p class="text-lg font-bold">${video.videoTitle}</p>
+        `;
+        historyList.appendChild(item);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", displayHistory);
+</script>
 </body>
 </html>
