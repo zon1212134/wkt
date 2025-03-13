@@ -13,7 +13,8 @@
     "soundcloud-downloader": "^1.0.0",
     "youtubei.js": "^13.1.0",
     "undici": "^7.4.0",
-    "miniget": "^4.2.3"
+    "miniget": "^4.2.3",
+    "cors": "^2.8.5"
   },
   "narflinger": {
     "basenames": [

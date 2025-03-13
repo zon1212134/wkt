@@ -19,6 +19,7 @@ const compression = require("compression");
 const bodyParser = require("body-parser");
 const YouTubeJS = require("youtubei.js");
 const serverYt = require("./server/youtube.js");
+const cors = require('cors');
 
 let app = express();
 let client;
@@ -28,6 +29,7 @@ app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 app.set("trust proxy", 1);
 
 app.get('/', (req, res) => {
