@@ -8,6 +8,14 @@ const wakamess = require("/app/server/wakame.js");
 
 router.get('/:id', async (req, res) => {
     const videoId = req.params.id;
+    const cookies = parseCookies(req);
+    const wakames = cookies.playbackMode;
+    if (wakames == "edu") {
+        return res.redirect(`/wkt/yt/edu/${videoId}`);
+    }
+    if (wakames == "nocookie") {
+        return res.redirect(`/wkt/yt/nocookie/${videoId}`);
+    }
     const server = req.query.server || '0';
     const serverUrls = [
 	      'https://watawata8.glitch.me',
@@ -24,14 +32,6 @@ router.get('/:id', async (req, res) => {
     }
     if (!/^[a-zA-Z0-9_-]{11}$/.test(videoId)) {
         return res.status(400).send('videoIDが正しくありません');
-    }
-    const cookies = parseCookies(req);
-    const wakames = cookies.playbackMode;
-    if (wakames == "edu") {
-        return res.redirect(`/wkt/yt/edu/${videoId}`);
-    }
-    if (wakames == "nocookie") {
-        return res.redirect(`/wkt/yt/nocookie/${videoId}`);
     }
     try {
       let videoData;
