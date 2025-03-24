@@ -70,6 +70,7 @@ router.get('/get/:Url', async (req, res) => {
   const { Url } = req.params;
   const replacedUrl = decodeURIComponent(Url);
   const url = replacedUrl.replace(/\.wakame02\./g, '.');
+  const baseUrl = new URL(url);
   if (!url) {
     return res.status(400).send('URLが入力されていません');
   }
@@ -82,8 +83,25 @@ router.get('/get/:Url', async (req, res) => {
         'Connection': 'keep-alive',
       }
     });
-    const html = response.data;
-    res.send(`${response.data}`);
+    let html = response.data;
+    html = html.replace(/<a\s+([\s\S]*?)href="([\s\S]*?)"([\s\S]*?)>([\s\S]*?)<\/a>/g, (match, beforeHref, url, afterHref, innerText) => {
+      let absoluteUrl;
+
+      try {
+        if (url.startsWith('http') || url.startsWith('https')) {
+          absoluteUrl = url;
+        } else {
+          absoluteUrl = new URL(url, baseUrl).href;
+        }
+      } catch (e) {
+        console.error('Error parsing URL:', url, e);
+        return match;
+      }
+      const replacedAbsoluteUrl = absoluteUrl.replace(/\./g, '.wakame02.');
+      const encoded = encodeURIComponent(replacedAbsoluteUrl);
+      return `<a ${beforeHref}href="/tool/html/get/${encoded}"${afterHref}>${innerText}</a>`;
+    });
+    res.send(html);
     } catch (error) {
         res.status(500).send(`<h1>エラー: ${error.message}</h1>`);
     }
