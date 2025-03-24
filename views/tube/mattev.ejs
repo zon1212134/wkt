@@ -7,7 +7,7 @@
     <script>
         function changeServer() {
             const server = document.getElementById('serverSelect').value;
-            window.location.href = `?server=${server}`;
+            window.location.href = `/wkt/watch/<%= videoId %>?server=${server}`;
         }
     </script>
     <style>
@@ -48,15 +48,15 @@
 <body>
     <div class="container">
         <h1>動画を取得できません</h1>
-        <p>エラー: <%= error %></p>
-        <img src="https://img.youtube.com/vi/<%= videoId %>/maxresdefault.jpg">
-        <p>現在のサーバー: <strong><%= baseUrl %></strong></p>
+        <p>エラー: <%= details %></p>
+        <img src="/wkt/back/vi/<%= videoId %>/mqdefault.jpg">
+        <p>現在のサーバー: <strong><%= baseUrl.replace('https://', '').replace('.glitch.me', '') %></strong></p>
         <label for="serverSelect">サーバーを変更:</label>
         <select id="serverSelect">
-            <option value="server8">server8</option>
-            <option value="server12">server12</option>
-            <option value="server24">server24</option>
-            <option value="backup">backup</option>
+            <% serverData.forEach(server => { %>
+                <option value="<%= server.replace('https://', '').replace('.glitch.me', '') %>"><%= server.replace('https://', '').replace('.glitch.me', '') %></option>
+            <% }); %>
+            <option value="direct">direct</option>
         </select>
         <button onclick="changeServer()">変更</button>
     </div>

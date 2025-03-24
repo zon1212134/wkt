@@ -45,7 +45,7 @@ router.get('/:id', async (req, res) => {
       res.render('tube/watch.ejs', { videoData, videoInfo, videoId, baseUrl });
   } catch (error) {
       res.status(500).render('tube/mattev.ejs', { 
-      videoId, baseUrl,
+      videoId, baseUrl, serverUrls,
       error: '動画を取得できません', 
       details: error.message 
     });
