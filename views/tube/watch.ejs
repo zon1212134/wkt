@@ -456,6 +456,7 @@ document.getElementById('reloadVideo').addEventListener('click', function() {
   
 //エラー処理
 video.addEventListener('error', function() {
+    showerrorMessage(`動画の読み込みに失敗しました: ${error}`);
     let lastCurrentTime = video.currentTime;
     video.load();
     video.addEventListener('loadedmetadata', function() {
