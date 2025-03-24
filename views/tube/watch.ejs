@@ -817,7 +817,7 @@ function showTutorial() {
             <p class="text-lg mb-6">あなたにとって最適な再生方法を設定するために協力してください！</p>
             <div class="space-y-4">
             <button id="startTutorialBtn" class="w-full bg-gray-700 py-2 rounded">設定する</button>
-            <button id="skipBtn" class="w-full bg-gray-700 py-2 rounded">設定をスキップ</button>
+            <button id="skipBtn0" class="w-full bg-gray-700 py-2 rounded">設定をスキップ</button>
             </div>
         </div>
     `;
@@ -826,9 +826,9 @@ function showTutorial() {
         tutorialOverlay.remove();
         showPlaybackSettings("https://www.youtube-nocookie.com/embed/<%= videoId %>", "nocookie");
     });
-    document.getElementById('skipBtn').addEventListener('click', function() {
+    document.getElementById('skipBtn0').addEventListener('click', function() {
         localStorage.setItem('tutorialCompleted', 'true');
-        settingsOverlay.remove();
+        tutorialOverlay.remove();
         showMessage("再生方法をnormalに設定しました。<br>再生方法の変更は「<%= baseUrl.replace('https://', '').replace('.glitch.me', '') %>」ボタンからいつでも行えます。");
     });
 }
@@ -875,9 +875,9 @@ async function showPlaybackSettings(iframeurl, mode) {
     document.getElementById('cannotPlayBtn').addEventListener('click',async function() {
         if (mode == "nocookie"){
           settingsOverlay.remove();
+          showMessage("必要なデータを取得中です");
           const ytinfo3 = await fetch('/wkt/yt/edurl', { method: 'GET' });
           const ytinfo = await ytinfo3.text();
-          alert(`https://www.youtubeeducation.com/embed/<%= videoData.videoId %>${ytinfo}`)
           showPlaybackSettings(`https://www.youtubeeducation.com/embed/<%= videoData.videoId %>${ytinfo}`, "edu");
         } else {
           localStorage.setItem('tutorialCompleted', 'true');
@@ -894,18 +894,46 @@ async function showPlaybackSettings(iframeurl, mode) {
 
 function showMessage(text) {
     const alertMessage = document.createElement('div');
-    alertMessage.classList.add('fixed', 'top-4', 'right-4', 'bg-gray-800', 'text-white', 'p-4', 'rounded-lg', 'shadow-lg', 'opacity-90', 'z-50');
+    alertMessage.classList.add(
+        'fixed', 'top-4', 'right-4', 'bg-gradient-to-r', 
+        'from-gray-800', 'to-gray-600', 'text-white', 
+        'p-5', 'rounded-lg', 'shadow-xl', 'opacity-90', 
+        'z-50', 'transform', 'scale-90', 'transition-transform', 
+        'border-2', 'border-indigo-500'
+    );
     alertMessage.innerHTML = `
-        <span>ℹ︎: ${text}</span>
+        <span class="font-semibold">ℹ︎</span> <span>${text}</span>
     `;
     document.body.appendChild(alertMessage);
     setTimeout(() => {
-        alertMessage.style.transform = 'translate-x-0';
+        alertMessage.style.transform = 'translateX(0) scale(1)';
     }, 0);
     setTimeout(() => {
         alertMessage.style.opacity = '0';
-        alertMessage.style.transform = 'translate-x-full';
-        setTimeout(() => alertMessage.remove(), 4000);
+        alertMessage.style.transform = 'translateX(100%) scale(1.1)';
+        setTimeout(() => alertMessage.remove(), 1000);
+    }, 4000);
+}
+function showerrorMessage(text) {
+    const alertMessage = document.createElement('div');
+    alertMessage.classList.add(
+        'fixed', 'top-4', 'right-4', 'bg-gradient-to-r', 
+        'from-gray-800', 'to-gray-600', 'text-white', 
+        'p-5', 'rounded-lg', 'shadow-xl', 'opacity-90', 
+        'z-50', 'transform', 'scale-90', 'transition-transform', 
+        'border-2', 'border-indigo-500'
+    );
+    alertMessage.innerHTML = `
+        <span class="font-semibold">ℹ︎</span> <span>${text}</span>
+    `;
+    document.body.appendChild(alertMessage);
+    setTimeout(() => {
+        alertMessage.style.transform = 'translateX(0) scale(1)';
+    }, 0);
+    setTimeout(() => {
+        alertMessage.style.opacity = '0';
+        alertMessage.style.transform = 'translateX(100%) scale(1.1)';
+        setTimeout(() => alertMessage.remove(), 1000);
     }, 4000);
 }
 </script>
