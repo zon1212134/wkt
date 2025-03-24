@@ -829,6 +829,7 @@ function showTutorial() {
     document.getElementById('skipBtn').addEventListener('click', function() {
         localStorage.setItem('tutorialCompleted', 'true');
         settingsOverlay.remove();
+        showMessage("再生方法をnormalに設定しました。<br>再生方法の変更は「<%= baseUrl.replace('https://', '').replace('.glitch.me', '') %>」ボタンからいつでも行えます。");
     });
 }
   
@@ -864,8 +865,10 @@ async function showPlaybackSettings(iframeurl, mode) {
         localStorage.setItem('tutorialCompleted', 'true');
         document.cookie = `playbackMode=${mode}; path=/; max-age=31536000`;
         if(mode == "nocookie"){
+          showMessage("再生方法をnocookieに設定しました。");
           window.location.href = `/wkt/yt/nocookie/<%= videoData.videoId %>?tu=true`;
         } else{
+          showMessage("再生方法をeduに設定しました。");
           window.location.href = `/wkt/yt/edu/<%= videoData.videoId %>?tu=true`;
         }
     });
@@ -879,25 +882,31 @@ async function showPlaybackSettings(iframeurl, mode) {
         } else {
           localStorage.setItem('tutorialCompleted', 'true');
           settingsOverlay.remove();
+          showMessage("再生方法をnormalに設定しました。<br>再生方法の変更は「<%= baseUrl.replace('https://', '').replace('.glitch.me', '') %>」ボタンからいつでも行えます。");
         }
     });
     document.getElementById('skipBtn').addEventListener('click', function() {
         localStorage.setItem('tutorialCompleted', 'true');
         settingsOverlay.remove();
-        showMessage("チュートリアルをスキップしました");
+        showMessage("再生方法をnormalに設定しました。<br>再生方法の変更は「<%= baseUrl.replace('https://', '').replace('.glitch.me', '') %>」ボタンからいつでも行えます。");
     });
 }
 
 function showMessage(text) {
     const alertMessage = document.createElement('div');
     alertMessage.classList.add('fixed', 'top-4', 'right-4', 'bg-gray-800', 'text-white', 'p-4', 'rounded-lg', 'shadow-lg', 'opacity-90', 'z-50');
-    alertMessage.innerHTML = `<p>${text}</p>`;
+    alertMessage.innerHTML = `
+        <span>ℹ︎: ${text}</span>
+    `;
     document.body.appendChild(alertMessage);
     setTimeout(() => {
-        alertMessage.style.transition = 'opacity 0.5s ease-out';
-        alertMessage.style.opacity = 0;
-        setTimeout(() => alertMessage.remove(), 500);
-    }, 2000);
+        alertMessage.style.transform = 'translate-x-0';
+    }, 0);
+    setTimeout(() => {
+        alertMessage.style.opacity = '0';
+        alertMessage.style.transform = 'translate-x-full';
+        setTimeout(() => alertMessage.remove(), 4000);
+    }, 4000);
 }
 </script>
 </body>
