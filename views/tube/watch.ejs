@@ -209,8 +209,8 @@
         <p class="text-gray-400">他の画質が見つかりません</p>
         <% } %>
         <div class="control-section mb-4">
-            <p 
-            <label class="block mb-2">サーバー選択:
+            <p class="block mb-2">使用したサーバー: <%= baseUrl.replace('https://', '').replace('.glitch.me', '') %></p>
+            <label class="block mb-2">サーバーを変える:
                 <select id="serverSelect" class="w-full bg-gray-800 text-white p-2 rounded">
                     <option value="watawata8">watawata8</option>
                     <option value="watawata37">watawata37</option>
@@ -333,7 +333,7 @@
             <button id="hideSidebar" class="w-full bg-gray-700 py-2 rounded">▶ サイドバーを隠す</button>
             <button id="toggleComments" class="mt-4 w-full bg-gray-700 py-2 rounded">コメントを開く</button>
             <button id="toggledouga" class="mt-4 w-full bg-gray-700 py-2 rounded">関連動画を開く</button>
-            <button id="toggleControlPanel" class="mt-4 w-full bg-gray-700 py-2 rounded"><%= baseUrl.replace('https://', '').replace('.glitch.me', '') %></button>
+            <button id="toggleControlPanel" class="mt-4 w-full bg-gray-700 py-2 rounded">コントロール</button>
             <div class="mt-4">
 <% if (videoInfo.watch_next_feed?.length) { %>
 <div class="mt-2 space-y-2">
@@ -602,6 +602,7 @@ $(document).ready(function() {
     $('#changeServer').click(function() {
         const server = $('#serverSelect').val();
         $('#controlPanel').toggleClass('open');
+        showMessage(`${server}に移動します☑️`);
         window.location.href = `/wkt/watch/<%= videoData.videoId %>?server=${server}`;
     });
 
@@ -609,6 +610,7 @@ $(document).ready(function() {
         $('#controlPanel').toggleClass('open');
         const mode = $('input[name="playbackMode"]:checked').val();
         document.cookie = `playbackMode=${mode}; path=/; max-age=31536000`;
+        showMessage(`再生方法を${mode}に変更します☑️`);
         window.location.href = `/wkt/redirect/mode/<%= videoData.videoId %>?mode=${mode}`;
     });
 });
@@ -884,13 +886,13 @@ async function showPlaybackSettings(iframeurl, mode) {
         } else {
           localStorage.setItem('tutorialCompleted', 'true');
           settingsOverlay.remove();
-          showMessage("再生方法をnormalに設定しました。<br>再生方法の変更は「<%= baseUrl.replace('https://', '').replace('.glitch.me', '') %>」ボタンからいつでも行えます。");
+          showMessage("再生方法をnormalに設定しました。<br>再生方法の変更は「コントロール」ボタンからいつでも行えます。");
         }
     });
     document.getElementById('skipBtn').addEventListener('click', function() {
         localStorage.setItem('tutorialCompleted', 'true');
         settingsOverlay.remove();
-        showMessage("再生方法をnormalに設定しました。<br>再生方法の変更は「<%= baseUrl.replace('https://', '').replace('.glitch.me', '') %>」ボタンからいつでも行えます。");
+        showMessage("再生方法をnormalに設定しました。<br>再生方法の変更は「コントロール」ボタンからいつでも行えます。");
     });
 }
 
