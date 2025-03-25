@@ -41,7 +41,7 @@ router.get('/:id', async (req, res) => {
       if(server == "direct"){
         videoData = await wakamess.getYouTube(videoId);
       }else{
-        const response = await axios.get(`${baseUrl}/api/${videoId}`);
+        const response = await axios.get(`${baseUrl}/api/${videoId}`, { timeout: 12500 });
         videoData = response.data;
       }
       const videoInfo = await serverYt.infoGet(videoId);
