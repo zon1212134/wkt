@@ -104,6 +104,8 @@ function showerrorMessage(text) {
 window.addEventListener("load", function() {
     if (!localStorage.getItem('tutorialCompleted')) {
       showTutorial();
+    }else{
+      showerrorMessage("動画の取得に失敗しました");
     }
 });
   

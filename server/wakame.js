@@ -84,8 +84,8 @@ async function getYouTube (videoId) {
           
     return(templateData);
   } catch (error) {
-    return null;
-}
+    return error;
+  }
 }
 
 module.exports = { 
