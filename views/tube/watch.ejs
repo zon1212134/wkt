@@ -834,7 +834,7 @@ function showTutorial() {
     document.getElementById('skipBtn0').addEventListener('click', function() {
         localStorage.setItem('tutorialCompleted', 'true');
         tutorialOverlay.remove();
-        showMessage("再生方法をnormalに設定しました。<br>再生方法の変更は「<%= baseUrl.replace('https://', '').replace('.glitch.me', '') %>」ボタンからいつでも行えます。");
+        showMessage("再生方法をnormalに設定しました。<br>再生方法の変更は「コントロール」ボタンからいつでも行えます。");
     });
 }
   
