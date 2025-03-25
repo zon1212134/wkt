@@ -3,46 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>わかめproxy</title>
+  <title>HTMLを取得</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-white dark:bg-gray-800 text-gray-900 dark:text-white transition-colors duration-500">
-  <div class="background p-4">
-    <div class="container mx-auto text-center">
-      <h1 class="text-3xl font-bold mb-4">わかめproxy</h1>
-
-      <!-- 検索バー -->
-      <div class="mb-4">
-        <input type="text" id="searchBar" placeholder="URLを検索" class="p-2 w-1/2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400">
-      </div>
-
-      <!-- URL入力ボタン -->
-      <button id="redirectButton" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-600 transition-colors">
-        URLを入力！
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center transition-colors duration-300">
+  <div class="w-full max-w-md p-8 bg-gray-800 rounded-xl shadow-xl">
+    <div class="text-center">
+      <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600 mb-6">HTMLを取得</h1>
+      <p class="text-gray-400 mb-8">ウェブサイトのhtmlを取得して、確認できます。</p>
+      <input type="text" id="searchBar" placeholder="URLを入力" class="w-full p-4 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-6 placeholder-gray-400 transition duration-300 hover:bg-gray-600">
+      <button id="redirectButton" class="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-lg shadow-md hover:from-blue-600 hover:to-indigo-700 transition duration-200 ease-in-out">
+        URLを取得
       </button>
-
-      <p class="mt-4">URLをコピーできたら、上のボタンを押して下さい。</p>
-      <p>ウェブサイトからファイルを拾ってきます。サイトによってはUIがぶち壊れますが、「何が書いてあるか」を迅速に確認できます！</p>
-      <p>対象となるウェブサイトがX-Frame-Optionsヘッダー、またはCSPを設定している場合、取得できない場合の方が多いです。</p>
+      <p class="mt-6 text-sm text-gray-400">サイトによっては、UIが壊れることがあります。また、X-Frame-OptionsヘッダーやCSP設定で取得できない場合があります。</p>
     </div>
   </div>
 
   <script>
-    // URLをリダイレクトするボタンの動作
     document.getElementById('redirectButton').addEventListener('click', () => {
       const url = prompt('URLを入力して下さい');
- 
       if (!url) {
-        alert('URLが提供されていません');
+        alert('URLが入力されていません');
         return;
       }
- 
       const replacedUrl = url.replace(/\./g, '.wakame02.');
-      const redirectUrl = `/getpage/${encodeURIComponent(replacedUrl)}`;
+      const redirectUrl = `/tool/html/gethtml/${encodeURIComponent(replacedUrl)}`;
       window.location.href = redirectUrl;
     });
 
-    // 検索バーの入力値でURLを処理（動作は任意）
     document.getElementById('searchBar').addEventListener('input', (event) => {
       const query = event.target.value;
       console.log('検索バーの入力:', query);
