@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>説明ページ</title>
+  <script src="/js/tailwindcss.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+
+  <div class="max-w-4xl mx-auto py-12 px-6">
+    <h1 class="text-4xl font-bold mb-6 text-center">サイトの説明</h1>
+
+    <!-- FAQ Section -->
+    <div class="space-y-4">
+      <!-- FAQ Item Template -->
+      <div class="faq-item bg-gray-800 rounded-lg shadow-md">
+        <button class="faq-btn w-full text-left px-6 py-4 flex justify-between items-center text-lg font-medium text-gray-200 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <span class="faq-title">サイトの特徴について</span>
+          <svg class="h-6 w-6 transform transition-transform duration-200 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        <div class="faq-content px-6 py-4 hidden bg-gray-700 text-gray-300">
+          <p>このサイトはシンプルで効率的に情報を取得できるよう設計されています。ユーザーが直感的に操作できるUI/UXを提供します。</p>
+        </div>
+      </div>
+      
+      <!-- FAQ Item Template -->
+      <div class="faq-item bg-gray-800 rounded-lg shadow-md">
+        <button class="faq-btn w-full text-left px-6 py-4 flex justify-between items-center text-lg font-medium text-gray-200 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <span class="faq-title">利用方法について</span>
+          <svg class="h-6 w-6 transform transition-transform duration-200 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        <div class="faq-content px-6 py-4 hidden bg-gray-700 text-gray-300">
+          <p>サイトの利用は非常に簡単です。トップページからすぐに目的の情報を検索でき、インターフェースも非常に直感的です。</p>
+        </div>
+      </div>
+      
+      <!-- FAQ Item Template -->
+      <div class="faq-item bg-gray-800 rounded-lg shadow-md">
+        <button class="faq-btn w-full text-left px-6 py-4 flex justify-between items-center text-lg font-medium text-gray-200 hover:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <span class="faq-title">サポートについて</span>
+          <svg class="h-6 w-6 transform transition-transform duration-200 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        <div class="faq-content px-6 py-4 hidden bg-gray-700 text-gray-300">
+          <p>サポートは24/7体制で対応しており、どんな疑問にもすぐにお答えできるようになっています。詳細はサポートページをご覧ください。</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // アコーディオン機能を動的に設定
+    $(document).ready(function() {
+      // すべてのfaq-btnにクリックイベントを設定
+      $('.faq-btn').click(function() {
+        // 対応するfaq-contentを取得
+        const content = $(this).next('.faq-content');
+        const icon = $(this).find('.faq-icon');
+
+        // クリックされたアイテムが開いていれば閉じ、閉じていれば開く
+        content.toggleClass('hidden');
+        icon.toggleClass('rotate-180');  // アイコンの回転をトグル
+      });
+    });
+  </script>
+
+</body>
+</html>
