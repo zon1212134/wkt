@@ -550,8 +550,6 @@ $(document).ready(function() {
     $('#qualitySelect').change(function() {
         const selectedOption = $(this).find(':selected');
         const resolution = selectedOption.attr('data-resolution');
-        const audio = document.getElementById('audio');
-        const videoSrc = document.getElementById('videoSrc');
 
         videoSrc.type = "video/webm";
         videoSrc.src = selectedOption.val();
@@ -559,6 +557,8 @@ $(document).ready(function() {
         $('#controlPanel').toggleClass('open');
         video.load();
         audio.load();
+        alert(video.duration)
+        alert(audio.duration)
 
         video.addEventListener('loadedmetadata', () => {
             video.play().catch(error => console.error("動画の再生エラー:", error));
