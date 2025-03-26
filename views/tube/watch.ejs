@@ -557,8 +557,6 @@ $(document).ready(function() {
         $('#controlPanel').toggleClass('open');
         video.load();
         audio.load();
-        alert(video.duration)
-        alert(audio.duration)
 
         video.addEventListener('loadedmetadata', () => {
             video.play().catch(error => console.error("動画の再生エラー:", error));
