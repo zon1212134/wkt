@@ -413,6 +413,7 @@ document.getElementById('umekomisearchForm').addEventListener('submit', function
   const videoContainer = document.getElementById('dougaBoxcon');
   videoContainer.innerHTML = '';
   const embedDiv = document.createElement('div');
+  showMessage("検索結果を取得します☑️");
   embedDiv.innerHTML = `
     <div style="height: 100vh; width: 100%;"><iframe src="/wkt/back/search?q=${encodeURIComponent(searchValue)}" width=100% height=100% frameborder="0" allowfullscreen></iframe></div>
   `;
