@@ -92,7 +92,7 @@
                 <img src="https://cdn.glitch.global/21c63086-ffc1-4d28-8e9a-e2c12f51b431/IMG_2121.jpeg">
             </a>
             <div class="space-x-6">
-                <a href="/wkt/setting" class="hover:text-gray-300">⚙️設定</a>
+                <a href="/wkt/cl/setting" class="hover:text-gray-300">⚙️設定</a>
                 <a href="/wkt/trend" class="hover:text-gray-300">🎩トレンド</a>
                 <a href="/wkt/cl/history" class="hover:text-gray-300">再生履歴</a>
             </div>
@@ -148,6 +148,29 @@
         </div>
     </section>
 
+  <div id="settingsPanel" class="fixed top-0 left-0 w-full bg-white dark:bg-gray-800 shadow-md p-6 transform -translate-y-full transition-transform duration-300">
+    <div class="flex justify-between items-center">
+      <h2 class="text-xl font-bold">再生設定</h2>
+      <button id="closeSettings" class="text-red-500 text-lg">×</button>
+    </div>
+    <p class="text-gray-700 dark:text-gray-300 text-sm mb-4">再生方法を選択してください。</p>
+    <form id="settingsForm">
+      <label class="block mb-2">
+        <input type="radio" name="playbackMode" value="normal" class="mr-2"> 通常 (normal)
+      </label>
+      <label class="block mb-2">
+        <input type="radio" name="playbackMode" value="edu" class="mr-2"> 教育用 (edu)
+      </label>
+      <label class="block mb-2">
+        <input type="radio" name="playbackMode" value="nocookie" class="mr-2"> プライバシー重視 (nocookie)
+      </label>
+      <label class="block mb-4">
+        <input type="radio" name="playbackMode" value="direct" class="mr-2"> 直接再生 (direct, サーバー使用)
+      </label>
+      <button type="submit" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">保存</button>
+    </form>
+  </div>
+
     <footer>
         <p>♪( ´▽｀)</p>
     </footer>
@@ -182,6 +205,32 @@ function showMessage(text) {
         setTimeout(() => alertMessage.remove(), 1000);
     }, 5000);
 }
+  
+document.getElementById('settingsButton').addEventListener('click', () => {
+      document.getElementById('settingsPanel').classList.remove('-translate-y-full');
+    });
+    
+    document.getElementById('closeSettings').addEventListener('click', () => {
+      document.getElementById('settingsPanel').classList.add('-translate-y-full');
+    });
+    
+    document.getElementById('settingsForm').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const selectedMode = document.querySelector('input[name="playbackMode"]:checked').value;
+      document.cookie = `playbackMode=${selectedMode}; path=/; max-age=${60 * 60 * 24 * 365}`;
+      alert(`再生方法を「${selectedMode}」に設定しました！`);
+      document.getElementById('settingsPanel').classList.add('-translate-y-full');
+    });
+    
+    window.addEventListener('DOMContentLoaded', () => {
+      const cookies = document.cookie.split('; ').reduce((acc, cookie) => {
+        const [key, value] = cookie.split('=');
+        acc[key] = value;
+        return acc;
+      }, {});
+      const playbackMode = cookies.playbackMode || 'normal';
+      document.querySelector(`input[value="${playbackMode}"]`).checked = true;
+    });
 </script>
 </body>
 </html>
