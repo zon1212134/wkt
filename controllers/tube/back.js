@@ -150,6 +150,27 @@ router.get("/info/:id", async (req, res) => {
 	}
 });
 
+router.get("/nextvideo/:id", async (req, res) => {
+  try {
+    const info = await serverYt.infoGet(req.params.id)
+    if(info.watch_next_feed){
+      res.json(info.watch_next_feed);
+    }
+    
+    throw new Error(`Failed to get nextvideo`);
+	} catch (error) {
+		console.error(error);
+		try {
+			res.status(500).render("error.ejs", {
+				title: "youtube.js Error",
+				content: error
+			});
+		} catch (error) {
+			console.error(error);
+		}
+	}
+});
+
 router.get('/stream/api/:id', async (req, res) => {
   try {
     const videoData = await wakamess.getYouTube(req.params.id);
