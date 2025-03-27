@@ -118,12 +118,10 @@ const selectedTab = document.getElementById("selectedTab");
 const shelves = document.querySelectorAll(".shelf-content");
 const recentVideosContainer = document.getElementById("recentVideos");
 
-// ドロップダウンメニューのトグル
 dropdownButton.addEventListener("click", () => {
     dropdownMenu.classList.toggle("hidden");
 });
 
-// タブを選択する関数
 function selectTab(title, index) {
     selectedTab.textContent = title;
     dropdownMenu.classList.add("hidden");
@@ -133,7 +131,6 @@ function selectTab(title, index) {
     recentVideosContainer.classList.add("hidden");
 }
 
-// 最近の動画を選択する関数
 function selectRecentVideos() {
     selectedTab.textContent = '最近の動画';
     dropdownMenu.classList.add("hidden");
@@ -141,7 +138,6 @@ function selectRecentVideos() {
     recentVideosContainer.classList.remove("hidden");
 }
 
-// ドキュメント全体をクリックしてドロップダウンを閉じる
 document.addEventListener("click", (event) => {
     if (!dropdownButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
         dropdownMenu.classList.add("hidden");
