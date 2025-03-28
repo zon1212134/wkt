@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>わかめ🎶 - <%= query %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white flex flex-col items-center">
+<header class="p-4 w-full flex justify-between items-center bg-gray-800 shadow-lg">
+    <form action="/wakamc" method="get" class="flex gap-2 w-full max-w-lg">
+        <input type="text" name="q" placeholder="曲を探す" required value="<%= query %>" class="p-2 rounded bg-gray-700 text-white w-full">
+        <button type="submit" class="p-2 bg-blue-600 rounded hover:bg-blue-500 transition">🔍</button>
+    </form>
+    <button onclick="window.location.href='/okiniiri'" class="p-2 bg-yellow-500 rounded hover:bg-yellow-400 transition">⭐ お気に入り</button>
+</header>
+
+<main class="p-4 w-full max-w-2xl">
+    <% if (tracks && tracks.length > 0) { %>
+        <div class="grid gap-4">
+            <% tracks.forEach(track => { %>
+                <div class="flex items-center gap-4 p-4 border border-gray-700 bg-gray-800 hover:bg-gray-700 transition rounded-lg shadow-md">
+                    <img src="<%= track.artwork_url %>" alt="Artwork" class="w-20 h-20 rounded shadow-md">
+                    <div class="flex-1">
+                        <p class="font-bold text-lg"><%= track.title %></p>
+                        <p class="text-sm text-gray-400">by <%= track.username %></p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="favorite-btn text-gray-400 hover:text-red-500 transition" data-id="<%= track.id %>" onclick="toggleFavorite('<%= track.artwork_url %>', '<%= track.title %>', '<%= track.id %>')">❤️</button>
+                        <button class="play-btn bg-green-500 p-2 rounded hover:bg-green-400 transition text-white" data-track-id="<%= track.id %>">▶️</button>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    <% } else { %>
+        <p class="text-center text-gray-400">曲が見つかりません。</p>
+    <% } %>
+</main>
+      
+<div id="player-container" class="fixed bottom-0 left-0 w-full bg-gray-800 p-4 hidden flex items-center gap-4 shadow-lg">
+    <iframe id="player" class="w-full h-1/9"></iframe>
+</div>
+
+<footer class="p-4 text-center text-gray-500">🎵 Wakamc Music Player 🎵</footer>
+
+<script>
+    document.querySelectorAll('.play-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const trackId = this.getAttribute('data-track-id');
+            playTrack(trackId);
+        });
+    });
+
+    function playTrack(trackId) {
+        const playerContainer = document.getElementById('player-container');
+        const player = document.getElementById('player');
+        player.src = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}&color=%23ff5500&auto_play=true`;
+        playerContainer.classList.remove('hidden');
+    }
+
+    function toggleFavorite(artwork_url, title, id) {
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        const index = favorites.findIndex(track => track.id === id);
+
+        if (index === -1) {
+            favorites.push({ artwork_url, title, id });
+            alert('お気に入りに追加しました！');
+        } else {
+            favorites.splice(index, 1);
+            alert('お気に入りを解除しました！');
+        }
+
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        updateFavoriteButtons();
+    }
+
+    function updateFavoriteButtons() {
+        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        document.querySelectorAll('.favorite-btn').forEach(btn => {
+            const trackId = btn.getAttribute('data-id');
+            if (favorites.some(track => track.id === trackId)) {
+                btn.classList.add('text-red-500');
+            } else {
+                btn.classList.remove('text-red-500');
+            }
+        });
+    }
+
+    updateFavoriteButtons();
+</script>
+</body>
+</html>
