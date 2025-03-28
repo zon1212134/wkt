@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ja" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お気に入り - わかめ🎶</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white flex flex-col items-center">
+<header class="p-4 w-full flex justify-between items-center bg-gray-800 shadow-lg">
+    <h1 class="text-xl font-bold">⭐ お気に入り曲</h1>
+    <button onclick="window.location.href='/'" class="p-3 bg-blue-600 rounded-lg hover:bg-blue-500 transition">🏠 ホーム</button>
+</header>
+
+<main id="favorites-list" class="p-4 w-full max-w-2xl flex flex-col gap-4">
+    <p class="text-center text-gray-400">お気に入りの曲を読み込んでいます...</p>
+</main>
+
+<div id="player-container" class="fixed bottom-0 left-0 w-full bg-gray-800 p-4 hidden flex items-center gap-4 shadow-lg">
+    <iframe id="player" class="w-full h-24"></iframe>
+</div>
+
+<footer class="p-4 text-center text-gray-500">🎵 Wakamc Music Player 🎵</footer>
+
+<script>
+    function loadFavorites() {
+        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        const favoritesList = document.getElementById('favorites-list');
+        favoritesList.innerHTML = '';
+
+        if (favorites.length === 0) {
+            favoritesList.innerHTML = '<p class="text-center text-gray-400">お気に入りの曲がありません。</p>';
+            return;
+        }
+
+        favorites.forEach(track => {
+            const trackElement = document.createElement('div');
+            trackElement.className = "flex items-center gap-4 p-4 border border-gray-700 bg-gray-800 hover:bg-gray-700 transition rounded-lg shadow-md";
+            trackElement.innerHTML = `
+                <img src="${track.artwork_url}" alt="Artwork" class="w-20 h-20 rounded-lg shadow-md">
+                <div class="flex-1">
+                    <p class="font-bold text-lg">${track.title}</p>
+                </div>
+                <div class="flex gap-2">
+                    <button class="play-btn bg-green-500 p-3 rounded-lg hover:bg-green-400 transition text-white text-xl" data-track-id="${track.id}">▶️</button>
+                    <button class="favorite-btn text-xl" data-id="${track.id}">
+                        <img src="${isFavorite(track.id) ? 'heart_filled.png' : 'heart_empty.png'}" alt="Favorite" class="w-6 h-6">
+                    </button>
+                </div>
+            `;
+            favoritesList.appendChild(trackElement);
+        });
+    }
+
+    document.addEventListener('click', function(event) {
+        if (event.target.closest('.play-btn')) {
+            const trackId = event.target.closest('.play-btn').getAttribute('data-track-id');
+            playTrack(trackId);
+        }
+        if (event.target.closest('.favorite-btn')) {
+            const trackId = event.target.closest('.favorite-btn').getAttribute('data-id');
+            toggleFavorite(trackId);
+        }
+    });
+
+    function playTrack(trackId) {
+        const playerContainer = document.getElementById('player-container');
+        const player = document.getElementById('player');
+        player.src = `https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${trackId}&color=%23ff5500&auto_play=true`;
+        playerContainer.classList.remove('hidden');
+    }
+
+    function isFavorite(trackId) {
+        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        return favorites.some(track => track.id === trackId);
+    }
+
+    function toggleFavorite(trackId) {
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        const index = favorites.findIndex(track => track.id === trackId);
+        if (index !== -1) {
+            favorites.splice(index, 1);
+        } else {
+            favorites.push({ id: trackId, artwork_url: '', title: 'Unknown' });
+        }
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        loadFavorites();
+    }
+
+    loadFavorites();
+</script>
+</body>
+</html>

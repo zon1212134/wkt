@@ -29,7 +29,7 @@ router.get('/s', async (req, res) => {
 });
 
 router.get('/f', (req, res) => {
-    res.render('music/wakamemusicf');
+    res.render('music/favorite');
 });
 
 module.exports = router;
