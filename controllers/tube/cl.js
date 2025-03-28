@@ -11,4 +11,8 @@ router.get('/setting', (req, res) => {
     res.render('tube/cl/setting.ejs');
 });
 
+router.get('/shistory', (req, res) => {
+    res.render('tube/cl/serhistory.ejs');
+});
+
 module.exports = router;
