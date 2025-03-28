@@ -344,11 +344,13 @@
             <button id="toggledouga" class="mt-4 w-full bg-gray-700 py-2 rounded">関連動画を開く</button>
             <button id="toggleControlPanel" class="mt-4 w-full bg-gray-700 py-2 rounded">コントロール</button>
             <div class="mt-4">
-<% if (videoInfo.watch_next_feed) { %>
+<% if (videoInfo.watch_next_feed && videoInfo.watch_next_feed.length > 0) { %>
 <div class="mt-2 space-y-2">
+  <% let hasValidVideo = false; %>
   <% videoInfo.watch_next_feed.forEach(video => { %>
-    <% if (!video) return; %>
+    <% if (!video || !video.type) return; %>
     <% if (video.type.endsWith("Video")) { %>
+      <% hasValidVideo = true; %>
       <div class="bg-gray-800 p-2 rounded result-item">
         <a href="/wkt/watch/<%= video.id %>">
           <img src="/wkt/back/vi/<%= video.id %>/mqdefault.jpg" alt="<%= video.title.text %> のサムネイル" class="w-full h-auto rounded">
@@ -371,6 +373,7 @@
         </p>
       </div>
     <% } else if (video.type.endsWith("Playlist")) { %>
+      <% hasValidVideo = true; %>
       <div class="bg-gray-800 p-2 rounded">
         <a href="/wkt/p/<%= video.id %>">
           <img src="/wkt/back/vi/<%= video?.endpoint?.payload?.videoId || video.first_videos?.[0]?.id || 'default' %>/mqdefault.jpg" alt="<%= video.title.text %> のサムネイル" class="w-full h-24 rounded">
@@ -381,6 +384,7 @@
         <p class="text-xs text-gray-400">動画数: <%= video.video_count?.text || '不明' %></p>
       </div>
     <% } else if (video.type.endsWith("Channel")) { %>
+      <% hasValidVideo = true; %>
       <div class="bg-gray-800 p-2 rounded">
         <a href="/wkt/c/<%= video.author.id %>">
           <img src="/wkt/back/yt3<%- (new URL(video.author.thumbnails[0].url)).pathname %>" alt="<%= video.author.name %> のチャンネルアイコン" class="w-16 h-16 rounded-full mx-auto">
@@ -395,8 +399,16 @@
     <% } %>
   <% }); %>
 </div>
-<% }</%>
-<div style="height: 100vh; width: 100%;"><iframe src="/wkt/back/search?q=${encodeURIComponent(searchValue)}" width=100% height=100% frameborder="0" allowfullscreen></iframe></div>
+<% if (!hasValidVideo) { %>
+    <div style="height: 100vh; width: 100%;">
+        <iframe src="/wkt/back/next/<%= videoId %>" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+    </div>
+<% } %>
+<% } else { %>
+<div style="height: 100vh; width: 100%;">
+    <iframe src="/wkt/back/next/<%= videoId %>" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+</div>
+<% } %>
             </div>
         </div>
     </div>

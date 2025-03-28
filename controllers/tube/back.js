@@ -134,6 +134,20 @@ router.get('/comment/:id', async (req, res) => {
   }
 });
 
+router.get('/next/:id', async (req, res) => {
+    const id = req.params.id;
+    try {
+        const videoInfo = await serverYt.infoGet(id);
+        res.render('tube/back/next', { videoInfo });
+   } catch (error) {
+        res.status(500).render('error', { 
+      id, 
+      error: 'コメントを取得できません', 
+      details: error.message 
+    });
+  }
+});
+
 router.get("/info/:id", async (req, res) => {
   try {
 		res.json(await serverYt.infoGet(req.params.id));
