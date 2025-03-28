@@ -806,8 +806,13 @@ function toggleFullScreen() {
   
 // ページ読み込み
 window.addEventListener("load", function() {
-    if (!localStorage.getItem('tutorialCompleted')) {
+    const tutorialok = localStorage.getItem('tutorialCompleted');
+    if (!tutorialok) {
       showTutorial();
+    }
+    if (tutorialok === "true"){
+      showMessage("ヒント:<br>右側のコントロールボタンから画質を変更できます！");
+      localStorage.setItem('tutorialCompleted', 'ok');
     }
     saveToHistory(videoId, channelId, channelName, videoTitle);
 });
