@@ -2,13 +2,9 @@
 <script src="/js/tailwindcss.js"></script>
 <link rel="stylesheet" href="/css/page.css">
 <body class="bg-gray-900 text-white">
-<% if (videoInfo.watch_next_feed && videoInfo.watch_next_feed.length > 0) { %>
 <div class="mt-2 space-y-2">
-  <% let hasValidVideo = false; %>
   <% videoInfo.watch_next_feed.forEach(video => { %>
-    <% if (!video || !video.type) return; %>
-    <% if (video.type.endsWith("Video")) { %>
-      <% hasValidVideo = true; %>
+    <% if (video.type.endsWith("Video")) ; { %>
       <div class="bg-gray-800 p-2 rounded result-item">
         <a href="/wkt/watch/<%= video.id %>">
           <img src="/wkt/back/vi/<%= video.id %>/mqdefault.jpg" alt="<%= video.title.text %> のサムネイル" class="w-full h-auto rounded">
@@ -57,11 +53,6 @@
     <% } %>
   <% }); %>
 </div>
-<% if (!hasValidVideo) { %>
-  <p>取得できません</p>
-<% } %>
-<% } else { %>
-<p>取得できません</p>
 <% } %>
 </body>
 </html>
