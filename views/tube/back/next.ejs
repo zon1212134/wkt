@@ -4,7 +4,7 @@
 <body class="bg-gray-900 text-white">
 <div class="mt-2 space-y-2">
   <% videoInfo.watch_next_feed.forEach(video => { %>
-    <% if (video.type.endsWith("Video")) ; { %>
+    <% if (video.type.endsWith("Video")) { %>
       <div class="bg-gray-800 p-2 rounded result-item">
         <a href="/wkt/watch/<%= video.id %>">
           <img src="/wkt/back/vi/<%= video.id %>/mqdefault.jpg" alt="<%= video.title.text %> のサムネイル" class="w-full h-auto rounded">
@@ -53,6 +53,5 @@
     <% } %>
   <% }); %>
 </div>
-<% } %>
 </body>
 </html>
