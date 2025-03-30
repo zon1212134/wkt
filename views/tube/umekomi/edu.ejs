@@ -357,17 +357,6 @@
     <button id="expandSidebar" class="expand-sidebar-btn">◀ サイドバーを開く</button>
           
 <script>
-//お気に入り読み込み
-function checkfav() {
-    const favBtn = document.getElementById("favoriteBtn");
-    const favIcon = document.getElementById("favoriteIcon");
-    let favorites = getFavoritesFromLocalStorage();
-    let isFavorited = favorites.some(track => track.videoId === "<%= videoId %>");
-    favIcon.src = isFavorited ? "https://cdn.glitch.global/44a02c72-aa32-4a7b-bb98-801035391fbc/IMG_3046.png" : "https://cdn.glitch.global/44a02c72-aa32-4a7b-bb98-801035391fbc/IMG_3045.png";
-}
-checkfav()
-  
-  
 // コメント
 const commentContainers = [document.getElementById("commentsList1"), document.getElementById("commentsList2")];
 const errorContainers = [document.getElementById("commentError1"), document.getElementById("commentError2")];
@@ -511,6 +500,43 @@ function getHistoryFromLocalStorage() {
         return [];
     }
 }
+  
+//お気に入り
+function getFavoritesFromLocalStorage() {
+  return JSON.parse(localStorage.getItem("wakametubefavorites") || "[]");
+}
+function saveToFavorites(videoId, channelId, channelName, videoTitle) {
+  let favorites = getFavoritesFromLocalStorage();
+  const favIndex = favorites.findIndex(track => track.videoId === videoId);
+  if (favIndex !== -1) {
+    favorites.splice(favIndex, 1);
+    showMessage(`${videoTitle}のお気に入りを解除しました☑️`);
+  } else {
+    favorites.push({ videoId, channelId, channelName, videoTitle });
+    showMessage(`${videoTitle}をお気に入りに追加しました☑️`);
+  }
+  localStorage.setItem("wakametubefavorites", JSON.stringify(favorites));
+}
+const favBtn = document.getElementById("favoriteBtn");
+const favIcon = document.getElementById("favoriteIcon");
+async function checkfav() {
+  let favorites = getFavoritesFromLocalStorage();
+  let isFavorited;
+  if(favorites){
+    let isFavorited = favorites.some(track => track.videoId === "<%= videoId %>");
+  }
+  favIcon.src = isFavorited ? "https://cdn.glitch.global/44a02c72-aa32-4a7b-bb98-801035391fbc/IMG_3046.png" : "https://cdn.glitch.global/44a02c72-aa32-4a7b-bb98-801035391fbc/IMG_3045.png";
+}
+checkfav()
+document.getElementById("favoriteBtn").addEventListener("click", function() {
+  saveToFavorites(videoId, channelId, channelName, videoTitle);
+  let updatedFavorites = getFavoritesFromLocalStorage();
+  let nowFavorited;
+  if(updatedFavorites){
+    let nowFavorited = updatedFavorites.some(track => track.videoId === videoId);
+  }
+  favIcon.src = isFavorited ? "https://cdn.glitch.global/44a02c72-aa32-4a7b-bb98-801035391fbc/IMG_3046.png" : "https://cdn.glitch.global/44a02c72-aa32-4a7b-bb98-801035391fbc/IMG_3045.png";
+});
 
 // 概要
 function toggleDescription(button) {
