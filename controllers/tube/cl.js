@@ -7,6 +7,10 @@ router.get('/history', (req, res) => {
     res.render('tube/cl/history.ejs');
 });
 
+router.get('/fav', (req, res) => {
+    res.render('tube/cl/fav.ejs');
+});
+
 router.get('/setting', (req, res) => {
     res.render('tube/cl/setting.ejs');
 });

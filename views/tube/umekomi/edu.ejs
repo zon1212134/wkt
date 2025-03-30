@@ -153,7 +153,7 @@
                   <h2 class="text-lg font-bold"><a href ="/wkt/c/<%= videoInfo.secondary_info.owner.author.id %>"><%= videoInfo.secondary_info.owner.author.name %></a></h2>
                     <p class="text-sm text-gray-400"><%= videoInfo.secondary_info.owner.subscriber_count.text || "" %></p>
                 </div>
-                  <button id="favoriteBtn" class="ml-auto p-2 rounded-full bg-gray-700 hover:bg-gray-600">
+                  <button id="favoriteBtn" class="ml-auto p-2 rounded-full bg-gray-500">
                       <img id="favoriteIcon" src="https://cdn.glitch.global/44a02c72-aa32-4a7b-bb98-801035391fbc/IMG_3045.png" alt="お気に入り" class="w-8 h-8">
                   </button>
             </div>
@@ -507,6 +507,7 @@ function getFavoritesFromLocalStorage() {
 }
 function saveToFavorites(videoId, channelId, channelName, videoTitle) {
   let favorites = getFavoritesFromLocalStorage();
+  const favIcon = document.getElementById("favoriteIcon");
   const favIndex = favorites.findIndex(track => track.videoId === videoId);
   if (favIndex !== -1) {
     favorites.splice(favIndex, 1);
@@ -517,25 +518,26 @@ function saveToFavorites(videoId, channelId, channelName, videoTitle) {
   }
   localStorage.setItem("wakametubefavorites", JSON.stringify(favorites));
 }
-const favBtn = document.getElementById("favoriteBtn");
-const favIcon = document.getElementById("favoriteIcon");
 async function checkfav() {
+  const favBtn = document.getElementById("favoriteBtn");
+  const favIcon = document.getElementById("favoriteIcon");
   let favorites = getFavoritesFromLocalStorage();
   let isFavorited;
   if(favorites){
-    let isFavorited = favorites.some(track => track.videoId === "<%= videoId %>");
+    isFavorited = favorites.some(track => track.videoId === videoId);
   }
   favIcon.src = isFavorited ? "https://cdn.glitch.global/44a02c72-aa32-4a7b-bb98-801035391fbc/IMG_3046.png" : "https://cdn.glitch.global/44a02c72-aa32-4a7b-bb98-801035391fbc/IMG_3045.png";
 }
 checkfav()
 document.getElementById("favoriteBtn").addEventListener("click", function() {
   saveToFavorites(videoId, channelId, channelName, videoTitle);
+  const favIcon = document.getElementById("favoriteIcon");
   let updatedFavorites = getFavoritesFromLocalStorage();
   let nowFavorited;
   if(updatedFavorites){
-    let nowFavorited = updatedFavorites.some(track => track.videoId === videoId);
+    nowFavorited = updatedFavorites.some(track => track.videoId === videoId);
   }
-  favIcon.src = isFavorited ? "https://cdn.glitch.global/44a02c72-aa32-4a7b-bb98-801035391fbc/IMG_3046.png" : "https://cdn.glitch.global/44a02c72-aa32-4a7b-bb98-801035391fbc/IMG_3045.png";
+  favIcon.src = nowFavorited ? "https://cdn.glitch.global/44a02c72-aa32-4a7b-bb98-801035391fbc/IMG_3046.png" : "https://cdn.glitch.global/44a02c72-aa32-4a7b-bb98-801035391fbc/IMG_3045.png";
 });
 
 // 概要
