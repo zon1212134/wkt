@@ -117,6 +117,7 @@
         <nav class="mt-12">
             <button onclick="window.location.href='/wkt'" class="w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">ホーム</button>
             <button onclick="window.location.href='/wkt/trend'" class="w-full bg-gray-700 py-2 hover:text-white rounded mb-2">トレンド</button>
+            <button onclick="window.location.href='/wkt/cl/fav'" class="w-full bg-gray-700 py-2 hover:text-white rounded mb-2">お気に入り</button>
             <button onclick="window.location.href='/wkt/cl/history'" class="w-full bg-gray-700 py-2 hover:text-white rounded mb-2">履歴</button>
             <button onclick="window.open('/wkt/back/vi/<%= videoId %>/maxresdefault.jpg', '_blank');" class="w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">サムネをダウンロード</button>
             <button onclick="window.open('<%- videoData.stream_url %>', '_blank');" class="w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">ストリームURLに移動</button>
@@ -158,6 +159,9 @@
                   <h2 class="text-lg font-bold"><a href ="/wkt/c/<%= videoData.channelId %>"><%= videoData.channelName %></a></h2>
                     <p class="text-sm text-gray-400"><%= videoInfo.secondary_info.owner.subscriber_count.text || "" %></p>
                 </div>
+                  <button id="favoriteBtn" class="ml-auto p-2 rounded-full bg-gray-500">
+                      <img id="favoriteIcon" src="https://cdn.glitch.global/44a02c72-aa32-4a7b-bb98-801035391fbc/IMG_3045.png" alt="お気に入り" class="w-8 h-8">
+                  </button>
             </div>
 
     <div class="mt-4 p-4 bg-gray-800 rounded">
@@ -769,6 +773,45 @@ function getHistoryFromLocalStorage() {
         return [];
     }
 }
+  
+//お気に入り
+function getFavoritesFromLocalStorage() {
+  return JSON.parse(localStorage.getItem("wakametubefavorites") || "[]");
+}
+function saveToFavorites(videoId, channelId, channelName, videoTitle) {
+  let favorites = getFavoritesFromLocalStorage();
+  const favIcon = document.getElementById("favoriteIcon");
+  const favIndex = favorites.findIndex(track => track.videoId === videoId);
+  if (favIndex !== -1) {
+    favorites.splice(favIndex, 1);
+    showMessage(`${videoTitle}の<a href="/wkt/cl/fav" style='color: #60a5fa;'>お気に入り</a>を解除しました☑️`);
+  } else {
+    favorites.push({ videoId, channelId, channelName, videoTitle });
+    showMessage(`${videoTitle}を<a href="/wkt/cl/fav" style='color: #60a5fa;'>お気に入り</a>に追加しました☑️`);
+  }
+  localStorage.setItem("wakametubefavorites", JSON.stringify(favorites));
+}
+async function checkfav() {
+  const favBtn = document.getElementById("favoriteBtn");
+  const favIcon = document.getElementById("favoriteIcon");
+  let favorites = getFavoritesFromLocalStorage();
+  let isFavorited;
+  if(favorites){
+    isFavorited = favorites.some(track => track.videoId === videoId);
+  }
+  favIcon.src = isFavorited ? "https://cdn.glitch.global/44a02c72-aa32-4a7b-bb98-801035391fbc/IMG_3046.png" : "https://cdn.glitch.global/44a02c72-aa32-4a7b-bb98-801035391fbc/IMG_3045.png";
+}
+checkfav()
+document.getElementById("favoriteBtn").addEventListener("click", function() {
+  saveToFavorites(videoId, channelId, channelName, videoTitle);
+  const favIcon = document.getElementById("favoriteIcon");
+  let updatedFavorites = getFavoritesFromLocalStorage();
+  let nowFavorited;
+  if(updatedFavorites){
+    nowFavorited = updatedFavorites.some(track => track.videoId === videoId);
+  }
+  favIcon.src = nowFavorited ? "https://cdn.glitch.global/44a02c72-aa32-4a7b-bb98-801035391fbc/IMG_3046.png" : "https://cdn.glitch.global/44a02c72-aa32-4a7b-bb98-801035391fbc/IMG_3045.png";
+});
   
 // 概要
 function toggleDescription(button) {

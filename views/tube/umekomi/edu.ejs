@@ -130,6 +130,7 @@
         <nav class="mt-12">
             <button onclick="window.location.href='/wkt'" class="w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">ホーム</button>
             <button onclick="window.location.href='/wkt/trend'" class="w-full bg-gray-700 py-2 hover:text-white rounded mb-2">トレンド</button>
+            <button onclick="window.location.href='/wkt/cl/fav'" class="w-full bg-gray-700 py-2 hover:text-white rounded mb-2">お気に入り</button>
             <button onclick="window.location.href='/wkt/cl/history'" class="w-full bg-gray-700 py-2 hover:text-white rounded mb-2">履歴</button>
             <button onclick="window.open('/wkt/back/vi/<%= videoId %>/maxresdefault.jpg', '_blank');" class="w-full bg-gray-700 py-2 hover:text-white p-2 rounded mb-2">サムネをダウンロード</button>
         </nav>
@@ -511,10 +512,10 @@ function saveToFavorites(videoId, channelId, channelName, videoTitle) {
   const favIndex = favorites.findIndex(track => track.videoId === videoId);
   if (favIndex !== -1) {
     favorites.splice(favIndex, 1);
-    showMessage(`${videoTitle}のお気に入りを解除しました☑️`);
+    showMessage(`${videoTitle}の<a href="/wkt/cl/fav" style='color: #60a5fa;'>お気に入り</a>を解除しました☑️`);
   } else {
     favorites.push({ videoId, channelId, channelName, videoTitle });
-    showMessage(`${videoTitle}をお気に入りに追加しました☑️`);
+    showMessage(`${videoTitle}を<a href="/wkt/cl/fav" style='color: #60a5fa;'>お気に入り</a>に追加しました☑️`);
   }
   localStorage.setItem("wakametubefavorites", JSON.stringify(favorites));
 }
