@@ -6,8 +6,8 @@ const http = require('http');
 const undici = require("undici");
 const miniget = require("miniget");
 const bodyParser = require("body-parser");
-const serverYt = require("/app/server/youtube.js");
-const wakamess = require("/app/server/wakame.js");
+const serverYt = require("../../server/youtube.js");
+const wakamess = require("../../server/wakame.js");
 
 router.use(express.urlencoded({ extended: true }));
 router.use(express.json());
