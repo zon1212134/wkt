@@ -25,21 +25,19 @@ const listener = app.listen(process.env.PORT || 3000, () => {
 app.use((req, res) => {
   res.status(404).render("error.ejs", {
     title: "404 Not found",
-    content: "そのページは存在しないか、サーバーが起動中なたアクセスできません",
+    content: "そのページは存在しないか、サーバーが起動中なためアクセスできません",
   });
 });
 
 async function initInnerTube(callback) {
-  await YouTubeJS.Innertube.create({ lang: "ja", location: "JP"})
-    .then(instance => {
-      client = instance;
-      serverYt.setClient(client);
-      if (callback) callback();
-    })
-    .catch(e => {
-      console.error('Error initializing YouTubeJS client:', e.message || e);
-      setTimeout(() => initInnerTube(callback), 10000);
-    });
+  try {
+    client = await YouTubeJS.Innertube.create({ lang: "ja", location: "JP" });
+    serverYt.setClient(client);
+    callback();
+  } catch (e) {
+    console.error(e);
+    setTimeout(() => initInnerTube(callback), 10000);
+  }
 }
 
 initInnerTube(() => {
