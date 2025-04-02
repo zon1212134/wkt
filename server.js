@@ -18,6 +18,35 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.set("trust proxy", 1);
 
+const listener = app.listen(process.env.PORT || 3000, () => {
+  console.log("Server listening on port", listener.address().port);
+});
+
+app.use((req, res) => {
+  res.status(404).render("error.ejs", {
+    title: "404 Not found",
+    content: "そのページは存在しません。",
+  });
+});
+
+function initInnerTube(callback) {
+  YouTubeJS.Innertube.create({ lang: "ja", location: "JP"})
+    .then(instance => {
+      client = instance;
+      serverYt.setClient(client);
+      if (callback) callback();
+    })
+    .catch(e => {
+      console.error('Error initializing YouTubeJS client:', e.message || e);
+      setTimeout(() => initInnerTube(callback), 10000);
+    });
+}
+
+initInnerTube(() => {
+  setupRoutes();
+});
+
+function setupRoutes() {
 app.get('/', (req, res) => {
   if (req.query.r === 'y') {
     res.render("home/index");
@@ -59,26 +88,7 @@ app.get('/hashtag/:des', (req, res) => {
 });
 
 app.use("/sandbox", require("./routes/sandbox"));
-
-app.use((req, res) => {
-  res.status(404).render("error.ejs", {
-    title: "404 Not found",
-    content: "そのページは存在しません。",
-  });
-});
-app.on("error", console.error);
-async function initInnerTube() {
-  try {
-    client = await YouTubeJS.Innertube.create({ lang: "ja", location: "JP"});
-    serverYt.setClient(client);
-  } catch (e) {
-    console.error(e);
-    setTimeout(initInnerTube, 10000);
-  };
-};
-process.on("unhandledRejection", console.error);
-initInnerTube();
-
-const listener = app.listen(process.env.PORT || 3000, () => {
-	console.log("listening on port", listener.address().port);
+}
+process.on("unhandledRejection", (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
