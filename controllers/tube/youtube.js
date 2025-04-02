@@ -10,10 +10,9 @@ router.get('/edu/:id', async (req, res) => {
   const videoId = req.params.id;
   try {
     const videoInfo = await serverYt.infoGet(videoId);
-    const response = await fetch("https://wktedutube.glitch.me");
-    if (!response.ok) throw new Error(`Failed to fetch: ${response.statusText}`);
+    const response = await axios.get("https://wktedutube.glitch.me");
     
-    const ytinfo = await response.text();
+    const ytinfo = response.data;
     const videosrc = `https://www.youtubeeducation.com/embed/${videoId}${ytinfo}`;
           
     res.render('tube/umekomi/edu.ejs', {videosrc, videoInfo, videoId});
