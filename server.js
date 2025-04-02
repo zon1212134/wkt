@@ -29,8 +29,8 @@ app.use((req, res) => {
   });
 });
 
-function initInnerTube(callback) {
-  YouTubeJS.Innertube.create({ lang: "ja", location: "JP"})
+async function initInnerTube(callback) {
+  await YouTubeJS.Innertube.create({ lang: "ja", location: "JP"})
     .then(instance => {
       client = instance;
       serverYt.setClient(client);
