@@ -25,7 +25,7 @@ const listener = app.listen(process.env.PORT || 3000, () => {
 app.use((req, res) => {
   res.status(404).render("error.ejs", {
     title: "404 Not found",
-    content: "そのページは存在しません。",
+    content: "そのページは存在しないか、サーバーが起動中なたアクセスできません",
   });
 });
 
