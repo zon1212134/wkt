@@ -18,7 +18,7 @@ router.get("/s", async (req, res) => {
 	let query = req.query.q;
 	let page = Number(req.query.p || 2);
     try {
-		res.render("tube/search.ejs", {
+		res.render("tube/opu/search.ejs", {
 			res: await ytsr(query, {limit, pages: page}),
 			query: query,
 			page
