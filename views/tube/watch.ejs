@@ -884,6 +884,9 @@ window.addEventListener("load", function() {
       showMessage("ヒント:<br>右側のコントロールボタンから画質を変更できます！");
       localStorage.setItem('tutorialCompleted', 'ok');
     }
+    if ("<%= baseUrl.replace('https://', '').replace('.glitch.me', '') %>" === "directk") {
+      showerrorMessage("このサイトに高い負荷がかかっていてリクエストがキャンセルされたため、自動的にdirectサーバーを使用しました。")
+    }
     saveToHistory(videoId, channelId, channelName, videoTitle);
 });
   
