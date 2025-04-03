@@ -16,17 +16,17 @@ router.get("/", (req, res) => {
 
 router.get("/s", async (req, res) => {
 	let query = req.query.q;
-	let page = Number(req.query.p || 1);
+	let page = Number(req.query.p || 2);
     try {
 		res.render("tube/search.ejs", {
-			res: await serverYt.search(query),
+			res: await ytsr(query, {limit, pages: page}),
 			query: query,
 			page
 		});
 	} catch (error) {
 		console.error(error);
 		res.status(500).render("error.ejs", {
-			title: "youtube.js Error",
+			title: "ytsr Error",
 			content: error
 		});
 	}
@@ -34,7 +34,7 @@ router.get("/s", async (req, res) => {
 
 router.get("/ss", async (req, res) => {
 	let query = req.query.q;
-	let page = Number(req.query.p || 2);
+	let page = Number(req.query.p || 3);
     try {
 		res.render("tube/opu/search.ejs", {
 			res: await ytsr(query, {limit, pages: page}),
