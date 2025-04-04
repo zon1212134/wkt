@@ -48,6 +48,7 @@ router.get('/:id', async (req, res) => {
       let videoData;
       if (server === "direct" || baseUrl === "direct") {
         videoData = await wakamess.getYouTube(videoId);
+	baseUrl = `https://direct.glitch.me`;
       }else{
 	try{
          const response = await axios.get(`${baseUrl}/api/${videoId}`, {
