@@ -12,6 +12,7 @@ async function getapis() {
         console.log('データを取得しました:', apis);
     } catch (error) {
         console.error('データの取得に失敗しました:', error);
+        await getapisgit();
     }
 }
 
