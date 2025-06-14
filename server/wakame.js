@@ -63,7 +63,7 @@ async function getYouTube (videoId) {
   try {
     const videoInfo = await ggvideo(videoId);
     const formatStreams = videoInfo.formatStreams || [];
-    const streamUrl = formatStreams.reverse().map(stream => stream.url)[0];
+    let streamUrl = formatStreams.reverse().map(stream => stream.url)[0];
     const audioStreams = videoInfo.adaptiveFormats || [];
     let highstreamUrl = audioStreams
       .filter(stream => stream.container === 'webm' && stream.resolution === '1080p')
